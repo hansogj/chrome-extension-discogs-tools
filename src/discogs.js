@@ -13,7 +13,7 @@ var paginationTotal = document.querySelector("strong.pagination_total"),
 
 
 if (paginationTotal) {
-  document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s(\d*)/)[1]
+  document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s([\d|\,]*)/)[1]
   setTimeout(function() {
     window.location.reload();
   }, 5*60*1000)
