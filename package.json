@@ -20,7 +20,8 @@
   "homepage": "https://github.com/hansogj/chrome-extension-discogs-add-collection",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./build.sh"
+    "build": "./build.sh",
+    "cli" : "rm -rf extension node_modules && npm install && npm run build"
   },
   "dependencies": {
     "browserify": "^13.0.0",
