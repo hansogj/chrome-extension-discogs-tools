@@ -4,11 +4,14 @@
   "manifest_version": 2,
   "description": "Add cds to HoG and Ingvill collectino",
   "icons": { "128": "disocgs.png" },
-  "web_accessible_resources": ["addToCollection.js"],
+  "web_accessible_resources": ["addToCollection.js", "uniqueSeller.js"],
   "content_scripts": [
     {
-      "matches": ["http://www.discogs.com/*","http://discogs.in/*"],
-      "js": ["discogs.js"]
+      "matches": [
+        "https://www.discogs.com/*",
+        "http://www.discogs.com/*",
+        "http://discogs.in/*"],
+      "js": ["discogs.js", "uniqueSeller.js"]
     }
   ]
 }
