@@ -12,10 +12,8 @@ function applyToWindow(scriptName) {
 
 }
 
-["addToCollection.js", "filterSellers.js"].forEach(applyToWindow),
+["addToCollection.js", "filterSellers.js"].forEach(applyToWindow);
 
-
-console.log(addToCollection);
 var paginationTotal = document.querySelector("strong.pagination_total"),
     header = document.querySelector("#site_header #activity_menu"),
     addToCollection = document.querySelector(".add_to_collection");
