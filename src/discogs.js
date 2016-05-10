@@ -21,16 +21,18 @@ var paginationTotal = document.querySelector("strong.pagination_total"),
 
 if (paginationTotal) {
   document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s([\d|\,]*)/)[1]
-  setTimeout(function() {
-    window.location.reload();
-  }, 5*60*1000)
+  // setTimeout(function() {
+  //   window.location.reload();
+  // }, 5*60*1000)
 }
 
+
+var style = "style=\"position:absolute; top:57px; right:0\" ";
 if(addToCollection) {
   header.innerHTML =
     '<li>' +
-    '<button class="button button_small button_blue"          style="float:right"            onclick="javascript:addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
-    '<button class="button button_small button_blue"          style="float:right"            onclick="javascript:addToCollection(this, \'CD HoG\')">CD HoG</button> <br />' +
-    '<button class="button button button_green button_small"  style="float:right; margin:0;" onclick="javascript:addToCollection(this, \'CD Ingvill\')">CD Ingvill</button>' +
+    '<button class="button button_small button_blue"' + style +' onclick="javascript:addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
+    // '<button class="button button_small button_blue"          style="float:right"            onclick="javascript:addToCollection(this, \'CD HoG\')">CD HoG</button> <br />' +
+    // '<button class="button button button_green button_small"  style="float:right; margin:0;" onclick="javascript:addToCollection(this, \'CD Ingvill\')">CD Ingvill</button>' +
     '</li>'  + header.innerHTML;
 }
