@@ -1,4 +1,4 @@
-
+var find = require("find-js");
 function applyToWindow(scriptName) {
 
   var s = document.createElement('script');
@@ -12,23 +12,12 @@ function applyToWindow(scriptName) {
 
 }
 
-["addToCollection.js", "filterSellers.js"].forEach(applyToWindow);
-
-var paginationTotal = document.querySelector("strong.pagination_total"),
-    header = document.querySelector("#site_header #activity_menu"),
-    addToCollection = document.querySelector(".add_to_collection");
+["addToCollection.js", "filterSellers.js", "addWantList.js"].forEach(applyToWindow);
 
 
-if (paginationTotal) {
-  document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s([\d|\,]*)/)[1]
-  // setTimeout(function() {
-  //   window.location.reload();
-  // }, 5*60*1000)
-}
+var  style = "style=\"position:absolute; top:57px; right:0\" ";
 
-
-var style = "style=\"position:absolute; top:57px; right:0\" ";
-if(addToCollection) {
+function addToCollectionBtns(header) {
   header.innerHTML =
     '<li>' +
     '<button class="button button_small button_blue"' + style +' onclick="javascript:addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
@@ -36,3 +25,28 @@ if(addToCollection) {
     // '<button class="button button button_green button_small"  style="float:right; margin:0;" onclick="javascript:addToCollection(this, \'CD Ingvill\')">CD Ingvill</button>' +
     '</li>'  + header.innerHTML;
 }
+
+
+function addWantlistBtnToModalBox(boxHeader) {
+
+  if (boxHeader && !document.getElementById("wantlistbtn")) {
+    boxHeader.innerHTML = '<button id="wantlistbtn" class="button button_small button_blue" onclick="javascript:addWantList(this)">Add all to wantlist</button> <br />' +
+      boxHeader.innerHTML;
+  }
+}
+
+
+find(document, "strong.pagination_total").forEach(function (paginationTotal) {
+  document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s([\d|\,]*)/)[1]
+});
+
+find(document, ".add_to_collection").forEach(function(elem) {
+  find(document, "#site_header #activity_menu").forEach(addToCollectionBtns);
+});
+
+setTimeout(function () {
+  setInterval(function () {
+    find(document, ".react-modal-header" )
+      .forEach(addWantlistBtnToModalBox);
+  }, 500);
+}, 2000);

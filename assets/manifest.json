@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Add cds to HoG and Ingvill collection",
   "icons": { "128": "disocgs.png" },
-  "web_accessible_resources": ["addToCollection.js", "filterSellers.js"],
+  "web_accessible_resources": ["addToCollection.js", "filterSellers.js", "addWantList.js"],
   "content_scripts": [
     {
       "matches": [

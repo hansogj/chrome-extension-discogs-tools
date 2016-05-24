@@ -145,4 +145,4 @@ function check(row) {
 }
 
 focus("#search_q");
-module.exports = addToCollection
+module.exports = addToCollection;
