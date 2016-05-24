@@ -5,9 +5,8 @@ function addItemToWantList(item) {
   return xhrJson("PUT", "https://www.discogs.com/_rest/wantlist/" + item.id, item)
     .then(function (response) {
       console.log(response);
-      debugger;
     }).catch(function (e) {
-      console.log(e);
+      console.error(e);
     });
 }
 
