@@ -2,9 +2,8 @@
 var find = require("find-js"),
     focus = require("./focus"),
     xhrJson =  require("json-xhr-promise").default,
-    XMLHttpRequestPromise = require('xhr-promise');
-
-var xhr = new XMLHttpRequestPromise();
+    XMLHttpRequestPromise = require('xhr-promise'),
+    xhr = new XMLHttpRequestPromise();
 
 function clickElem(e) {
   e.click();

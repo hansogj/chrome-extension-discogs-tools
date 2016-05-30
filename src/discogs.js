@@ -30,7 +30,8 @@ function addToCollectionBtns(header) {
 function addWantlistBtnToModalBox(boxHeader) {
 
   if (boxHeader && !document.getElementById("wantlistbtn")) {
-    boxHeader.innerHTML = '<button id="wantlistbtn" class="button button_small button_blue" onclick="javascript:addWantList(this)">Add all to wantlist</button> <br />' +
+    boxHeader.innerHTML = '<button id="wantlistbtn" class="button button_small button_blue"  onclick="javascript:addWantList(this, \'PUT\')">Add all to wantlist</button> <br />' +
+      '<button id="wantlistbtn" class="button button_small button_green" onclick="javascript:addWantList(this, \'DELETE\')">Delte from  wantlist</button> <br />' +
       boxHeader.innerHTML;
   }
 }
