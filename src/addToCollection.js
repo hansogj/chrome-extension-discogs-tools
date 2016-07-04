@@ -21,7 +21,6 @@ function addNotes(notes) {
     setTimeout(function () {
       ta.value = notes;
       find(ta.parentNode, "a.button_green").forEach(clickElem);
-      focus("#search_q");
     }, 1000);
   });
 }
@@ -143,5 +142,4 @@ function check(row) {
     .map(function (input) {return input.click(),input});
 }
 
-focus("#search_q");
 module.exports = addToCollection;
