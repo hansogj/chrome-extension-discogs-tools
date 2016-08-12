@@ -1,5 +1,5 @@
 var find = require("find-js");
-
+window.discogs = window.discogs || {};
 module.exports = function () {
   (function (w) {
     w.filterSellers = find(document, ".shortcut_navigable")
@@ -15,5 +15,5 @@ module.exports = function () {
       }).forEach(function (unique) {
         unique.style.display = "none"
       });
-  }(window));
+  }(window.discogs));
 }

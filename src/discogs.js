@@ -1,4 +1,5 @@
 var find = require("find-js");
+window.disocgs = window.disocgs || {};
 function applyToWindow(scriptName) {
 
   var s = document.createElement('script');
@@ -20,7 +21,7 @@ var  style = "style=\"position:absolute; top:57px; right:0\" ";
 function addToCollectionBtns(header) {
   header.innerHTML =
     '<li>' +
-    '<button class="button button_small button_blue"' + style +' onclick="javascript:addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
+    '<button class="button button_small button_blue"' + style +' onclick="javascript:discogs.addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
     // '<button class="button button_small button_blue"          style="float:right"            onclick="javascript:addToCollection(this, \'CD HoG\')">CD HoG</button> <br />' +
     // '<button class="button button button_green button_small"  style="float:right; margin:0;" onclick="javascript:addToCollection(this, \'CD Ingvill\')">CD Ingvill</button>' +
     '</li>'  + header.innerHTML;
@@ -30,8 +31,8 @@ function addToCollectionBtns(header) {
 function addWantlistBtnToModalBox(boxHeader) {
 
   if (boxHeader && !document.getElementById("wantlistbtn")) {
-    boxHeader.innerHTML = '<button id="wantlistbtn" class="button button_small button_blue"  onclick="javascript:addWantList(this, \'PUT\')">Add all to wantlist</button> <br />' +
-      '<button id="wantlistbtn" class="button button_small button_green" onclick="javascript:addWantList(this, \'DELETE\')">Delte from  wantlist</button> <br />' +
+    boxHeader.innerHTML = '<button id="wantlistbtn" class="button button_small button_blue"  onclick="javascript:discogs.addWantList(this, \'PUT\')">Add all to wantlist</button> <br />' +
+      '<button id="wantlistbtn" class="button button_small button_green" onclick="javascript:discogs.addWantList(this, \'DELETE\')">Delte from  wantlist</button> <br />' +
       boxHeader.innerHTML;
   }
 }
