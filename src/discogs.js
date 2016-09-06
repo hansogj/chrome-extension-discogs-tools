@@ -13,7 +13,7 @@ function applyToWindow(scriptName) {
 
 }
 
-["addToCollection.js", "filterSellers.js", "addWantList.js"].forEach(applyToWindow);
+["addToCollection.js", "filterSellers.js", "addWantList.js", "filterRelease.js"].forEach(applyToWindow);
 
 
 var  style = "style=\"position:absolute; top:57px; right:0\" ";
