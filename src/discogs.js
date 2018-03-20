@@ -16,7 +16,7 @@ function applyToWindow(scriptName) {
 ["addToCollection.js", "filterSellers.js", "addWantList.js", "filterRelease.js"].forEach(applyToWindow);
 
 
-var  style = "style=\"position:absolute; top:57px; right:0\" ";
+var  style = "style=\"position:absolute; top:0px; right:150px\" ";
 
 function addToCollectionBtns(header) {
   header.innerHTML =
@@ -42,9 +42,9 @@ find(document, "strong.pagination_total").forEach(function (paginationTotal) {
   document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s([\d|\,]*)/)[1]
 });
 
-find(document, ".add_to_collection").forEach(function(elem) {
-  find(document, "#site_header #activity_menu").forEach(addToCollectionBtns);
-});
+find(document, "#site_header #activity_menu")
+  .filter(function(_, i){return i === 0})
+  .forEach(addToCollectionBtns);
 
 setTimeout(function () {
   setInterval(function () {
