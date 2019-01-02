@@ -21,9 +21,7 @@ var  style = "style=\"position:absolute; top:0px; right:150px\" ";
 function addToCollectionBtns(header) {
   header.innerHTML =
     '<li>' +
-    '<button class="button button_small button_blue"' + style +' onclick="javascript:discogs.addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
-    // '<button class="button button_small button_blue"          style="float:right"            onclick="javascript:addToCollection(this, \'CD HoG\')">CD HoG</button> <br />' +
-    // '<button class="button button button_green button_small"  style="float:right; margin:0;" onclick="javascript:addToCollection(this, \'CD Ingvill\')">CD Ingvill</button>' +
+    '<button class="button button_small button_blue"' + style +' onclick="javascript:window.discogs.addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
     '</li>'  + header.innerHTML;
 }
 
@@ -31,7 +29,7 @@ function addToCollectionBtns(header) {
 function addWantlistBtnToModalBox(boxHeader) {
 
   if (boxHeader && !document.getElementById("wantlistbtn")) {
-    boxHeader.innerHTML = '<button id="wantlistbtn" class="button button_small button_blue"  onclick="javascript:discogs.addWantList(this, \'PUT\')">Add all to wantlist</button> <br />' +
+    boxHeader.innerHTML = '<button id="wantlistbtn" class="button button_small button_blue"  onclick="javascript:window.discogs.addWantList(this, \'PUT\')">Add all to wantlist</button> <br />' +
       '<button id="wantlistbtn" class="button button_small button_green" onclick="javascript:discogs.addWantList(this, \'DELETE\')">Delte from  wantlist</button> <br />' +
       boxHeader.innerHTML;
   }
