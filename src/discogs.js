@@ -13,7 +13,14 @@ function applyToWindow(scriptName) {
 
 }
 
-["addToCollection.js", "filterSellers.js", "addWantList.js", "filterRelease.js"].forEach(applyToWindow);
+[
+    "addToCollection.js", 
+    "filterSellers.js", 
+    "addWantList.js", 
+    "filterRelease.js",
+    "unwantedLabels.js",
+
+].forEach(applyToWindow);
 
 
 var  style = "style=\"position:absolute; top:0px; right:150px\" ";
@@ -35,6 +42,7 @@ function addWantlistBtnToModalBox(boxHeader) {
   }
 }
 
+// run
 
 find(document, "strong.pagination_total").forEach(function (paginationTotal) {
   document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s([\d|\,]*)/)[1]

@@ -6,4 +6,5 @@ node node_modules/browserify/bin/cmd.js src/addToCollection.js --standalone disc
 node node_modules/browserify/bin/cmd.js src/addWantList.js --standalone discogs.addWantList > extension/addWantList.js 
 node node_modules/browserify/bin/cmd.js src/filterSellers.js --standalone discogs.filterSellers > extension/filterSellers.js 
 node node_modules/browserify/bin/cmd.js src/filterRelease.js --standalone discogs.filterRelease > extension/filterRelease.js 
+node node_modules/browserify/bin/cmd.js src/unwantedLabels.js --standalone discogs.unwantedLabels > extension/unwantedLabels.js 
 cp assets/* extension/
