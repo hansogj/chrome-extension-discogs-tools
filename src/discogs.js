@@ -23,13 +23,19 @@ function applyToWindow(scriptName) {
 ].forEach(applyToWindow);
 
 
-var  style = "style=\"position:absolute; top:0px; right:150px\" ";
 
-function addToCollectionBtns(header) {
-  header.innerHTML =
-    '<li>' +
-    '<button class="button button_small button_blue"' + style +' onclick="javascript:window.discogs.addToCollection(this, \'LP HoG\')">LP HoG</button> <br />' +
-    '</li>'  + header.innerHTML;
+function addBtn(folder) {
+  return `<a class="button button-small button-green" onclick="javascript:window.discogs.addToCollection(this, '${folder}')">
+            <i class="icon icon-collection"></i> 
+            ${folder}
+          </a>`
+}
+
+function addToCollectionBtns(btnlist) {
+  btnlist.innerHTML = btnlist.innerHTML + 
+    '<div class="collections_buttons hide_mobile">' +  
+    addBtn('LP HoG') +  addBtn('CD HoG') +
+    '</div>'
 }
 
 
@@ -48,7 +54,10 @@ find(document, "strong.pagination_total").forEach(function (paginationTotal) {
   document.title = document.querySelector("strong.pagination_total").textContent.match(/of\s([\d|\,]*)/)[1]
 });
 
-find(document, "#site_header #activity_menu")
+
+
+
+find(document, ".section.collections ")
   .filter(function(_, i){return i === 0})
   .forEach(addToCollectionBtns);
 
