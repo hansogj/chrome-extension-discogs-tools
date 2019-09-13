@@ -24,6 +24,7 @@ labelAlert([
   "DOXY",
   "Get Back",
   "Jazz Wax",
+  "joe jackson recoords",
   "Lilith",
   "Music on Vinyl",
   "Simply Vinyl" ,
