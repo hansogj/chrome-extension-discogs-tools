@@ -27,6 +27,7 @@ labelAlert([
   "joe jackson recoords",
   "Lilith",
   "Music on Vinyl",
+  "Sanctuary Records",
   "Simply Vinyl" ,
   "Skorpio",
   "Tapestry",
