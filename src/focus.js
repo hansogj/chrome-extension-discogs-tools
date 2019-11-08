@@ -1,6 +1,7 @@
-var find = require("find-js");
+var find = require('find-js')
 
 module.exports = function(selector) {
-  find(document,selector)
-    .forEach(function (query) {query.focus();});
+    find(document, selector).forEach(function(query) {
+        query.focus()
+    })
 }

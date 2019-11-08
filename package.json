@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "browserify": "^13.0.0",
+    "eslint": "^6.3.0",
     "find-js": "^2.0.0",
     "i": "^0.3.5",
     "json-xhr-promise": "^1.3.0",
