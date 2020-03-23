@@ -25,6 +25,7 @@ labelAlert(
         'DOL',
         'DOXY',
         'Get Back',
+        'Hi Hat',
         'Jazz Wax',
         'joe jackson recoords',
         'Lilith',
