@@ -1,5 +1,6 @@
 <h1 align="center">Chrome Extension with React and Typescript Starter Pack</h1>
-[Thanx to](https://github.com/thmsgbrt/Chrome-Extension-with-React-and-Typescript-Starter-Pack#readme)
+
+[Thanx to](https://github.com/thmsgbrt/Chrome-Extension-with-React-and-Typescript-Starter-Pack)
 
 ## Install
 
