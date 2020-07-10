@@ -1,15 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
-import { base, contentKidStyle } from '../styled';
-import record from '../../assets/round-record.png';
+import React from 'react'
+import styled from 'styled-components'
+import { base, contentKidStyle } from '../styled'
+import record from '../../assets/round-record.png'
 
-const rpm33 = 60 / 33.3333;
+const rpm33 = 60 / 33.3333
 const ContentHeader = styled.header`
-  ${contentKidStyle};
-  align-items: center;
-`;
+    ${contentKidStyle};
+    align-items: center;
+`
 
 const AppLogo = styled.img`
+  opacity: 0.3;
   pointer-events: none;
   height: calc(${base} * 10);
   width: calc(${base} * 10);
@@ -25,11 +26,11 @@ const AppLogo = styled.img`
     to {
       transform: rotate(360deg);
     }
-  `;
+  `
 
 const AppHeader = () => (
-  <ContentHeader>
-    <AppLogo src={record} alt="logo" />
-  </ContentHeader>
-);
-export default AppHeader;
+    <ContentHeader>
+        <AppLogo src={record} alt="logo" />
+    </ContentHeader>
+)
+export default AppHeader
