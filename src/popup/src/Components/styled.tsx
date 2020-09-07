@@ -10,6 +10,7 @@ export const colors = {
     white: '#ddd',
     shade: '#aaa',
     dread: '#880000',
+    kindOfBlue: '#123654',
 }
 
 export const fontSizes = {

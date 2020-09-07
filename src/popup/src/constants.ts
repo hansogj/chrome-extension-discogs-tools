@@ -23,9 +23,22 @@ export const folders: Folder[] = [
     { folder_id: 848675, name: 'LP Tora' },
 ]
 
+export enum LoadAction {
+    AddToWantlist = 'addToWantlist',
+}
+
+export type ActionType =
+    | 'uniqueSeller'
+    | 'uniqueRelease'
+    | 'addRelease'
+    | 'filterAndAddToWantlist'
+    | 'addToWantlist'
+    | 'removeFromWantlist'
+
 export interface Action {
-    action: string
-    title?: string
+    action: ActionType
+    title: string
+    options?: any
 }
 
 export const uniqueSellerAction: Action = {
@@ -36,8 +49,22 @@ export const uniqueReleaseAction: Action = {
     action: 'uniqueRelease',
     title: 'Filter Release',
 }
-export const addReleaseAction: Action = { action: 'addRelease' }
-export const addToWantlistAction: Action = { action: 'addToWantlist' }
+export const addReleaseAction: Action = {
+    action: 'addRelease',
+    title: 'Add to collection',
+}
+
+export const filterAndAddToWantlistAction: Action = {
+    action: 'filterAndAddToWantlist',
+    title: 'Filter and Add to wantlist',
+    options: { format: 'Vinyl' },
+}
+export const addToWantlistAction: Action = {
+    action: 'addToWantlist',
+    title: 'Wantlist +',
+}
+
 export const removeFromWantlistAction: Action = {
     action: 'removeFromWantlist',
+    title: 'Wantlist -',
 }

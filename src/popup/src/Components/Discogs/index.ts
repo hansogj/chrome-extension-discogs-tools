@@ -1,2 +1,2 @@
-import DiscogsActions from './Discogs';
-export default DiscogsActions;
+import DiscogsActions from './Discogs'
+export default DiscogsActions
