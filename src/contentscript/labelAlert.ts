@@ -5,6 +5,7 @@ const badLabels = [
     'Abkco',
     'Abraxas',
     'Akarma',
+    'Back To Black',
     'Bad Joker',
     'DOL',
     'DOXY',
@@ -31,6 +32,7 @@ const goodLabels = [
     'Analogue Productions',
     'Audio Fidelity',
     'Cisco',
+    'Flightless',
     'Hubro',
     'Jazzland',
     'Mobile Fidelity',
@@ -45,24 +47,31 @@ const goodLabels = [
 const labelAlert = (
     selector: string,
     labels: typeof badLabels | typeof goodLabels,
-    backgroundColor: string,
-    borderColor: string
+    soft: string,
+    strong: string
 ) =>
     find(selector)
-        .map(listItem => listItem as HTMLElement)
-        .filter(listItem =>
-            labels.some(label =>
+        .map((listItem) => listItem as HTMLElement)
+        .filter((listItem) =>
+            labels.some((label) =>
                 listItem.innerText.toLowerCase().match(label.toLowerCase())
             )
         )
-        .map(match => {
+        .map((match) => {
             // match.style = {...match.style, ...backgroundColor, {...border:  ['1px', 'solid'].concat(borderColor).join(' ')}
-            match.style.backgroundColor = backgroundColor
-            match.style.borderRadius = '5px'
-            match.style.border = ['1px', 'solid'].concat(borderColor).join(' ')
+            //match.style.backgroundColor = backgroundColor
+
+            match.style.backgroundImage = ` repeating-linear-gradient(
+              135deg,
+              ${strong},
+              ${soft} 80px,
+              transparent 10px,
+              transparent 99.999999%
+            )`
+
             return match
         })
-;['.label_and_cat', '.collection-row'].forEach(selector => {
+;['.label_and_cat', '.collection-row'].forEach((selector) => {
     labelAlert(selector, badLabels, color.red.soft, color.red.strong)
     labelAlert(selector, goodLabels, color.green.soft, color.green.strong)
 })

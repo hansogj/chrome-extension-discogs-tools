@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm i && cd src/popup && npm i
+npm ci && cd src/popup && npm ci && cd -
 ```
 
 ## Usage
