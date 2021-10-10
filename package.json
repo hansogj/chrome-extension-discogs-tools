@@ -57,7 +57,7 @@
     "@types/styled-components": "^5.1.1",
     "array.defined": "^2.4.2",
     "array.onempty": "^1.4.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "npm-audit-resolver": "^2.2.0",
     "serve": "^11.3.2",
     "styled-components": "^5.1.1"
