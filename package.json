@@ -24,7 +24,7 @@
   "scripts": {
     "audit": "npx check-audit --registry https://registry.npmjs.org/",
     "audit:resolve": "npx resolve-audit --registry=https://registry.npmjs.org",
-    "clean": "rm -rf dist && cpy manifest.json dist && cpy src/assets/* dist/assets",
+    "clean": "rm -rf dist && mkdir dist && cp manifest.json dist && cp -R src/assets dist/assets",
     "prebuild": "npm run clean",
     "build:contentscript-background": "NODE_ENV=production webpack --config webpack.config.js",
     "build:popup": "INLINE_RUNTIME_CHUNK=false npm run build --prefix src/popup && cd src/popup/build && cpy * /static/* ../../../dist/popup --parents",
