@@ -1,53 +1,58 @@
-import find from './util/find'
 import { color } from './constants'
+import find from './util/find'
 
 const badLabels = [
     'Abkco',
     'Abraxas',
     'Akarma',
     'Back To Black',
-    'Bad Joker',
     'DOL',
     'DOXY',
-    'Get Back',
-    'Hi Hat',
     'Jazz Wax',
-    'joe jackson recoords',
-    'Lilith',
     'Music on Vinyl',
-    'Sanctuary Records',
     'Simply Vinyl',
     'Skorpio',
     'Tapestry',
     'Vinyl Lovers',
-    'Vinyl Magic (VM - BTF)',
     'Waxtime In Color',
     'WaxTime',
     'ZYX',
 ]
+const poorLabels = [
+    'Bad Joker',
+    'joe jackson recoords',
+    'Lilith',
+    'Get Back',
+    'Hi Hat',
+    'Sanctuary Records',
+    'Vinyl Magic (VM - BTF)',
+]
 
 const goodLabels = [
-    'ACT',
-    'AKT',
     'Analogue Productions',
-    'Audio Fidelity',
     'Cisco',
+    'EMC',
     'Flightless',
     'Hubro',
-    'Jazzland',
-    'Mobile Fidelity',
-    'Moserobie Music Production',
     'Riverside Records',
     'Rune Grammofon',
+    "Speaker's Corner",
+]
+const upperClassLabels = [
+    'ACT',
+    'AKT',
+    'Audio Fidelity',
+    'Blue Note',
+    'Mobile Fidelity',
+    'Moserobie Music Production',
+    'Jazzland',
     'Seventh Records',
     'Soleil Zeuhl',
-    "Speaker's Corner",
 ]
 
 const labelAlert = (
     selector: string,
     labels: typeof badLabels | typeof goodLabels,
-    soft: string,
     strong: string
 ) =>
     find(selector)
@@ -64,14 +69,18 @@ const labelAlert = (
             match.style.backgroundImage = ` repeating-linear-gradient(
               135deg,
               ${strong},
-              ${soft} 80px,
+              ${color.white.strong} 80px,
               transparent 10px,
               transparent 99.999999%
             )`
 
             return match
         })
-;['.label_and_cat', '.collection-row'].forEach((selector) => {
-    labelAlert(selector, badLabels, color.red.soft, color.red.strong)
-    labelAlert(selector, goodLabels, color.green.soft, color.green.strong)
-})
+;['.label_and_cat', '.collection-row', 'tr[class^="wantlist"]'].forEach(
+    (selector) => {
+        labelAlert(selector, badLabels, color.red.strong)
+        labelAlert(selector, poorLabels, color.red.soft)
+        labelAlert(selector, goodLabels, color.green.soft)
+        labelAlert(selector, upperClassLabels, color.green.strong)
+    }
+)
