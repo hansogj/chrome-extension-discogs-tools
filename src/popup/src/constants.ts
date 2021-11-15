@@ -3,6 +3,12 @@ export interface Folder {
     name: string
 }
 
+export const placements = ['Oppe', 'Nede', 'Boden'] as const
+export const origins = ['Self', 'Maus', 'Skiaker'] as const
+
+export type Placement = typeof placements[number] // 'Oppe' | 'Nede' | 'Boden'
+export type Origin = typeof origins[number] // 'Self' | 'Maus' | 'Skiaker'
+
 export const folders: Folder[] = [
     { name: 'Add to Folder' },
     { folder_id: 653066, name: 'LP HoG' },
@@ -34,6 +40,8 @@ export type ActionType =
     | 'filterAndAddToWantlist'
     | 'addToWantlist'
     | 'removeFromWantlist'
+    | 'changePlacement'
+    | 'changeOrigin'
 
 export interface Action {
     action: ActionType
@@ -67,4 +75,14 @@ export const addToWantlistAction: Action = {
 export const removeFromWantlistAction: Action = {
     action: 'removeFromWantlist',
     title: 'Wantlist -',
+}
+
+export const changePlacement: Action = {
+    action: 'changePlacement',
+    title: 'Change Placement',
+}
+
+export const changeOrigin: Action = {
+    action: 'changeOrigin',
+    title: 'Change Origin',
 }
