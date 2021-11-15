@@ -53,8 +53,7 @@ export const collUpdate = (body: string) =>
             'sec-fetch-site': 'same-origin',
             'x-requested-with': 'XMLHttpRequest',
         },
-        referrer:
-            'https://www.discogs.com/user/hansogj/collection?sort=added%2Cdesc&folder=1516801&limit=25',
+        referrer: 'https://www.discogs.com/',
         referrerPolicy: 'strict-origin-when-cross-origin',
         body: body,
         method: 'POST',
