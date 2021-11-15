@@ -9,7 +9,7 @@ import {
 } from './addToWantlist'
 import './contentscript.scss'
 import './labelAlert'
-import { flyttTil, setOpphav } from './setCustomField'
+import { changePlacement, changeOrigin } from './setCustomField'
 import { uniqueRelease } from './uniqueRelease'
 import { uniqueSeller } from './uniqueSeller'
 import find from './util/find'
@@ -24,8 +24,8 @@ find('.activity_menu_total')
 export const RequestMapping = {
     uniqueSeller,
     uniqueRelease,
-    flyttTil,
-    setOpphav,
+    changePlacement,
+    changeOrigin,
     filterAndAddToWantlist,
     addToWantlist,
     removeFromWantlist,

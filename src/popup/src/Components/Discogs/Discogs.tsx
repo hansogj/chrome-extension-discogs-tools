@@ -59,7 +59,13 @@ const DiscogsActions = () => (
 
             <AddToFolder />
         </Row>
-
+        <Row>
+            <Column>
+                <h3 style={{ color: '#333' }}>
+                    Change Custom Fields for all selection
+                </h3>
+            </Column>
+        </Row>
         <Row>
             <Column>
                 <ChangeOrigin />
