@@ -1,17 +1,17 @@
 import React from 'react'
-import { ContentBody, Row, Column, colors } from '../styled'
-import AddToFolder from './AddToFolder'
-import { Button } from './inputs'
-import { sendChromeMessage } from '../../service/messages'
-
 import {
-    uniqueSellerAction,
-    uniqueReleaseAction,
-    addToWantlistAction,
-    removeFromWantlistAction,
-    filterAndAddToWantlistAction,
     Action,
+    addToWantlistAction,
+    filterAndAddToWantlistAction,
+    removeFromWantlistAction,
+    uniqueReleaseAction,
+    uniqueSellerAction,
 } from '../../constants'
+import { sendChromeMessage } from '../../service/messages'
+import { colors, Column, ContentBody, Row } from '../styled'
+import AddToFolder from './AddToFolder'
+import { ChangeOrigin, ChangePlacement } from './CustomFieldsSelectors'
+import { Button } from './inputs'
 
 interface ActionButtonProps extends Action {
     style?: React.CSSProperties
@@ -58,6 +58,15 @@ const DiscogsActions = () => (
             </Column>
 
             <AddToFolder />
+        </Row>
+
+        <Row>
+            <Column>
+                <ChangeOrigin />
+            </Column>
+            <Column>
+                <ChangePlacement />
+            </Column>
         </Row>
     </ContentBody>
 )

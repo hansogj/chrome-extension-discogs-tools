@@ -34,6 +34,8 @@ export type ActionType =
     | 'filterAndAddToWantlist'
     | 'addToWantlist'
     | 'removeFromWantlist'
+    | 'changePlacement'
+    | 'changeOrigin'
 
 export interface Action {
     action: ActionType
@@ -67,4 +69,9 @@ export const addToWantlistAction: Action = {
 export const removeFromWantlistAction: Action = {
     action: 'removeFromWantlist',
     title: 'Wantlist -',
+}
+
+export const changePlacement: Action = {
+    action: 'changePlacement',
+    title: 'Change Placement',
 }
