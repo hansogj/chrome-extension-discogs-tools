@@ -4,10 +4,10 @@ export interface Folder {
 }
 
 export const placements = ['Oppe', 'Nede', 'Boden'] as const
-export const origins = ['Self', 'Maus', 'Skiaker'] as const
+export const origins = ['Self', 'Maus', 'Gjerdrum', 'Skiaker'] as const
 
-export type Placement = typeof placements[number] // 'Oppe' | 'Nede' | 'Boden'
-export type Origin = typeof origins[number] // 'Self' | 'Maus' | 'Skiaker'
+export type Placement = typeof placements[number]
+export type Origin = typeof origins[number]
 
 export const folders: Folder[] = [
     { name: 'Add to Folder' },
