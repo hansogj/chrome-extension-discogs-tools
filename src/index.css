@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", "Helvetica", "Nimbus Sans", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+#root {
+  width: 600px;
+  height: auto;
+}

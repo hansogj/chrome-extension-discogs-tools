@@ -1,0 +1,33 @@
+{
+  "name": "Discogs tools",
+  "description": "Make adding items to collection with several custom fields easier, highlights labels of favour and disfvaour and provides a filte on unique want list items",
+  "version": "2.0.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Discogs tools"
+  },
+  "background": {
+    "service_worker": "./static/js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.discogs.com/*"
+      ],
+      "js": [
+        "./static/js/content.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus"
+  ],
+  "icons": {
+    "16": "discogs.png",
+    "48": "discogs.png",
+    "128": "discogs.png"
+  }
+}
