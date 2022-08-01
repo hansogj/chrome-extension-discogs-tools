@@ -1,9 +1,9 @@
-import maybe from "maybe-for-sure";
-import { PaginatedWantList, Want } from "../../domain";
-import { fetch } from "./api";
-import { get, set, uniqueKey } from "./local.storage";
+import maybe from 'maybe-for-sure'
+import { PaginatedWantList, Want } from '../../domain'
+import { fetch } from './api'
+import { get, set, uniqueKey } from '../storage'
 
-export type Cache = Record<string, Object>;
+export type Cache = Record<string, Object>
 
 const toWantList = (wants: Want[]) =>
   wants
@@ -34,47 +34,46 @@ const toWantList = (wants: Want[]) =>
         date_added,
         formats: formats.filter((_, i) => i === 0),
       })
-    );
+    )
 
 const wantListService = () => {
-  const getCachedValues = (userId: number): Cache =>
-    get(uniqueKey("want-list", userId), {});
+  const getCachedValues = (userId: number): Promise<Cache> =>
+    get(uniqueKey('want-list', userId), {})
 
   const call = async (url: string, page = 1, cache: Cache): Promise<Cache> => {
     const { pagination, wants }: PaginatedWantList = await fetch(url, {
       page,
       per_page: 100,
-    });
+    })
 
     const build: Cache = toWantList(wants)
       .filter(({ wantListId }) => !!wantListId && !cache[wantListId])
       .reduce((curr, { wantListId, ...rest }) => {
         try {
-          curr[wantListId] = rest;
+          curr[wantListId] = rest
         } catch (error) {
-          debugger;
+          throw error
         }
-        return curr;
-      }, cache);
+        return curr
+      }, cache)
 
     return pagination.page < pagination.pages
       ? call(url, pagination.page + 1, build)
-      : build;
-  };
+      : build
+  }
 
   const sync = async (userId: number, url: string, page = 1) => {
-    console.log(userId, url, page);
-    console.time();
-    const res = await call(url, page, {});
-    console.timeEnd();
-    set(uniqueKey(`want-list`, userId), res);
-    return Promise.resolve(res);
-  };
+    console.log(userId, url, page)
+    console.time()
+    const res = await call(url, page, {})
+    console.timeEnd()
+    return set(uniqueKey(`want-list`, userId), res)
+  }
 
   return {
-    get: (userId: number) => Promise.resolve(getCachedValues(userId)),
+    get: (userId: number) => getCachedValues(userId),
     sync,
-  };
-};
+  }
+}
 
-export default wantListService;
+export default wantListService

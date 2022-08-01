@@ -1,23 +1,23 @@
-import { base, colors } from "../../Components/styled";
-import { DEFAULT_HIGHLIGHTED_LABELS } from "../../constants";
-import { HightlightedLabels } from "../../domain";
-import find from "../utils/find";
+import { base, colors } from '../../Components/styled'
+import { DEFAULT_HIGHLIGHTED_LABELS } from '../../constants'
+import { HightlightedLabels } from '../../domain'
+import find from '../utils/find'
 import {
   get as getStorage,
   remove as removeStorage,
   set as setStorage,
-} from "./local.storage";
+} from '../storage'
 
-const higlightColors = colors.highlightedLabels;
+const higlightColors = colors.highlightedLabels
 
-const key = "highlighted-labels";
+const key = 'highlighted-labels'
 export const generatedCss = (emphasize: string) => `repeating-linear-gradient(
     135deg,
     ${emphasize},
     ${higlightColors.white.strong} calc(${base} * 7),
     transparent ${base},
     transparent 99.999999%
-  )`;
+  )`
 const labelAlert = (selector: string, labels: string[], emphasize: string) =>
   find(selector)
     .map((listItem) => listItem as HTMLElement)
@@ -27,27 +27,26 @@ const labelAlert = (selector: string, labels: string[], emphasize: string) =>
       )
     )
     .map((match) => {
-      match.style.backgroundImage = generatedCss(emphasize);
-      return match;
-    });
+      match.style.backgroundImage = generatedCss(emphasize)
+      return match
+    })
 
 const apply = ({ poor, fair, good, veryGood }: HightlightedLabels) => {
-  [".label_and_cat", ".collection-row", 'tr[class^="wantlist"]'].forEach(
+  ;['.label_and_cat', '.collection-row', 'tr[class^="wantlist"]'].forEach(
     (selector) => {
-      labelAlert(selector, poor, higlightColors.red.strong);
-      labelAlert(selector, fair, higlightColors.red.soft);
-      labelAlert(selector, good, higlightColors.green.soft);
-      labelAlert(selector, veryGood, higlightColors.green.strong);
+      labelAlert(selector, poor, higlightColors.red.strong)
+      labelAlert(selector, fair, higlightColors.red.soft)
+      labelAlert(selector, good, higlightColors.green.soft)
+      labelAlert(selector, veryGood, higlightColors.green.strong)
     }
-  );
-};
+  )
+}
 
 const highlightedLabelsServcie = () => {
-  const get = () =>
-    Promise.resolve(getStorage(key, DEFAULT_HIGHLIGHTED_LABELS));
-  const remove = () => Promise.resolve(removeStorage(key));
+  const get = () => getStorage(key, DEFAULT_HIGHLIGHTED_LABELS)
+  const remove = () => removeStorage(key)
 
-  get().then(apply);
+  get().then(apply)
 
   return {
     get,
@@ -58,12 +57,12 @@ const highlightedLabelsServcie = () => {
               return {
                 ...storedLabels,
                 ...labels,
-              };
+              }
             })
             .then((it) => setStorage(key, it))
-        : remove();
+        : remove()
     },
-  };
-};
+  }
+}
 
-export default highlightedLabelsServcie;
+export default highlightedLabelsServcie

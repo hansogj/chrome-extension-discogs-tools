@@ -1,18 +1,16 @@
-import { SelectedFields } from "../../domain/Inventory";
+import { SelectedFields } from '../../domain/Inventory'
 import {
   get as getStorage,
   set as setStorage,
   remove as removeStorage,
   uniqueKey,
-} from "./local.storage";
+} from '../storage'
 
-const key = "selected-fields";
+const key = 'selected-fields'
 
 const fieldsService = () => {
-  const get = (userId: number) =>
-    Promise.resolve(getStorage(uniqueKey(key, userId), {}));
-  const remove = (userId: number) =>
-    Promise.resolve(removeStorage(uniqueKey(key, userId)));
+  const get = (userId: number) => getStorage(uniqueKey(key, userId), {})
+  const remove = (userId: number) => removeStorage(uniqueKey(key, userId))
 
   return {
     get,
@@ -25,7 +23,7 @@ const fieldsService = () => {
             }))
             .then((it) => setStorage(uniqueKey(key, userId), it))
         : remove(userId),
-  };
-};
+  }
+}
 
-export default fieldsService;
+export default fieldsService

@@ -1,37 +1,41 @@
-import axios, { AxiosResponse } from "axios";
-import maybe from "maybe-for-sure";
+import axios, { AxiosResponse } from 'axios'
+import maybe from 'maybe-for-sure'
 
-import { empty } from "../../utils/json.utils";
-import { get, set } from "../local.storage";
+import { empty } from '../../utils/json.utils'
+import { get, set } from '../../storage'
 
-const unRest = ({ data }: AxiosResponse) => data;
+const unRest = ({ data }: AxiosResponse) => data
 const serialize = (obj: Record<string, string | number>): string =>
   Object.keys(obj)
     .reduce(
       (a, k) => a.concat(`${k}=${encodeURIComponent(obj[k])}`),
       [] as string[]
     )
-    .join("&");
+    .join('&')
 
-const mergeWithToken = (it: SearchParams) => {
-  const token = get("token", {}); // token to be found in https://www.discogs.com/settings/developers
-  return { ...it, ...(!empty(token) && { token }) };
-};
+const mergeWithToken = (it: SearchParams, token: string) => ({
+  ...it,
+  ...(!empty(token) && { token }),
+})
 
-const url = (resource: string, params?: SearchParams) => {
-  return maybe(params)
-    .orJust({} as SearchParams)
-    .map(mergeWithToken)
-    .map((it) => serialize(it))
-    .map((it) => (it ? `${resource}?${it}` : resource))
-    .valueOr(resource);
-};
+const url = (resource: string, params?: SearchParams) =>
+  get('token', undefined).then(
+    (
+      token // token to be found in https://www.discogs.com/settings/developers
+    ) =>
+      maybe(params)
+        .orJust({} as SearchParams)
+        .map((it) => mergeWithToken(it, token!))
+        .map((it) => serialize(it))
+        .map((it) => (it ? `${resource}?${it}` : resource))
+        .valueOr(resource)
+  )
 
 export const fetch = async (resource: string, params?: SearchParams) =>
-  axios.get(url(resource, params)).then(unRest);
+  url(resource, params).then(axios.get).then(unRest)
 
 export const deleteResource = async (resource: string) =>
-  axios.delete(url(resource)).then(unRest);
+  url(resource).then(axios.delete).then(unRest)
 
 export const post = async (
   resource: string,
@@ -39,9 +43,11 @@ export const post = async (
 ) => {
   const { payLoad, ...body } = maybe(
     paramsAndPayload as SearchParams & PayLoad
-  ).valueOr({ payLoad: undefined });
-  return axios.post(url(resource, body as SearchParams), payLoad).then(unRest);
-};
+  ).valueOr({ payLoad: undefined })
+  return url(resource, body as SearchParams)
+    .then((postUrl) => axios.post(postUrl, payLoad))
+    .then(unRest)
+}
 
 export const put = async (
   resource: string,
@@ -49,9 +55,11 @@ export const put = async (
 ) => {
   const { payLoad, ...body } = maybe(
     paramsAndPayload as SearchParams & PayLoad
-  ).valueOr({ payLoad: undefined });
-  return axios.put(url(resource, body as SearchParams), payLoad).then(unRest);
-};
+  ).valueOr({ payLoad: undefined })
+  return url(resource, body as SearchParams)
+    .then((putUrl) => axios.put(putUrl, payLoad))
+    .then(unRest)
+}
 
-export const setUserToken = (userToken: string): Promise<boolean> =>
-  Promise.resolve(!!set("token", userToken));
+export const setUserToken = (userToken: string): Promise<string> =>
+  set('token', userToken)
