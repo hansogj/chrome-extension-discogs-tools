@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PREFIX, Storage, StorageKeys } from './types'
+import { Storage, StorageKeys } from './types'
 import { prefixed, valueOr } from './utils'
 console.log('LOCAL STORAGE')
 

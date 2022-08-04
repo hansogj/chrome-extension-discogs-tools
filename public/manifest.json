@@ -10,6 +10,9 @@
   "background": {
     "service_worker": "./static/js/background.js"
   },
+  "host_permissions": [
+    "*://*.discogs.com/*"
+  ],
   "content_scripts": [
     {
       "matches": [
