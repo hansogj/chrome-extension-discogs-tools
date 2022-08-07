@@ -17,6 +17,7 @@ import { fromReleasePageMaster } from '../selectors'
 import { getWantListResource } from '../selectors/resource.selectors'
 import { WantListActions, WantListActionTypes } from './types'
 import * as wantListActions from './wantlist.actions'
+import * as wantlistService from '../../wantlist.service'
 
 const MAX_REQUESTS_PR_MINUTE = 60 - 10 // -10 to get som slack
 const second = 1000
@@ -34,9 +35,9 @@ function* syncWantList(): Generator<any> {
 
 function* getWantList(): Generator<any> {
   const userId = yield call(appSagas.getUserId)
-  let result = yield call(api.getWantList, userId as number)
+  let result = yield call(wantlistService.get, userId as number)
+
   if (Object.keys(result as any).length === 0) {
-    yield call(syncWantList)
   } else {
     yield put(wantListActions.getWantListSuccess(result as WantList))
   }
@@ -124,6 +125,7 @@ function* addToWantListFromVersionsUrl(
 function* DiscogsSaga() {
   yield all([
     takeLatest(AppActions.getUserSuccess, getWantList),
+    takeLatest(WantListActions.getWantList, getWantList),
     takeLatest(WantListActions.syncWantList, syncWantList),
     takeLatest(WantListActions.addToWantList, addToWantList),
   ])

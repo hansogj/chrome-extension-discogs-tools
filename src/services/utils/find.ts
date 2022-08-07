@@ -1,6 +1,6 @@
 export const find = (
   selector: string,
-  root: Document | Element = window.document
-) => Array.from(root.querySelectorAll(selector));
+  root: Document | Element = window && window.document,
+) => Array.from(root.querySelectorAll(selector))
 
-export default find;
+export default find

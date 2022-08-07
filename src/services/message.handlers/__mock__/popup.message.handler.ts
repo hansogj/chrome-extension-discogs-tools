@@ -1,13 +1,7 @@
-import highlightedLabelsService from '../../highlighted.labels.service'
 import { ActionTypes } from '../../redux'
-import fieldsService from '../../selectedFields.service'
-import versionsService from '../../versions.service'
-import wantListService from '../../wantlist.service'
 import { messageResolverFactory as backgroundMessageResolver } from '.././background.resolver'
 import { messageResolverFactory as contentMessageResolver } from '.././content.resolver'
 import { MessageResover } from '.././types'
-
-console.log('message handler fallback')
 
 const singlePageAppResolver =
   (
@@ -30,14 +24,7 @@ export const messageHandlerFallback = (
   const sapResolver = singlePageAppResolver(action, override)
 
   return Promise.race([
-    sapResolver(
-      contentMessageResolver({
-        wantList: wantListService(),
-        fields: fieldsService(),
-        versions: versionsService(),
-        highlightedLabels: highlightedLabelsService(),
-      } as any),
-    ),
+    sapResolver(contentMessageResolver()),
     sapResolver(backgroundMessageResolver()),
   ])
 }

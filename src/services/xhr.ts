@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import maybe from 'maybe-for-sure'
-import { get, set } from './storage'
+import * as userToken from './userToken.service'
 import { empty } from './utils/json.utils'
 
 import adapter from '@vespaiach/axios-fetch-adapter'
@@ -20,16 +20,13 @@ const mergeWithToken = (it: SearchParams, token: string) => ({
 })
 
 const url = (resource: string, params?: SearchParams) =>
-  get('token', undefined).then(
-    (
-      token, // token to be found in https://www.discogs.com/settings/developers
-    ) =>
-      maybe(params)
-        .orJust({} as SearchParams)
-        .map((it) => mergeWithToken(it, token!))
-        .map((it) => serialize(it))
-        .map((it) => (it ? `${resource}?${it}` : resource))
-        .valueOr(resource),
+  userToken.get().then((token) =>
+    maybe(params)
+      .orJust({} as SearchParams)
+      .map((it) => mergeWithToken(it, token!))
+      .map((it) => serialize(it))
+      .map((it) => (it ? `${resource}?${it}` : resource))
+      .valueOr(resource),
   )
 
 export const fetch = async (resource: string, params?: SearchParams) =>
@@ -63,6 +60,3 @@ export const put = async (
     .then((putUrl) => axios.put(putUrl, payLoad))
     .then(unRest)
 }
-
-export const setUserToken = (userToken: string): Promise<string> =>
-  set('token', userToken)

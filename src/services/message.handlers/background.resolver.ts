@@ -1,16 +1,15 @@
+import 'regenerator-runtime/runtime.js'
 import { ActionTypes } from '../redux'
+import * as wantlist from '../wantlist.service'
 import * as xhr from '../xhr'
 import { MessageActions } from './types'
-
-import 'regenerator-runtime/runtime.js'
-
+import { releasePage } from '../releasePage.service'
 export const messageResolverFactory =
   () =>
   (
     action: ActionTypes,
     resolver: (prom: Promise<unknown>) => Promise<unknown>,
   ) => {
-    console.info('background message received ', action)
     if (action.type === MessageActions.fetch)
       return resolver(xhr.fetch(action.resource!, action.body as SearchParams))
 
@@ -28,7 +27,16 @@ export const messageResolverFactory =
 
     if (action.type === MessageActions.deleteResource) {
       return resolver(xhr.deleteResource(action.resource!))
-    } else
+    }
+
+    if (action.type === MessageActions.SYNC_WANT_LIST)
+      return resolver(
+        wantlist.sync(action.userId as number, action.body as string),
+      )
+
+    if (action.type === MessageActions.GET_RELEASE_PAGE_ITEM_ID)
+      return resolver(releasePage(action.body as string))
+    else
       return resolver(
         new Promise((_, reject) =>
           setTimeout(

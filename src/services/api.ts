@@ -5,11 +5,10 @@ import {
   ResourceUrl,
   Version,
 } from '../domain'
-import { SelectedFields } from '../domain/Inventory'
-import { DiscogsActions } from './redux/discogs'
 import { MessageActions } from './message.handlers'
-import { Cache } from './wantlist.service'
 import messageHandler from './message.handlers/popup.message.handler'
+import { DiscogsActions } from './redux/discogs'
+import { Cache } from './wantlist.service'
 
 export const fetch = async <T>(resource: ResourceUrl, body?: SearchParams) =>
   messageHandler<T>({ type: MessageActions.fetch, resource, body })
@@ -27,11 +26,6 @@ export const post = async <T>(
 export const deleteResource = async <T>(resource: ResourceUrl) =>
   messageHandler<T>({ type: MessageActions.deleteResource, resource })
 
-export const setUserToken = async (userToken: string) =>
-  messageHandler({ type: MessageActions.setUserToken, body: userToken }).then(
-    (e) => `${e}`,
-  )
-
 export const manipulateDom = async (
   body: DiscogsActions,
   resource: ResourceUrl,
@@ -43,11 +37,6 @@ export const manipulateDom = async (
       ),
   )
 
-export const getWantList = async (userId: number) =>
-  messageHandler<Cache>({ type: MessageActions.GET_WANT_LIST, userId }).then(
-    (cache) => maybe(cache).valueOr({}) as Cache,
-  )
-
 export const syncWantList = async (userId: number, url: string) =>
   messageHandler<Cache>({
     type: MessageActions.SYNC_WANT_LIST,
@@ -55,36 +44,19 @@ export const syncWantList = async (userId: number, url: string) =>
     userId,
   }).then((cache) => maybe(cache).valueOr({}) as Cache)
 
-export const setSelectedFields = async (
-  userId: number,
-  selectedFields: SelectedFields,
-) =>
-  messageHandler<SelectedFields>({
-    type: MessageActions.SET_SELECTED_FIELDS,
-    body: selectedFields as any,
-    userId,
-  }).then((it) => maybe(it).valueOr(selectedFields))
-
-export const getSelectedFields = async (userId: number) =>
-  messageHandler<SelectedFields>({
-    type: MessageActions.GET_SELECTED_FIELDS,
-    userId,
-  }).then((it) => maybe(it).valueOr({}))
-
 export const getReleasePageItem = async () =>
   messageHandler<Optional<MasterRelease>>({
-    type: MessageActions.GET_RELEASE_PAGE_ITEM_ID,
-  })
+    type: MessageActions.GET_CURRENT_URL,
+  }).then((body) =>
+    messageHandler<Optional<MasterRelease>>({
+      type: MessageActions.GET_RELEASE_PAGE_ITEM_ID,
+      body,
+    }),
+  )
 
 export const reload = async () =>
   messageHandler<Optional<MasterRelease>>({
     type: MessageActions.WINDOW_RELOAD,
-  })
-
-export const getAllWantedVersionsOfItem = async (resource: string) =>
-  messageHandler<Optional<MasterRelease>>({
-    type: MessageActions.GET_ALL_WANTED_VERSIONS_OF_ITEM,
-    resource,
   })
 
 export const getAllWantedVersionsByFormat = async (
@@ -97,13 +69,7 @@ export const getAllWantedVersionsByFormat = async (
     body: format,
   })
 
-export const setHighglightedLabels = async (labels: {}) =>
+export const applyHighglightedLabels = async () =>
   messageHandler<HightlightedLabels>({
-    type: MessageActions.SET_HIGHTLIGHTED_LABELS,
-    body: labels,
-  }).then((it) => maybe(it).valueOr(labels))
-
-export const getHighglightedLabels = async () =>
-  messageHandler<HightlightedLabels>({
-    type: MessageActions.GET_HIGHTLIGHTED_LABELS,
-  }).then((it) => maybe(it).valueOr({}))
+    type: MessageActions.APPLY_HIGHTLIGHTED_LABELS,
+  })

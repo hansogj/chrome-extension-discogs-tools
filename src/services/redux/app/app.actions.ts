@@ -48,6 +48,10 @@ export const logOut = (): AppActionTypes => ({
   type: AppActions.logOut,
 })
 
+export const logOutSuccess = (): AppActionTypes => ({
+  type: AppActions.logOutSuccess,
+})
+
 export const setUserToken = (userToken: string): AppActionTypes => ({
   type: AppActions.setUserToken,
   userToken,

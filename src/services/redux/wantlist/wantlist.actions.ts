@@ -1,9 +1,8 @@
 import { Version, WantList } from '../../../domain'
 import { WantListActions, WantListActionTypes } from './types'
 
-export const getWantList = (page: number): WantListActionTypes => ({
+export const getWantList = (): WantListActionTypes => ({
   type: WantListActions.getWantList,
-  page,
 })
 
 export const syncWantList = (): WantListActionTypes => ({

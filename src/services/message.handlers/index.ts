@@ -1,10 +1,10 @@
 import { ActionTypes as Action } from '../redux'
+import { MessageResover } from './types'
 
-import { Services, MessageResover } from './types'
 export * from './types'
 
 export const messageHandlerFactory =
-  (messageResolver: MessageResover, services?: Services) =>
+  (messageResolver: MessageResover) =>
   (
     action: Action,
     sender: chrome.runtime.MessageSender,
@@ -12,6 +12,6 @@ export const messageHandlerFactory =
   ) => {
     const resolver = (prom: Promise<unknown>) =>
       prom.then(sendResponse).catch((error) => sendResponse({ error }))
-    messageResolver(action, resolver, services)
+    messageResolver(action, resolver)
     return true
   }

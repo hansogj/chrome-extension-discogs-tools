@@ -50,19 +50,6 @@ const App: FC<AppProps> = ({
 }: AppProps) => {
   let ref = useRef(null)
 
-  console.log(
-    JSON.stringify({
-      isLoading: maybe(isLoading).nothingUnless(Boolean).valueOr('*'),
-      notAuthenticated: maybe(notAuthenticated)
-        .nothingUnless(Boolean)
-        .valueOr('*'),
-      user: maybe(user as any)
-        .nothingUnless(Boolean)
-        .map(() => 'user')
-        .valueOr('*'),
-    }),
-  )
-
   return (
     <Container id="container">
       <Content id="content" ref={ref}>
@@ -94,16 +81,7 @@ const App: FC<AppProps> = ({
                 )),
             )
 
-            .valueOr(
-              <NotificationComponent
-                {...{
-                  notification: {
-                    message: getText('notification.general.error'),
-                    isError: true,
-                  },
-                }}
-              />,
-            )}
+            .valueOr(<TokenInput setUserToken={setUserToken} />)}
         </>
       </Content>
     </Container>
@@ -122,7 +100,6 @@ export const mapStateToProps = (
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<AppProps> =>
   ({
     getUser: bindActionCreators(appActions.getUser, dispatch),
-
     setUserToken: bindActionCreators(appActions.setUserToken, dispatch),
   } as AppProps)
 

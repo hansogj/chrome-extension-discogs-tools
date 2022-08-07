@@ -26,7 +26,8 @@
   "permissions": [
     "activeTab",
     "storage",
-    "contextMenus"
+    "contextMenus",
+    "unlimitedStorage"
   ],
   "icons": {
     "16": "discogs.png",

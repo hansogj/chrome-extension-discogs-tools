@@ -17,7 +17,6 @@ export enum WantListActions {
   getWantList = 'GET_WANT_LIST',
   syncWantList = 'SYNC_WANT_LIST',
   getWantListSuccess = 'GET_WANT_LIST_SUCCESS',
-
   getWantListFailed = 'GET_WANT_LIST_FAILED',
   addToWantList = 'ADD_TO_WANT_LIST',
   addToWantListSuccess = 'ADD_TO_WANT_LIST_SUCCESS',

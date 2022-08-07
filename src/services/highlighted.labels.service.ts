@@ -31,38 +31,30 @@ const labelAlert = (selector: string, labels: string[], emphasize: string) =>
       return match
     })
 
-const apply = ({ poor, fair, good, veryGood }: HightlightedLabels) => {
-  ;['.label_and_cat', '.collection-row', 'tr[class^="wantlist"]'].forEach(
-    (selector) => {
-      labelAlert(selector, poor, higlightColors.red.strong)
-      labelAlert(selector, fair, higlightColors.red.soft)
-      labelAlert(selector, good, higlightColors.green.soft)
-      labelAlert(selector, veryGood, higlightColors.green.strong)
-    },
+export const apply = () =>
+  get().then(({ poor, fair, good, veryGood }: HightlightedLabels) =>
+    ['.label_and_cat', '.collection-row', 'tr[class^="wantlist"]'].forEach(
+      (selector) => {
+        labelAlert(selector, poor, higlightColors.red.strong)
+        labelAlert(selector, fair, higlightColors.red.soft)
+        labelAlert(selector, good, higlightColors.green.soft)
+        labelAlert(selector, veryGood, higlightColors.green.strong)
+      },
+    ),
   )
+
+export const get = () => getStorage(key, DEFAULT_HIGHLIGHTED_LABELS)
+export const remove = () => removeStorage(key)
+
+export const set = (labels: HightlightedLabels) => {
+  return labels
+    ? get()
+        .then((storedLabels: HightlightedLabels) => {
+          return {
+            ...storedLabels,
+            ...labels,
+          }
+        })
+        .then((it) => setStorage(key, it))
+    : remove()
 }
-
-const highlightedLabelsServcie = () => {
-  const get = () => getStorage(key, DEFAULT_HIGHLIGHTED_LABELS)
-  const remove = () => removeStorage(key)
-
-  get().then(apply)
-
-  return {
-    get,
-    set: (labels: HightlightedLabels) => {
-      return labels
-        ? get()
-            .then((storedLabels: HightlightedLabels) => {
-              return {
-                ...storedLabels,
-                ...labels,
-              }
-            })
-            .then((it) => setStorage(key, it))
-        : remove()
-    },
-  }
-}
-
-export default highlightedLabelsServcie

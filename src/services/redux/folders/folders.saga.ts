@@ -19,6 +19,7 @@ import {
   ReleasePageItem,
 } from '../../../domain'
 import * as api from '../../api'
+import * as selectedFieldsService from '../../selectedFields.service'
 import { renderText } from '../../texts'
 import { actions as appActions, AppActions, sagas as appSagas } from '../app'
 import { sagas as discogsSaga } from '../discogs'
@@ -58,7 +59,7 @@ function* setSelectedFields({
 }: FoldersActionTypes): Generator<any> {
   const userId = yield call(appSagas.getUserId)
   const allFields = yield call(
-    api.setSelectedFields,
+    selectedFieldsService.set,
     userId as number,
     selectedFields!,
   )
@@ -69,7 +70,7 @@ function* setSelectedFields({
 
 function* getSelectedFields(): Generator<any> {
   const userId = yield call(appSagas.getUserId)
-  const allFields = yield call(api.getSelectedFields, userId as number)
+  const allFields = yield call(selectedFieldsService.get, userId as number)
 
   yield put(
     actions.setSelectedFieldsSuccess(allFields as Record<string, string>),

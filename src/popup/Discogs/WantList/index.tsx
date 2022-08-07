@@ -1,5 +1,5 @@
 import maybe from 'maybe-for-sure'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { WantList } from '../../../domain'
@@ -13,15 +13,27 @@ import { renderText } from '../../../services/texts'
 import { Column, ContentBody, Row } from '../../styled'
 import ControlPanel from './ControlPanel'
 import List, { Props as ListProps } from './List'
-import { entriesFrom, filteredAndSorted, SortMethod } from './utils'
+import {
+  entriesFrom,
+  filteredAndSorted,
+  SortMethod,
+  SortMethods,
+} from './utils'
 
 import { actions as appActions } from '../../../services/redux/app'
+import { actions as wantlistActions } from '../../../services/redux/wantlist'
+import { DispatchAction } from '../../../services/redux/store'
 
 export interface Props extends ListProps {
   wantList: WantList
+  getSyncedWantlist: DispatchAction<void>
 }
 
-const WantListComponent: FC<Props> = ({ wantList, goToUrl }: Props) => {
+const WantListComponent: FC<Props> = ({
+  wantList,
+  goToUrl,
+  getSyncedWantlist,
+}: Props) => {
   const [sortMethod, selectSortMethod] = useState<SortMethod>('Added (rev)')
   const [pageSize, setPageSize] = useState<number>(25)
   const [pageNr, setPage] = useState<number>(0)
@@ -30,7 +42,46 @@ const WantListComponent: FC<Props> = ({ wantList, goToUrl }: Props) => {
     .map((it) => it.length)
     .valueOr(0)
 
-  const turnPage = (dir: number) => setPage(pageNr + dir)
+  const turnPage = (dir: number) => {
+    return setPage(pageNr + dir)
+  }
+
+  useEffect(() => {
+    getSyncedWantlist()
+  }, [getSyncedWantlist])
+
+  const lastPage = pageSize * (pageNr + 2) > wantListLength
+
+  const CP = () => (
+    <ControlPanel
+      {...{
+        selectSortMethod: (method: keyof SortMethods) => {
+          setPage(0)
+          selectSortMethod(method)
+        },
+        sortMethod,
+        turnPage,
+        pageSize,
+        setPageSize: (newSize) => {
+          setPage(0)
+          setPageSize(newSize)
+        },
+        pageNr,
+        wantListLength,
+        firstPage: pageNr === 0,
+        lastPage,
+      }}
+    />
+  )
+
+  console.log({
+    pageNr,
+    wantListLength,
+    pageSize,
+    firstPage: pageNr === 0,
+    lp: pageSize * (pageNr + 1),
+    lastPage,
+  })
 
   return wantList ? (
     <ContentBody filled>
@@ -44,34 +95,12 @@ const WantListComponent: FC<Props> = ({ wantList, goToUrl }: Props) => {
           </h3>
         </Column>
       </Row>
-      <ControlPanel
-        {...{
-          selectSortMethod,
-          sortMethod,
-          turnPage,
-          pageSize,
-          setPageSize,
-          pageNr,
-          wantListLength,
-        }}
-      />
+      <CP />
       {maybe(filteredAndSorted(wantList, sortMethod, pageNr, pageSize))
         .map((entries) => <List {...{ entries, goToUrl }} />)
         .valueOr(<></>)}
 
-      {pageSize > 99 && (
-        <ControlPanel
-          {...{
-            selectSortMethod,
-            sortMethod,
-            turnPage,
-            pageSize,
-            setPageSize,
-            pageNr,
-            wantListLength,
-          }}
-        />
-      )}
+      {pageSize > 99 && wantListLength > 99 && <CP />}
     </ContentBody>
   ) : (
     <></>
@@ -87,7 +116,11 @@ export const mapStateToProps = (
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<Props> =>
   ({
     goToUrl: bindActionCreators(appActions.goToUrl, dispatch),
-  } as Props)
+    getSyncedWantlist: bindActionCreators(
+      wantlistActions.getWantList,
+      dispatch,
+    ),
+  } as Partial<Props>)
 
 export default connect(
   mapStateToProps,

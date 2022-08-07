@@ -7,9 +7,7 @@ export interface TokenInputProps {
   setUserToken: Fn<[string], AppActionTypes>
 }
 
-const TokenInput: FC<TokenInputProps> = ({
-  setUserToken: onClick,
-}: TokenInputProps) => {
+const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
   const [token, setToken] = useState<string>('')
   const [title, __html, href, linkText, placeholder, submit] = getTexts(
     'token.info.title',
@@ -43,7 +41,10 @@ const TokenInput: FC<TokenInputProps> = ({
               value={token}
               onChange={(e) => setToken(e.target.value)}
             ></Input>
-            <Submit style={{ marginTop: base }} onClick={() => onClick(token)}>
+            <Submit
+              style={{ marginTop: base }}
+              onClick={() => setUserToken(token)}
+            >
               {submit}
             </Submit>
           </Card>

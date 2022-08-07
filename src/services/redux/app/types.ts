@@ -53,6 +53,7 @@ export enum AppActions {
   setUserToken = 'SET_USER_TOKEN',
   setUserTokenSuccess = 'SET_USER_TOKEN_SUCCESS',
   logOut = 'APP_LOG_OUT',
+  logOutSuccess = 'APP_LOG_OUT_SUCCESS',
   setView = 'APP_SET_VIEW',
   setViewSuccess = 'APP_SET_VIEW_SUCCESS',
   goToUrl = 'APP_GO_TO_URL',
