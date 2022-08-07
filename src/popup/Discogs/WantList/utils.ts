@@ -50,7 +50,7 @@ export const sortMap: SortMethods = {
   'Added (rev)': byAddedReverse,
 }
 
-export const pageSizes = [4, 25, 50, 100, 500]
+export const pageSizes = [25, 50, 100, 500]
 
 export const sortMethods = Object.keys(sortMap)
 

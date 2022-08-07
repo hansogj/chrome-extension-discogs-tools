@@ -50,8 +50,6 @@ const WantListComponent: FC<Props> = ({
     getSyncedWantlist()
   }, [getSyncedWantlist])
 
-  const lastPage = pageSize * (pageNr + 2) > wantListLength
-
   const CP = () => (
     <ControlPanel
       {...{
@@ -69,19 +67,10 @@ const WantListComponent: FC<Props> = ({
         pageNr,
         wantListLength,
         firstPage: pageNr === 0,
-        lastPage,
+        lastPage: pageSize * (pageNr + 1) >= wantListLength,
       }}
     />
   )
-
-  console.log({
-    pageNr,
-    wantListLength,
-    pageSize,
-    firstPage: pageNr === 0,
-    lp: pageSize * (pageNr + 1),
-    lastPage,
-  })
 
   return wantList ? (
     <ContentBody filled>
