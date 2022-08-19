@@ -8,6 +8,8 @@ import * as highlightedLabelsService from '../highlighted.labels.service'
 import getMockRelease from '../__mock__/release.in.view'
 import { MessageActions, MessageResover } from './types'
 
+import * as xhr from '../xhr'
+
 export const messageResolverFactory =
   (): MessageResover =>
   (
@@ -28,7 +30,25 @@ export const messageResolverFactory =
       )
     }
 
-    if (action.type === MessageActions.APPLY_HIGHTLIGHTED_LABELS) {
+    if (action.type === MessageActions.post) {
+      return resolver(
+        xhr.post(action.resource!, action.body as SearchParams & PayLoad),
+      )
+    }
+    if (action.type === MessageActions.fetch)
+      return resolver(xhr.fetch(action.resource!, action.body as SearchParams))
+
+    if (action.type === MessageActions.put) {
+      return resolver(
+        xhr.put(action.resource!, action.body as SearchParams & PayLoad),
+      )
+    }
+
+    if (action.type === MessageActions.deleteResource) {
+      return resolver(xhr.deleteResource(action.resource!))
+    }
+
+    if (action.type === MessageActions.APPLY_HIGHLIGHTED_LABELS) {
       return resolver(highlightedLabelsService.apply())
     }
 

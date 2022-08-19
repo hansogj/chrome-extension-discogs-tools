@@ -1,37 +1,17 @@
 import 'regenerator-runtime/runtime.js'
 import { ActionTypes } from '../redux'
-import * as wantlist from '../wantlist.service'
-import * as xhr from '../xhr'
-import { MessageActions } from './types'
 import { releasePage } from '../releasePage.service'
+import * as wanList from '../wantlist.service'
+import { MessageActions } from './types'
 export const messageResolverFactory =
   () =>
   (
     action: ActionTypes,
     resolver: (prom: Promise<unknown>) => Promise<unknown>,
   ) => {
-    if (action.type === MessageActions.fetch)
-      return resolver(xhr.fetch(action.resource!, action.body as SearchParams))
-
-    if (action.type === MessageActions.post) {
-      return resolver(
-        xhr.post(action.resource!, action.body as SearchParams & PayLoad),
-      )
-    }
-
-    if (action.type === MessageActions.put) {
-      return resolver(
-        xhr.put(action.resource!, action.body as SearchParams & PayLoad),
-      )
-    }
-
-    if (action.type === MessageActions.deleteResource) {
-      return resolver(xhr.deleteResource(action.resource!))
-    }
-
     if (action.type === MessageActions.SYNC_WANT_LIST)
       return resolver(
-        wantlist.sync(action.userId as number, action.body as string),
+        wanList.sync(action.userId as number, action.body as string),
       )
 
     if (action.type === MessageActions.GET_RELEASE_PAGE_ITEM_ID)

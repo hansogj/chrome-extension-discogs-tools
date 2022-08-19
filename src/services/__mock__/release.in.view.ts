@@ -7,20 +7,15 @@ const MOCKED_RELEASE_URL = [
   'https://www.discogs.com/release/4382732-Magma-M%C3%ABkan%C3%AFk-Destrukt%C3%AFw-Kommand%C3%B6h',
   'https://www.discogs.com/user/murdrejg/collection',
   'https://www.discogs.com/release/11100619-Band-Of-Dogs-Band-Of-Dogs',
+  'https://www.discogs.com/release/3216584-Jethro-Tull-Stand-Up',
 ]
 
 const getMockRelease = () =>
-  //maybe(window.location.search)
-  maybe('false')
-    .map((it) =>
-      it
-        .replace('?', '')
-        .split('&')
-        .filter((param) => param.toLowerCase().includes('itemnr'))
-        .shift(),
-    )
-
-    .map((it) => it!.split('=').pop())
+  maybe(window.location)
+    .mapTo('href')
+    .map((it) => new URL(it))
+    .mapTo('searchParams')
+    .map((params) => params.get('itemNr'))
     .map((it) => parseInt(it!, 10))
     .orJust(Math.floor(Math.random() * MOCKED_RELEASE_URL.length))
     .map((it) => MOCKED_RELEASE_URL[it])
