@@ -12,12 +12,12 @@ import {
 import { Version, WantList } from '../../../domain'
 import * as api from '../../api'
 import { getText } from '../../texts'
+import * as wantlistService from '../../wantlist.service'
 import { AppActions, sagas as appSagas } from '../app'
 import { fromReleasePageMaster } from '../selectors'
 import { getWantListResource } from '../selectors/resource.selectors'
 import { WantListActions, WantListActionTypes } from './types'
 import * as wantListActions from './wantlist.actions'
-import * as wantlistService from '../../wantlist.service'
 
 const MAX_REQUESTS_PR_MINUTE = 60 - 10 // -10 to get som slack
 const second = 1000
@@ -99,9 +99,7 @@ function* addToWantListFromVersionsUrl(
             undefined,
             second * 60,
           )
-
-          debugger
-          const del = yield fork(api.put, `${wantListResource}/${id}`)
+          yield fork(api.put, `${wantListResource}/${id}`)
         }
       })
     } catch (error) {

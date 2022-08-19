@@ -13,9 +13,8 @@ import {
   notAuthenticated,
 } from '../../services/redux/selectors/app.selectors'
 import { DispatchProps, StateProps } from '../../services/redux/selectors/utils'
-import { getText } from '../../services/texts'
-import View from '../View'
 import { Container, Content } from '../styled'
+import View from '../View'
 import NotificationComponent from './Notification'
 import Profile, { Props as ProfileProps } from './Profile'
 import { AppLogo, ContentHeader } from './style'

@@ -1,10 +1,10 @@
 import { API_TIMEOUT, isProduction } from '../../constants'
 import domResolver from '../../content/dom'
-import { HightlightedLabels, Version } from '../../domain'
+import { Version } from '../../domain'
+import * as highlightedLabelsService from '../highlighted.labels.service'
 import { ActionTypes } from '../redux'
 import { DiscogsActions } from '../redux/discogs'
 import * as versionsService from '../versions.service'
-import * as highlightedLabelsService from '../highlighted.labels.service'
 import getMockRelease from '../__mock__/release.in.view'
 import { MessageActions, MessageResover } from './types'
 

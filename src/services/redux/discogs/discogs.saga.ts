@@ -48,7 +48,7 @@ function* getReleasePageItem(): Generator<any> {
     console.log(error)
   }
 }
-
+// eslint-disable-next-line
 function* getDiscogsInventory(): Generator<any> {
   yield fetchResource(getInventoryResource)
   yield fetchResource(getFoldersResource)
