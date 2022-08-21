@@ -1,6 +1,6 @@
 {
   "name": "chrome-extension-discogs-add-collection",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.5",
