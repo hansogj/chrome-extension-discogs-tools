@@ -1,17 +1,18 @@
 {
-    "window.title": "DISCOGS-TOOLS",
-    "workbench.colorTheme": "Darktooth",
-    "workbench.colorCustomizations": {
-        "[Darktooth]": {
-            "activityBar.background": "#2875cc",
-            "statusBar.background": "#2875cc",
-            "titleBar.activeBackground": "#2875cc",
-            "titleBar.inactiveBackground": "#2875cc",
-            "scrollbar.shadow": "#2875cc",
-            "scrollbarSlider.background": "#2875cc"
-        }
-    },
-    "editor.formatOnSave": true,
-    "editor.tabSize": 2,
-    "files.insertFinalNewline": true
+  "window.title": "DISCOGS-TOOLS",
+  "workbench.colorTheme": "Darktooth",
+  "workbench.colorCustomizations": {
+    "[Darktooth]": {
+      "activityBar.background": "#2875cc",
+      "statusBar.background": "#2875cc",
+      "titleBar.activeBackground": "#2875cc",
+      "titleBar.inactiveBackground": "#2875cc",
+      "scrollbar.shadow": "#2875cc",
+      "scrollbarSlider.background": "#2875cc"
+    }
+  },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "cSpell.words": ["wantlist"]
 }

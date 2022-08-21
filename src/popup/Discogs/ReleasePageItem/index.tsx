@@ -1,11 +1,11 @@
-import maybe from 'maybe-for-sure'
-import React, { FC, PropsWithChildren } from 'react'
-import { ReleasePageItem } from '../../../domain'
-import { BrightCard, ContentBody } from '../../styled'
-import ListItem from './ListPageItem'
+import maybe from 'maybe-for-sure';
+import React, { FC, PropsWithChildren } from 'react';
+import { ReleasePageItem } from '../../../domain';
+import { Card, ContentBody, discogsColors } from '../../styled';
+import ListItem from './ListPageItem';
 
 export interface Props {
-  releasePageItem: ReleasePageItem
+  releasePageItem: ReleasePageItem;
 }
 
 const WithReleasePageItem: FC<PropsWithChildren<Props>> = ({
@@ -13,14 +13,14 @@ const WithReleasePageItem: FC<PropsWithChildren<Props>> = ({
   children,
 }: PropsWithChildren<Props>) => (
   <ContentBody filled>
-    <BrightCard>
+    <Card color={discogsColors.bright} background="transparent">
       {maybe(releasePageItem)
         .mapTo('master')
         .map((releasePageItem) => <ListItem {...{ releasePageItem }} />)
         .valueOr(<></>)}
-    </BrightCard>
+    </Card>
     {children}
   </ContentBody>
-)
+);
 
-export default WithReleasePageItem
+export default WithReleasePageItem;

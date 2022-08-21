@@ -1,4 +1,4 @@
-type ReduxAction = import("redux").Action;
+type ReduxAction = import('redux').Action;
 
 export interface Action<T> extends ReduxAction {
   type: T;

@@ -1,28 +1,28 @@
-import { HightlightedLabels, User } from '../../../domain'
-import { ActionTypes } from '../types'
-import { ActionTypes as AnyActionTypes } from '../store'
-export const DISCOGS_BASE_URL = 'https://api.discogs.com'
+import { HighlightedLabels, User } from '../../../domain';
+import { ActionTypes as AnyActionTypes } from '../store';
+import { ActionTypes } from '../types';
+export const DISCOGS_BASE_URL = 'https://api.discogs.com';
 
-export const Views = ['Add Item', 'Watch', 'Want List', 'Settings'] as const
-export type View = typeof Views[number]
-export type ActionButton = { action: AnyActionTypes; text: string }
-export const MustHaveReleaseItem: View[] = ['Add Item', 'Watch']
-export type ErrorType = ERROR | Error | string
+export const Views = ['Add Item', 'Want List', 'Settings'] as const;
+export type View = typeof Views[number];
+export type ActionButton = { action: AnyActionTypes; text: string };
+export const MustHaveReleaseItem: View[] = ['Add Item'];
+export type ErrorType = ERROR | Error | string;
 
 export type Notification = {
-  message: string
-  actionBtn?: ActionButton
-  isError: boolean
-  error?: ErrorType
-}
+  message: string;
+  actionBtn?: ActionButton;
+  isError: boolean;
+  error?: ErrorType;
+};
 
 export interface AppState {
-  readonly user: Optional<User>
-  readonly error: Optional<ErrorType>
-  readonly notification: Optional<Notification>
-  readonly isLoading: boolean
-  readonly view: Optional<View>
-  highlightedLabels: Optional<HightlightedLabels>
+  readonly user: Optional<User>;
+  readonly error: Optional<ErrorType>;
+  readonly notification: Optional<Notification>;
+  readonly isLoading: boolean;
+  readonly view: Optional<View>;
+  highlightedLabels: Optional<HighlightedLabels>;
 }
 
 export enum ERROR {
@@ -31,14 +31,14 @@ export enum ERROR {
 }
 
 export interface AppActionData {
-  identity: Optional<string>
-  error: Optional<ErrorType>
-  user: Optional<User>
-  userToken: Optional<string>
-  notification: Notification
-  view: Optional<View>
-  highlightedLabels: Optional<HightlightedLabels>
-  url: Optional<string>
+  identity: Optional<string>;
+  error: Optional<ErrorType>;
+  user: Optional<User>;
+  userToken: Optional<string>;
+  notification: Notification;
+  view: Optional<View>;
+  highlightedLabels: Optional<HighlightedLabels>;
+  url: Optional<string>;
 }
 
 export enum AppActions {
@@ -57,9 +57,9 @@ export enum AppActions {
   setView = 'APP_SET_VIEW',
   setViewSuccess = 'APP_SET_VIEW_SUCCESS',
   goToUrl = 'APP_GO_TO_URL',
-  setHighglightedLabels = 'APP_SET_HIGHTLIGHTED_LABELS',
-  setHighglightedLabelsSuccess = 'APP_SET_HIGHTLIGHTED_LABELS_SUCCESS',
-  getHighglightedLabelsSuccess = 'APP_GET_HIGHTLIGHTED_LABELS_SUCCESS',
+  setHighlightedLabels = 'APP_SET_HIGHLIGHTED_LABELS',
+  setHighlightedLabelsSuccess = 'APP_SET_HIGHLIGHTED_LABELS_SUCCESS',
+  getHighlightedLabelsSuccess = 'APP_GET_HIGHLIGHTED_LABELS_SUCCESS',
 }
 
-export type AppActionTypes = ActionTypes<AppActions, AppActionData>
+export type AppActionTypes = ActionTypes<AppActions, AppActionData>;

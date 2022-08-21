@@ -1,17 +1,17 @@
-import styled from 'styled-components'
-import { WantList } from '../../../domain'
+import styled from 'styled-components';
+import { WantList } from '../../../domain';
 import {
   AugmentetCol,
   base,
   borderRadius,
-  colors,
   Column,
+  discogsColors,
   shade,
   spacings,
-} from '../../styled'
+} from '../../styled';
 
 export interface Props {
-  wantList: WantList
+  wantList: WantList;
 }
 
 export const ReleaseCol = styled(Column)`
@@ -27,17 +27,17 @@ export const ReleaseCol = styled(Column)`
   }
 
   a {
-    color: ${colors.dark};
+    color: ${discogsColors.dark};
     width: calc(${base} * 12);
     &:hover {
       ${shade}
       border-radius: ${borderRadius.small};
       width: calc(${base} * 14);
-      color: ${colors.dark};
+      color: ${discogsColors.dark};
       display: inline-block;
-      background-color: ${colors.bright};
+      background-color: ${discogsColors.bright};
       filter: brightness(85%);
       padding: ${base};
     }
   }
-`
+`;

@@ -1,10 +1,10 @@
-import { Paginated } from "./div";
+import { Paginated } from './div';
 
 export type PaginatedVersions = Paginated<{
   versions: Version[];
 }>;
 
-type Format = "Vinyl" | "Cd" | "Casette";
+type Format = 'Vinyl' | 'Cd' | 'Casette';
 
 export interface Version {
   status: string;

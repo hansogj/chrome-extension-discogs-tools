@@ -1,10 +1,10 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
-import { DispatchAction } from '../../../services/redux/store'
-import { Column, Row, Thumb } from '../../styled'
-import { ReleaseCol } from './style'
-import { Item } from './utils'
-export type Props = { entries: Item[]; goToUrl: DispatchAction<string> }
+import { DispatchAction } from '../../../services/redux/store';
+import { Column, Row, Thumb } from '../../styled';
+import { ReleaseCol } from './style';
+import { Item } from './utils';
+export type Props = { entries: Item[]; goToUrl: DispatchAction<string> };
 
 const List: FC<Props> = ({ entries, goToUrl }: Props) => (
   <Row>
@@ -35,6 +35,6 @@ const List: FC<Props> = ({ entries, goToUrl }: Props) => (
       </ReleaseCol>
     ))}
   </Row>
-)
+);
 
-export default List
+export default List;

@@ -1,7 +1,7 @@
-import { BasicInformation } from './BasicInformation'
-import { Paginated } from './div'
+import { BasicInformation } from './BasicInformation';
+import { Paginated } from './div';
 
-export type WantList = Record<BasicInformation['master_id'], WantListItem>
+export type WantList = Record<BasicInformation['master_id'], WantListItem>;
 
 export interface WantListItem
   extends Pick<Want, 'date_added'>,
@@ -10,17 +10,17 @@ export interface WantListItem
       'master_url' | 'artists' | 'thumb' | 'title' | 'year' | 'cover_image'
       /* | 'formats' */
     > {
-  wantListId: string
+  wantListId: string;
 }
 
 export type PaginatedWantList = Paginated<{
-  wants: Want[]
-}>
+  wants: Want[];
+}>;
 
 export interface Want {
-  id: number
-  resource_url: string
-  rating: number
-  date_added: Date
-  basic_information: BasicInformation
+  id: number;
+  resource_url: string;
+  rating: number;
+  date_added: Date;
+  basic_information: BasicInformation;
 }

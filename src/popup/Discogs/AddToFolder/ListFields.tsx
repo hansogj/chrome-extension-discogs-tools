@@ -1,29 +1,20 @@
-import maybe from 'maybe-for-sure'
-import { FC } from 'react'
-import { DropdownInventoryField, InventoryFields } from '../../../domain'
-import { SelectedFields } from '../../../domain/Inventory'
-import { DispatchAction } from '../../../services/redux/store'
-import { Column, Row, Select } from '../../styled'
+import maybe from 'maybe-for-sure';
+import { FC } from 'react';
+import { DropdownInventoryField, InventoryFields } from '../../../domain';
+import { SelectedFields } from '../../../domain/Inventory';
+import { DispatchAction } from '../../../services/redux/store';
+import { Column, Row, Select } from '../../styled';
 
 export type Props = {
-  fields: InventoryFields
-  selectedFields: SelectedFields
-  setSelectedFields: DispatchAction<SelectedFields>
-}
+  fields: InventoryFields;
+  selectedFields: SelectedFields;
+  setSelectedFields: DispatchAction<SelectedFields>;
+};
 
-const ListFields: FC<Props> = ({
-  fields,
-  selectedFields,
-  setSelectedFields,
-}: Props) => (
+const ListFields: FC<Props> = ({ fields, selectedFields, setSelectedFields }: Props) => (
   <Row>
     {fields.map(({ type, name, id, ...field }) => (
-      <Column
-        width={10}
-        height={4}
-        key={`fieldId-${id}-col`}
-        padding={[0.2, 0]}
-      >
+      <Column width={10} height={4} key={`fieldId-${id}-col`} padding={[0.2, 0]}>
         <label>{name}</label>
         {type === 'dropdown' && (
           <Select
@@ -46,6 +37,6 @@ const ListFields: FC<Props> = ({
       </Column>
     ))}
   </Row>
-)
+);
 
-export default ListFields
+export default ListFields;

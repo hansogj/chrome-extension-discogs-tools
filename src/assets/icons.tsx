@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Svg = styled.svg`
   height: 12px;
@@ -9,12 +9,7 @@ const Svg = styled.svg`
 
 type Props = { fill: string };
 export const List = ({ fill }: Props) => (
-  <Svg
-    fill={fill}
-    aria-hidden="true"
-    viewBox="0 0 1024 1024"
-    role="presentation"
-  >
+  <Svg fill={fill} aria-hidden="true" viewBox="0 0 1024 1024" role="presentation">
     <path d="M146 750v109q0 8-5 13t-13 6H18q-7 0-13-6t-5-13V750q0-8 5-13t13-6h110q7 0 13 6t5 13zm0-220v110q0 7-5 13t-13 5H18q-7 0-13-5t-5-13V530q0-7 5-13t13-5h110q7 0 13 5t5 13zm0-219v110q0 7-5 12t-13 6H18q-7 0-13-6t-5-12V311q0-8 5-13t13-5h110q7 0 13 5t5 13zm878 439v109q0 8-5 13t-13 6H238q-8 0-13-6t-6-13V750q0-8 6-13t13-6h768q7 0 13 6t5 13zM146 91v110q0 8-5 13t-13 5H18q-7 0-13-5t-5-13V91q0-7 5-12t13-6h110q7 0 13 6t5 12zm878 439v110q0 7-5 13t-13 5H238q-8 0-13-5t-6-13V530q0-7 6-13t13-5h768q7 0 13 5t5 13zm0-219v110q0 7-5 12t-13 6H238q-8 0-13-6t-6-12V311q0-8 6-13t13-5h768q7 0 13 5t5 13zm0-220v110q0 8-5 13t-13 5H238q-8 0-13-5t-6-13V91q0-7 6-12t13-6h768q7 0 13 6t5 12z"></path>
   </Svg>
 );
@@ -52,11 +47,11 @@ export const Settings = ({ fill }: Props) => (
 ); */
 
 const IcoMoon = (content: string) => styled.span`
-  font-family: "IcoMoon-Free" !important;
+  font-family: 'IcoMoon-Free' !important;
   :before {
-    content: "${content}";
+    content: '${content}';
   }
 `;
 
-export const Off = IcoMoon("\\e9b6");
-export const Bin = IcoMoon("\\e9ac");
+export const Off = IcoMoon('\\e9b6');
+export const Bin = IcoMoon('\\e9ac');

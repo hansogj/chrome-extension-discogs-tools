@@ -1,17 +1,18 @@
-import { ActionTypes as Action } from '../redux'
-import { MessageResover } from './types'
+import { ActionTypes as Action } from '../redux';
+import { MessageActionMatcher } from './MessageActionMatcher';
+import { MessageResolver } from './types';
 
-export * from './types'
+export * from './types';
 
 export const messageHandlerFactory =
-  (messageResolver: MessageResover) =>
+  (messageResolver: MessageResolver, serviceName: string) =>
   (
     action: Action,
-    sender: chrome.runtime.MessageSender,
+    _sender: chrome.runtime.MessageSender,
     sendResponse: (response: unknown) => void,
   ) => {
-    const resolver = (prom: Promise<unknown>) =>
-      prom.then(sendResponse).catch((error) => sendResponse({ error }))
-    messageResolver(action, resolver)
-    return true
-  }
+    messageResolver(new MessageActionMatcher(action, serviceName))
+      .then(sendResponse)
+      .catch((error) => sendResponse({ error }));
+    return true; // nb, do not remove
+  };

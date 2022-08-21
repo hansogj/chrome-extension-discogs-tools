@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure'
+import maybe from 'maybe-for-sure';
 
 const MOCKED_RELEASE_URL = [
   'https://www.discogs.com/release/11874869-Genesis-Selling-England-By-The-Pound',
@@ -8,7 +8,7 @@ const MOCKED_RELEASE_URL = [
   'https://www.discogs.com/user/murdrejg/collection',
   'https://www.discogs.com/release/11100619-Band-Of-Dogs-Band-Of-Dogs',
   'https://www.discogs.com/release/3216584-Jethro-Tull-Stand-Up',
-]
+];
 
 const getMockRelease = () =>
   maybe(window.location)
@@ -20,8 +20,8 @@ const getMockRelease = () =>
     .orJust(Math.floor(Math.random() * MOCKED_RELEASE_URL.length))
     .map((it) => MOCKED_RELEASE_URL[it])
     .map((it) => {
-      console.log('Mocked discogs page url: ', it)
-      return it
+      console.log('Mocked discogs page url: ', it);
+      return it;
     })
-    .valueOrThrow(new Error('Cannot generate mocked url'))
-export default getMockRelease
+    .valueOrThrow(new Error('Cannot generate mocked url'));
+export default getMockRelease;

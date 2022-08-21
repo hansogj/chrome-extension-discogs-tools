@@ -1,12 +1,15 @@
-import { HightlightedLabels } from './domain'
+import { HighlightedLabels } from './domain';
 // eslint-disable-next-line
-export const isProduction = process.env.NODE_ENV === 'production'
+export const isProduction = process.env.NODE_ENV === 'production';
 
-export const API_TIMEOUT = 5000
+export const API_TIMEOUT = 5000;
 
-export const MAX_LOGIN_ATEMPTS = 5
+export const MAX_LOGIN_ATTEMPTS = 5;
 
-export const DEFAULT_HIGHLIGHTED_LABELS: HightlightedLabels = {
+export const DISCOGS_LOGO =
+  'https://st.discogs.com/0cc662c5cb9e836fcd6010bc2a182f5e53a6d1e5/images/discogs-logo.svg';
+
+export const DEFAULT_HIGHLIGHTED_LABELS: HighlightedLabels = {
   poor: [
     'Abkco',
     'Abraxas',
@@ -55,4 +58,4 @@ export const DEFAULT_HIGHLIGHTED_LABELS: HightlightedLabels = {
     'Seventh Records',
     'Soleil Zeuhl',
   ],
-}
+};

@@ -1,20 +1,20 @@
-import maybe from 'maybe-for-sure'
-import { createSelector } from 'reselect'
-import { DropdownInventoryField } from '../../../domain'
-import { FoldersState } from '../folders'
-import { RootState } from '../root.reducers'
-import { selectFromRoot } from '../utils'
+import maybe from 'maybe-for-sure';
+import { createSelector } from 'reselect';
+import { DropdownInventoryField } from '../../../domain';
+import { FoldersState } from '../folders';
+import { RootState } from '../root.reducers';
+import { selectFromRoot } from '../utils';
 
 export const getFoldersState = (state: Partial<RootState>): FoldersState =>
-  selectFromRoot(state, 'Folders')!
+  selectFromRoot(state, 'Folders')!;
 
 export const getFolders = createSelector(getFoldersState, (folderState) =>
   maybe(folderState).mapTo('folders').valueOr([]),
-)
+);
 
 export const getCollectableFolders = createSelector(getFolders, (folders) =>
   folders.filter((it) => it.id !== 0),
-)
+);
 
 export const getFields = createSelector(
   getFoldersState,
@@ -23,13 +23,13 @@ export const getFields = createSelector(
       .mapTo('fields')
       .map((it) => it.filter((field) => field.type === 'dropdown'))
       .valueOr([]) as DropdownInventoryField[],
-)
+);
 
 const getSelectedAbleFields = createSelector(getFoldersState, (discogs) =>
   maybe(discogs)
     .mapTo('selectedFields')
     .valueOr({} as FoldersState['selectedFields']),
-)
+);
 
 export const getSelectedFields = createSelector(
   getSelectedAbleFields,
@@ -58,4 +58,4 @@ export const getSelectedFields = createSelector(
         },
       },
     ),
-)
+);

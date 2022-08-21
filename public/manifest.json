@@ -10,25 +10,14 @@
   "background": {
     "service_worker": "./static/js/background.js"
   },
-  "host_permissions": [
-    "*://*.discogs.com/*"
-  ],
+  "host_permissions": ["*://*.discogs.com/*"],
   "content_scripts": [
     {
-      "matches": [
-        "*://*.discogs.com/*"
-      ],
-      "js": [
-        "./static/js/content.js"
-      ]
+      "matches": ["*://*.discogs.com/*"],
+      "js": ["./static/js/content.js"]
     }
   ],
-  "permissions": [
-    "activeTab",
-    "storage",
-    "contextMenus",
-    "unlimitedStorage"
-  ],
+  "permissions": ["activeTab", "storage", "contextMenus", "unlimitedStorage"],
   "icons": {
     "16": "discogs.png",
     "48": "discogs.png",

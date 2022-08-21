@@ -3,11 +3,12 @@ module.exports = {
     configure: (webpackConfig, { env, paths }) => ({
       ...webpackConfig,
       entry: {
-        main: [env === 'development' &&
-          require.resolve('webpack/hot/dev-server'), paths.appIndexJs].filter(Boolean),
+        main: [
+          env === 'development' && require.resolve('webpack/hot/dev-server'),
+          paths.appIndexJs,
+        ].filter(Boolean),
         content: './src/content/index',
         background: './src/background/index',
-
       },
       output: {
         ...webpackConfig.output,
@@ -20,10 +21,10 @@ module.exports = {
         runtimeChunk: false,
         splitChunks: {
           chunks(chunk) {
-            return false
+            return false;
           },
         },
-      }
+      },
     }),
-  }
-}
+  },
+};

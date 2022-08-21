@@ -1,16 +1,13 @@
-import { ResourceUrl } from '../../domain'
-import { ActionTypes } from '../redux'
-import { ActionTypes as ReduxActinTypes } from './../redux/types'
+import { ResourceUrl } from '../../domain';
+import { ActionTypes as ReduxActinTypes } from './../redux/types';
+import { MessageActionMatcher } from './MessageActionMatcher';
 
-export type MessageResover = (
-  action: ActionTypes,
-  resolver: (prom: Promise<unknown>) => Promise<unknown>,
-) => void
+export type MessageResolver = (actionMatcher: MessageActionMatcher) => Promise<unknown>;
 
 export interface MessageActionData {
-  body?: unknown
-  resource: ResourceUrl
-  userId?: number
+  body?: unknown;
+  resource: ResourceUrl;
+  userId?: number;
 }
 
 export enum MessageActions {
@@ -27,10 +24,8 @@ export enum MessageActions {
   REMOVE_ALL_WANTED_VERSIONS_OF_ITEM = 'REMOVE_ALL_WANTED_VERSIONS_OF_ITEM',
   GET_ALL_WANTED_VERSIONS_OF_ITEM = 'GET_ALL_WANTED_VERSIONS_OF_ITEM',
   GET_ALL_WANTED_VERSIONS_BY_FORMAT = 'GET_ALL_WANTED_VERSIONS_BY_FORMAT',
-  APPLY_HIGHLIGHTED_LABELS = 'APPLY_HIGHTLIGHTED_LABELS',
+  APPLY_HIGHLIGHTED_LABELS = 'APPLY_HIGHLIGHTED_LABELS',
+  WANT_LIST_IS_SYNCING = 'WANT_LIST_IS_SYNCING',
 }
 
-export type MessageActionTypes = ReduxActinTypes<
-  MessageActions,
-  MessageActionData
->
+export type MessageActionTypes = ReduxActinTypes<MessageActions, MessageActionData>;

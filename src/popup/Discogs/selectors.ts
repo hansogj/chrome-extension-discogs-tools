@@ -1,9 +1,6 @@
-import maybe from 'maybe-for-sure'
-import { createSelector } from 'reselect'
-import {
-  getFoldersState,
-  getReleasePageItem,
-} from '../../services/redux/selectors'
+import maybe from 'maybe-for-sure';
+import { createSelector } from 'reselect';
+import { getFoldersState, getReleasePageItem } from '../../services/redux/selectors';
 
 export const disableSubmitBtn = createSelector(
   getFoldersState,
@@ -13,4 +10,4 @@ export const disableSubmitBtn = createSelector(
       maybe(folderState).mapTo('addingToFolder').valueOr(false) ||
         maybe(releasePageItem).mapTo('releaseId').isNothing(),
     ),
-)
+);

@@ -1,14 +1,19 @@
-import React, { FC, useState } from 'react'
-import { AppActionTypes } from '../../services/redux/app'
-import { getTexts } from '../../services/texts'
-import { Submit, Card, base, Column, ContentBody, Input, Row } from '../styled'
+import React, { FC, useState } from 'react';
+import styled from 'styled-components';
+import { AppActionTypes } from '../../services/redux/app';
+import { getTexts } from '../../services/texts';
+import { Submit as StyledSubmit, Card, base, Column, ContentBody, Input, Row } from '../styled';
 
 export interface TokenInputProps {
-  setUserToken: Fn<[string], AppActionTypes>
+  setUserToken: Fn<[string], AppActionTypes>;
 }
 
+const Submit = styled(StyledSubmit)`
+  margin-top: calc(${base} * 4);
+`;
+
 const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
-  const [token, setToken] = useState<string>('')
+  const [token, setToken] = useState<string>('');
   const [title, __html, href, linkText, placeholder, submit] = getTexts(
     'token.info.title',
     'token.info.ingress',
@@ -16,9 +21,9 @@ const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
     'token.info.link.text',
     'token.input.placeholder',
     'token.input.submit',
-  )
+  );
   return (
-    <ContentBody>
+    <ContentBody filled>
       <Row>
         <Column width={20}>
           <Card>
@@ -41,17 +46,12 @@ const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
               value={token}
               onChange={(e) => setToken(e.target.value)}
             ></Input>
-            <Submit
-              style={{ marginTop: base }}
-              onClick={() => setUserToken(token)}
-            >
-              {submit}
-            </Submit>
+            <Submit onClick={() => setUserToken(token)}>{submit}</Submit>
           </Card>
         </Column>
       </Row>
     </ContentBody>
-  )
-}
+  );
+};
 
-export default TokenInput
+export default TokenInput;

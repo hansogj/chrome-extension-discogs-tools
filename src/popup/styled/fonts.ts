@@ -1,12 +1,12 @@
-import { css } from "styled-components";
-import { base, colors, fontSizes } from "./variables";
+import { css } from 'styled-components';
+import { base, discogsColors, fontSizes } from './variables';
 
 export const link = css`
   a {
-    color: ${colors.bright};
+    color: ${discogsColors.dark};
     &:active,
     &:hover {
-      color: ${colors.darkShade};
+      color: ${discogsColors.F1};
     }
     &:active {
       text-decoration: none;
@@ -16,7 +16,7 @@ export const link = css`
 
 export const h = css`
   h1 {
-    font-family: "Enriqueta", arial, serif;
+    font-family: 'Enriqueta', arial, serif;
     font-size: ${fontSizes.xxLarge};
     font-weight: 800;
     line-height: calc(${base} * 4);
@@ -24,7 +24,7 @@ export const h = css`
   }
 
   h2 {
-    font-family: "Enriqueta", arial, serif;
+    font-family: 'Enriqueta', arial, serif;
     font-size: ${fontSizes.xLarge};
     font-weight: 800;
     line-height: calc(${base} * 0.5);
@@ -32,7 +32,7 @@ export const h = css`
   }
 
   h3 {
-    font-family: "Enriqueta", arial, serif;
+    font-family: 'Enriqueta', arial, serif;
     font-size: ${fontSizes.large};
     font-weight: 600;
     line-height: calc(${base} * 2);
@@ -42,7 +42,7 @@ export const h = css`
   h4,
   h5,
   label {
-    font-family: "Enriqueta", arial, serif;
+    font-family: 'Enriqueta', arial, serif;
     font-size: ${fontSizes.medium};
     font-weight: 600;
     line-height: calc(${base} * 1.5);

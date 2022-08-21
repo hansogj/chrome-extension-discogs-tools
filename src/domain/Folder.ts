@@ -1,4 +1,4 @@
-import { ResourceUrl } from "./";
+import { ResourceUrl } from './';
 
 export interface Folder {
   count: number;

@@ -5,15 +5,13 @@ interface CommonInventoryField {
   public: boolean;
 }
 export interface DropdownInventoryField extends CommonInventoryField {
-  type: "dropdown";
+  type: 'dropdown';
   options: Array<string>;
 }
 
 export interface TextareaInventoryFields extends CommonInventoryField {
-  type: "textarea";
+  type: 'textarea';
   lines: number;
 }
 
-export type InventoryFields = Array<
-  DropdownInventoryField | TextareaInventoryFields
->;
+export type InventoryFields = Array<DropdownInventoryField | TextareaInventoryFields>;

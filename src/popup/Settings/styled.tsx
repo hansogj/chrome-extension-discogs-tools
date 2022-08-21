@@ -1,22 +1,23 @@
-import { AugmentetCol, base, Column as StyledColumn } from '../styled'
+import { base, Column as StyledColumn, discogsColors, micro } from '../styled';
 
-import styled from 'styled-components'
-import { generatedCss } from '../../services/highlighted.labels.service'
-import { colors } from '../styled'
+import styled from 'styled-components';
+import { generatedCss } from '../../services/highlighted.labels.service';
 
 export const Column = styled(StyledColumn)`
-  ${AugmentetCol};
-  color: ${colors.dark};
   width: calc(${base} * 18);
+  justify-content: start;
   textarea {
-    background-color: ${colors.dark};
-    color: ${colors.bright};
+    background-color: ${discogsColors.black};
+    color: ${discogsColors.bright};
   }
-`
+`;
 
 export const Preview = styled.h3<{ emphasize: string }>`
   background-image: ${({ emphasize }) => generatedCss(emphasize)};
   height: calc(${base} * 2);
   width: auto;
-  margin-bottom: ${base};
-`
+  margin: ${base} 0 !important;
+`;
+export const H3 = styled.h3`
+  border-bottom: ${micro} solid ${discogsColors.dark};
+`;

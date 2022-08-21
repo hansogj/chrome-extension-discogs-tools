@@ -1,5 +1,5 @@
-import { MasterRelease, Release } from ".";
-import { BasicInformation } from "./BasicInformation";
+import { MasterRelease, Release } from '.';
+import { BasicInformation } from './BasicInformation';
 
 export type Urls = {} & {
   first: string;
@@ -17,7 +17,7 @@ export interface Label {
   resource_url: string;
 }
 
-export type HightlightedLabels = {
+export type HighlightedLabels = {
   poor: string[];
   fair: string[];
   good: string[];
@@ -35,7 +35,7 @@ export interface Pagination {
 export type Paginated<T> = { pagination: Pagination } & T;
 
 export interface ReleasePageItem {
-  releaseId: Release["id"];
+  releaseId: Release['id'];
   master: MasterRelease;
 }
 

@@ -1,11 +1,11 @@
-import maybe from 'maybe-for-sure'
-import { FC } from 'react'
-import { Artist, Image, MasterRelease } from '../../../domain'
-import { Column, Row, Thumb } from '../../styled'
+import maybe from 'maybe-for-sure';
+import { FC } from 'react';
+import { Artist, Image, MasterRelease } from '../../../domain';
+import { Column, Row, Thumb } from '../../styled';
 
 export type Props = {
-  releasePageItem: MasterRelease
-}
+  releasePageItem: MasterRelease;
+};
 
 const ReleasePageItem: FC<Props> = ({ releasePageItem }: Props) =>
   maybe(releasePageItem)
@@ -34,6 +34,6 @@ const ReleasePageItem: FC<Props> = ({ releasePageItem }: Props) =>
           .valueOr(<></>)}
       </>
     ))
-    .valueOr(<></>)
+    .valueOr(<></>);
 
-export default ReleasePageItem
+export default ReleasePageItem;

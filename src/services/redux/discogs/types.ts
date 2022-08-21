@@ -1,13 +1,13 @@
-import { Instance, ReleasePageItem } from '../../../domain'
-import { ActionTypes } from '../types'
+import { Instance, ReleasePageItem } from '../../../domain';
+import { ActionTypes } from '../types';
 
 export interface DiscogsState {
-  readonly releasePageItem: Optional<ReleasePageItem>
+  readonly releasePageItem: Optional<ReleasePageItem>;
 }
 
 export interface DiscogsActionData {
-  instance: Optional<Instance>
-  releasePageItem: Optional<ReleasePageItem>
+  instance: Optional<Instance>;
+  releasePageItem: Optional<ReleasePageItem>;
 }
 
 export enum DiscogsActions {
@@ -18,4 +18,4 @@ export enum DiscogsActions {
   domFilterReleases = 'DOM_FILTER_RELEASES',
 }
 
-export type DiscogsActionTypes = ActionTypes<DiscogsActions, DiscogsActionData>
+export type DiscogsActionTypes = ActionTypes<DiscogsActions, DiscogsActionData>;

@@ -1,4 +1,4 @@
-import { Artist, Format, Image, Video, Tracklist } from "./div";
+import { Artist, Format, Image, Video, Tracklist } from './div';
 
 export interface Release {
   title: string;

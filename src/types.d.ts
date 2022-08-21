@@ -1,5 +1,5 @@
-declare module "*.png";
-declare module "*.svg";
+declare module '*.png';
+declare module '*.svg';
 declare type Fn<H, T> = (..._: H) => T;
 type Optional<T> = T | undefined;
 
