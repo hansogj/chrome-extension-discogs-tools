@@ -6,6 +6,4 @@ console.log('loading background index');
 
 chrome &&
   chrome.runtime &&
-  chrome.runtime.onMessage.addListener(
-    messageHandlerFactory(messageResolverFactory(), 'background'),
-  );
+  chrome.runtime.onMessage.addListener(messageHandlerFactory(messageResolverFactory()));

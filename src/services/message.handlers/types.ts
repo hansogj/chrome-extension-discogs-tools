@@ -1,8 +1,8 @@
 import { ResourceUrl } from '../../domain';
+import { ActionTypes } from '../redux';
 import { ActionTypes as ReduxActinTypes } from './../redux/types';
-import { MessageActionMatcher } from './MessageActionMatcher';
 
-export type MessageResolver = (actionMatcher: MessageActionMatcher) => Promise<unknown>;
+export type MessageResolver = (action: ActionTypes) => Promise<unknown>;
 
 export interface MessageActionData {
   body?: unknown;

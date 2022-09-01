@@ -9,4 +9,4 @@ applyHighlightedLabels();
 
 chrome &&
   chrome.runtime &&
-  chrome.runtime.onMessage.addListener(messageHandlerFactory(messageResolverFactory(), 'content'));
+  chrome.runtime.onMessage.addListener(messageHandlerFactory(messageResolverFactory()));
