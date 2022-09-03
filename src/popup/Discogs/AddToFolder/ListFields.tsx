@@ -24,8 +24,9 @@ const ListFields: FC<Props> = ({ fields, selectedFields, setSelectedFields }: Pr
             padding={[0.2]}
           >
             {maybe((field as DropdownInventoryField).options)
+              .map((it) => [undefined, ...it])
               .map((it) =>
-                it.map((option: string) => (
+                it.map((option: Optional<string>) => (
                   <option key={`fieldId-${id}-${option}`} value={option}>
                     {option}
                   </option>
