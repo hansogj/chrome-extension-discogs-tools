@@ -3,16 +3,12 @@
 const find = (selector: string, root: Document | Element = window.document) =>
   Array.from(root.querySelectorAll(selector));
 
-/*
-Filters out multiple instances of same item from wantlist
-*/
-
 /* 
 Filters out multiple instances of same item from wantlist
 */
 
 export const uniqueRelease = () => {
-  const colums = find('.release_list_table tbody tr');
+  const columns = find('.release_list_table tbody tr');
   const releasePattern = /[(master)|(release)]\/(\d+)/;
 
   const getReleaseLinks = (release: HTMLElement | Document | undefined) =>
@@ -23,12 +19,12 @@ export const uniqueRelease = () => {
 
   const getArtist = (release: HTMLElement | Document | undefined) => {
     find('.release_title.set_height a', release)
-      .filter((a, i) => i === 0)
+      .filter((_, i) => i === 0)
       .map((a: any) => a.innerText)
       .pop();
   };
 
-  const buildModel = (all: any, release: any) => {
+  const buildModel = (_: any, release: any) => {
     return getReleaseLinks(release)
       .map((link: any) => ({
         artist: getArtist(release),
@@ -60,8 +56,7 @@ export const uniqueRelease = () => {
     elem.classList.add('hidden');
 
   const addCss = () => {
-    const css =
-        'tr {display:table-row; transition: all .2s ease-out; }' + '.hidden {display:none;}',
+    const css = `tr {display:table-row; transition: all .2s ease-out; }.hidden {display:none;}`,
       head = document.head || document.getElementsByTagName('head')[0],
       style: any = document.createElement('style');
 
@@ -77,8 +72,8 @@ export const uniqueRelease = () => {
 
   addCss();
 
-  const hidden = colums
-    .map(buildModel.bind(this, colums))
+  const hidden = columns
+    .map(buildModel.bind(this, columns))
     .filter(uniqueRelease as any)
     .map((rel: any) => {
       hide(rel.rel);
