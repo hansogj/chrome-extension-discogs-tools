@@ -17,6 +17,7 @@ export const DEFAULT_HIGHLIGHTED_LABELS: HighlightedLabels = {
     'Back To Black',
     'DOL',
     'DOXY',
+    'Fame',
     'Jazz Wax',
     'Music on Vinyl',
     'Simply Vinyl',

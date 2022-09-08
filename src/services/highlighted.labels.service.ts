@@ -25,15 +25,29 @@ const labelAlert = (selector: string, labels: string[], emphasize: string) =>
       return match;
     });
 
-export const apply = () =>
-  get().then(({ poor, fair, good, veryGood }: HighlightedLabels) =>
-    ['.label_and_cat', '.collection-row', 'tr[class^="wantlist"]'].forEach((selector) => {
-      labelAlert(selector, poor, highlightColors.red.strong);
-      labelAlert(selector, fair, highlightColors.red.soft);
-      labelAlert(selector, good, highlightColors.green.soft);
-      labelAlert(selector, veryGood, highlightColors.green.strong);
-    }),
-  );
+export const apply = () => {
+  return get().then(({ poor, fair, good, veryGood }: HighlightedLabels) => {
+    const observer = new MutationObserver(() =>
+      [
+        '.label_and_cat',
+        '.collection-row',
+        'tr[class^="wantlist"]',
+        '.card_info',
+        'tr [class*="LabelCell"]',
+      ].forEach((selector) => {
+        labelAlert(selector, poor, highlightColors.red.strong);
+        labelAlert(selector, fair, highlightColors.red.soft);
+        labelAlert(selector, good, highlightColors.green.soft);
+        labelAlert(selector, veryGood, highlightColors.green.strong);
+      }),
+    );
+
+    observer.observe(document, {
+      subtree: true,
+      attributes: true,
+    });
+  });
+};
 
 export const get = () => getStorage(key, DEFAULT_HIGHLIGHTED_LABELS);
 export const remove = () => removeStorage(key);
