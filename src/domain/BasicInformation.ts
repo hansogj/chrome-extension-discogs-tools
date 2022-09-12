@@ -1,4 +1,5 @@
-import { Artist, Format, Label } from '.';
+import { Format, Label } from '.';
+import { Artist } from './Artist';
 
 export interface BasicInformation {
   id: number;

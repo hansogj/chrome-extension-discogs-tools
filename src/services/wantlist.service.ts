@@ -28,7 +28,7 @@ const wantlistProperties = ({
   date_added,
 });
 
-const toWantList = (wants: Want[]): WantListItem[] =>
+export const toWantList = (wants: Want[]): WantListItem[] =>
   wants
     .map(({ basic_information, date_added }) => ({
       ...basic_information,

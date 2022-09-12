@@ -1,5 +1,6 @@
-import { MasterRelease, Release } from '.';
 import { BasicInformation } from './BasicInformation';
+import { Artist } from './Artist';
+import { MasterRelease, Release } from './Release';
 
 export type Urls = {} & {
   first: string;
@@ -43,16 +44,6 @@ export interface Instance {
   instance_id: number;
   resource_url: string;
   basic_information: BasicInformation;
-}
-
-export interface Artist {
-  anv: string;
-  id: number;
-  join: string;
-  name: string;
-  resource_url: string;
-  role: string;
-  tracks: string;
 }
 
 export interface Format {

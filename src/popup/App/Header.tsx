@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Collection, List, Settings } from '../../assets/icons';
-import { MustHaveReleaseItem, View, Views } from '../../services/redux/app';
+import { Collection, Head, List, Settings } from '../../assets/icons';
+import { MustHaveArtistReleases, MustHaveReleaseItem, View, Views } from '../../services/redux/app';
 import { DispatchAction } from '../../services/redux/store';
 import {
   base,
@@ -16,18 +16,20 @@ import maybe from 'maybe-for-sure';
 import styled from 'styled-components';
 import { DISCOGS_LOGO } from '../../constants';
 import { User } from '../../domain';
-import { Props as ReleasePageItemProps } from '../Discogs/ReleasePageItem';
 
 const IconMap: Record<View, (fill: string) => JSX.Element> = {
-  'Add Item': (fill: string) => <Collection {...{ fill }} />,
+  Item: (fill: string) => <Collection {...{ fill }} />,
+  Artist: (fill: string) => <Head />,
   'Want List': (fill: string) => <List {...{ fill }} />,
   Settings: (fill: string) => <Settings {...{ fill }} />,
 };
 
-export interface Props extends ReleasePageItemProps {
+export interface Props {
   activeView: View;
   setView: DispatchAction<View>;
   user: User;
+  hasReleaseItems: boolean;
+  hasArtistReleases: boolean;
 }
 
 const Row = styled(StyledRow)`
@@ -49,34 +51,42 @@ const ImgColumn = styled(Column)`
   }
 `;
 
-const isDisabled = (view: View, releasePageItem: Props['releasePageItem']) =>
-  !Boolean(releasePageItem) &&
-  MustHaveReleaseItem.map((it) => it.toLowerCase()).includes(view.toLowerCase());
+const matchView = (mustHave: Array<View>, view: View) =>
+  mustHave.map((it) => it.toLowerCase()).includes(view.toLowerCase());
 
-const Header: FC<Props> = ({ setView, activeView, releasePageItem, user }: Props) => {
+const Header: FC<Props> = ({
+  setView,
+  activeView,
+  hasReleaseItems,
+  hasArtistReleases,
+  user,
+}: Props) => {
+  const filterView = (view: View) =>
+    ![
+      !hasReleaseItems && matchView(MustHaveReleaseItem, view),
+      !hasArtistReleases && matchView(MustHaveArtistReleases, view),
+    ].some(Boolean);
+
   return (
     <Row>
       <ImgColumn>
         <img src={DISCOGS_LOGO} alt="Discogs Logo" />
       </ImgColumn>
-      {Views.map((view) => ({
-        view,
-        disabled: isDisabled(view, releasePageItem),
-        active: view === activeView && 'activeView',
-      })).map(({ view, disabled, active }) => (
-        <Column key={view} center>
-          <>
-            <NavButton
-              className={[active && 'activeView', disabled && 'disabled'].filter(Boolean).join(' ')}
-              disabled={disabled}
-              onClick={() => !disabled && setView(view)}
-            >
-              {IconMap[view](active ? discogsColors.bright : discogsColors.white)}
-              {view}
-            </NavButton>
-          </>
-        </Column>
-      ))}
+      {Views.filter(filterView)
+        .map((view) => ({ view, active: view === activeView && 'activeView' }))
+        .map(({ view, active }) => (
+          <Column key={view} center>
+            <>
+              <NavButton
+                className={[active && 'activeView'].filter(Boolean).join(' ')}
+                onClick={() => setView(view)}
+              >
+                {IconMap[view](active ? discogsColors.bright : discogsColors.white)}
+                {view}
+              </NavButton>
+            </>
+          </Column>
+        ))}
       <Column>
         {maybe(user)
           .mapTo('avatar_url')

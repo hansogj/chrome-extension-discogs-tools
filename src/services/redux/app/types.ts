@@ -3,10 +3,11 @@ import { ActionTypes as AnyActionTypes } from '../store';
 import { ActionTypes } from '../types';
 export const DISCOGS_BASE_URL = 'https://api.discogs.com';
 
-export const Views = ['Add Item', 'Want List', 'Settings'] as const;
+export const Views = ['Item', 'Artist', 'Want List', 'Settings'] as const;
 export type View = typeof Views[number];
 export type ActionButton = { action: AnyActionTypes; text: string };
-export const MustHaveReleaseItem: View[] = ['Add Item'];
+export const MustHaveReleaseItem: View[] = ['Item'];
+export const MustHaveArtistReleases: View[] = ['Artist'];
 export type ErrorType = ERROR | Error | string;
 
 export type Notification = {

@@ -1,8 +1,10 @@
 import maybe from 'maybe-for-sure';
 import { HighlightedLabels, MasterRelease, ResourceUrl, Version } from '../domain';
+import { ArtistReleases } from '../domain';
 import { MessageActions } from './message.handlers';
 import messageHandler from './message.handlers/popup.message.handler';
 import { DiscogsActions } from './redux/discogs';
+import { PageResourceIds } from './releasePage.service';
 import { Cache } from './wantlist.service';
 
 export const fetch = async <T>(resource: ResourceUrl, body?: SearchParams) =>
@@ -34,15 +36,22 @@ export const wantlistIsSyncing = async () =>
     type: MessageActions.WANT_LIST_IS_SYNCING,
   });
 
-export const getReleasePageItem = async () =>
-  messageHandler<Optional<MasterRelease>>({
+export const getWindowLocation = async () =>
+  messageHandler<URL>({
     type: MessageActions.GET_CURRENT_URL,
-  }).then((body) =>
-    messageHandler<Optional<MasterRelease>>({
-      type: MessageActions.GET_RELEASE_PAGE_ITEM_ID,
-      body,
-    }),
-  );
+  }).then((url) => new URL(url));
+
+export const getArtistReleases = async (body: PageResourceIds) =>
+  messageHandler<Optional<ArtistReleases>>({
+    type: MessageActions.GET_ARTIST_RELEASES_ID,
+    body,
+  });
+
+export const getReleasePageItem = async (body: PageResourceIds) =>
+  messageHandler<Optional<MasterRelease>>({
+    type: MessageActions.GET_RELEASE_PAGE_ITEM_ID,
+    body,
+  });
 
 export const reload = async () =>
   messageHandler<Optional<MasterRelease>>({

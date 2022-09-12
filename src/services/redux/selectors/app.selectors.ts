@@ -1,10 +1,10 @@
 import maybe from 'maybe-for-sure';
 import { createSelector } from 'reselect';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
-import { AppState, ERROR, MustHaveReleaseItem, View } from '../app';
+import { AppState, ERROR, MustHaveArtistReleases, MustHaveReleaseItem, View } from '../app';
 import { RootState } from '../root.reducers';
 import { selectFromRoot } from '../utils';
-import { getReleasePageItem } from './discogs.selectors';
+import { hasArtistReleases, hasReleasePageItem } from './discogs.selectors';
 
 export const getAppState = (state: Partial<RootState>): AppState => selectFromRoot(state, 'App')!;
 
@@ -31,11 +31,17 @@ export const notAuthenticated = createSelector(
 
 export const getActiveView = createSelector(
   getAppState,
-  getReleasePageItem,
-  (appState, releasePageItem): View =>
+  hasReleasePageItem,
+  hasArtistReleases,
+  (appState, hasPageRelease, hasPageArtistRelease): View =>
     maybe(appState)
       .mapTo('view')
-      .map((it) => (MustHaveReleaseItem.includes(it!) && !releasePageItem ? 'Want List' : it))
+      .map((it) =>
+        (MustHaveReleaseItem.includes(it!) && !hasPageRelease) ||
+        (MustHaveArtistReleases.includes(it!) && !hasPageArtistRelease)
+          ? 'Want List'
+          : it,
+      )
       .valueOr('Settings') as View,
 );
 

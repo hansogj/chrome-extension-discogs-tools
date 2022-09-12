@@ -7,7 +7,7 @@ import { ActionTypes } from '../redux';
 import { DiscogsActions } from '../redux/discogs';
 import * as versionsService from '../versions.service';
 import * as xhr from '../xhr';
-import getMockRelease from '../__mock__/release.in.view';
+import getMockPage from '../__mock__/page.in.view';
 import { MessageActionMatcher } from './MessageActionMatcher';
 import { MessageActions, MessageActionTypes, MessageResolver } from './types';
 
@@ -30,7 +30,7 @@ export const messageResolverFactory = (): MessageResolver => (action: ActionType
     )
     .matcher(MessageActions.APPLY_HIGHLIGHTED_LABELS, () => highlightedLabelsService.apply())
     .matcher(MessageActions.GET_CURRENT_URL, () =>
-      Promise.resolve(isProduction ? window.location.href : getMockRelease()),
+      Promise.resolve(isProduction ? window.location.href : (getMockPage() as string)),
     )
     .matcher(MessageActions.WINDOW_RELOAD, () => window.location.reload() as any)
     .matcher(MessageActions.GET_ALL_WANTED_VERSIONS_BY_FORMAT, (action: MessageActionTypes) =>

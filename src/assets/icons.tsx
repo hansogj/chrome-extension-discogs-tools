@@ -55,3 +55,4 @@ const IcoMoon = (content: string) => styled.span`
 
 export const Off = IcoMoon('\\e9b6');
 export const Bin = IcoMoon('\\e9ac');
+export const Head = IcoMoon('\\e971');

@@ -8,9 +8,12 @@ import { actions as appActions, Notification } from '../../services/redux/app/';
 
 import {
   getActiveView,
+  getArtistReleases,
   getNotification,
   getReleasePageItem,
   getUser,
+  hasArtistReleases,
+  hasReleasePageItem,
   isLoading,
   notAuthenticated,
 } from '../../services/redux/selectors';
@@ -22,11 +25,7 @@ import NotificationComponent from './Notification';
 import { AppLogo, ContentHeader } from './style';
 import TokenInput, { TokenInputProps } from './TokenInput';
 
-interface AppProps
-  extends TokenInputProps,
-    LoaderProps,
-    ViewProps,
-    Omit<HeaderProps, 'hasReleasePageItem'> {
+interface AppProps extends TokenInputProps, LoaderProps, ViewProps, HeaderProps {
   notification: Notification;
   isLoading: boolean;
   notAuthenticated: boolean;
@@ -53,7 +52,8 @@ const App: FC<AppProps> = ({
   getUser,
   activeView,
   setView,
-  releasePageItem,
+  hasReleaseItems,
+  hasArtistReleases,
 }: AppProps) => {
   let ref = useRef(null);
 
@@ -81,7 +81,7 @@ const App: FC<AppProps> = ({
                       }}
                     />
                   )}
-                  <Header {...{ activeView, setView, releasePageItem, user }} />
+                  <Header {...{ activeView, setView, user, hasArtistReleases, hasReleaseItems }} />
                   <View {...{ activeView }} />
                 </>
               )),
@@ -98,7 +98,8 @@ export const mapStateToProps = (state: RootState): StateProps<Partial<AppProps>>
   notAuthenticated: notAuthenticated(state),
   notification: getNotification(state),
   activeView: getActiveView(state),
-  releasePageItem: getReleasePageItem(state),
+  hasArtistReleases: hasArtistReleases(state),
+  hasReleaseItems: hasReleasePageItem(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<AppProps> =>

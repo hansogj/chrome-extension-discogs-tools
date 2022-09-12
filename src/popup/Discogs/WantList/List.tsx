@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
 import { DispatchAction } from '../../../services/redux/store';
-import { Column, Row, Thumb } from '../../styled';
+import { Column, Row, Size, Thumb } from '../../styled';
 import { ReleaseCol } from './style';
 import { Item } from './utils';
-export type Props = { entries: Item[]; goToUrl: DispatchAction<string> };
+export type Props = { entries: Item[]; goToUrl: DispatchAction<string> } & Size;
 
-const List: FC<Props> = ({ entries, goToUrl }: Props) => (
-  <Row>
+const List: FC<Props> = ({ entries, goToUrl, width }: Props) => (
+  <Row {...{ width }}>
     {entries.map(([wantListId, { title, thumb, artists, year }]: Item) => (
       <ReleaseCol key={wantListId} width={12} height={8}>
         <a

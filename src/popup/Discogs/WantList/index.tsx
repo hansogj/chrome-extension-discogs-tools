@@ -62,7 +62,7 @@ const WantListComponent: FC<Props> = ({ wantList, goToUrl, getSyncedWantlist }: 
   return wantList ? (
     <ContentBody filled>
       <Row>
-        <Column width={37}>
+        <Column>
           <h3>
             {renderText('discogs.wantlist.header', {
               size: Math.min(pageSize, length),
@@ -97,5 +97,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(WantListComponent as FC<Partial<Props>>);
-
-// export default WantListComponent;

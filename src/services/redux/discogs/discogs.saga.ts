@@ -1,4 +1,5 @@
 import '@hansogj/array.utils';
+import maybe from 'maybe-for-sure';
 import {
   all,
   call,
@@ -9,9 +10,11 @@ import {
   SelectEffect,
   takeLatest,
 } from 'redux-saga/effects';
-import { ReleasePageItem } from '../../../domain';
+import { Artist, ReleasePageItem } from '../../../domain';
+import { ArtistReleases } from '../../../domain';
 import * as api from '../../api';
-import { AppActions } from '../app';
+import { PageResourceIds } from '../../releasePage.service';
+import { AppActions, DISCOGS_BASE_URL } from '../app';
 import * as appActions from '../app/app.actions';
 import {
   getFieldsResource,
@@ -38,16 +41,57 @@ export function* fetchResource<T>(
   }
   return result;
 }
-function* getReleasePageItem(): Generator<any> {
+
+const matchers = {
+  releases: /\/release\//,
+  masters: /\/master\//,
+  artists: /\/artist\//,
+};
+const urlMatch = ({ pathname }: URL) =>
+  Object.entries(matchers).reduce(
+    (cur, [field, reg]: [string, RegExp]) => ({
+      ...cur,
+      [field]: maybe(pathname.split(reg))
+        .map((it) => it.pop())
+        .nothingIf((it) => it === undefined)
+        .map((it) => `${it}`.split('-').shift())
+        .map((it) => parseInt(it!, 10))
+        .nothingIf(isNaN)
+
+        .valueOr(undefined),
+    }),
+
+    {} as PageResourceIds,
+  );
+
+const getPath = (url: URL) =>
+  maybe(urlMatch(url))
+    .map(Object.entries)
+    .map((it) => it.filter(([_, v]) => Boolean(v)))
+    .map((parts) => parts.flatMap((part) => part.join('/')))
+    .map((it) => it.shift())
+    .valueOr('') as string;
+
+function* getResourceIdFromWindowUrl(): Generator<any> {
   try {
-    const master = yield call(api.getReleasePageItem);
-    if (master) {
-      yield put(actions.getReleasePageItemSuccess(master as ReleasePageItem));
+    let url = yield call(api.getWindowLocation);
+    const path: string = getPath(url as URL);
+
+    if (/artists/.test(path)) {
+      const artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
+      const releases = yield call(api.fetch, (artist as Artist).releases_url);
+      yield put(actions.getArtistReleasesLoaded(artist as Artist, releases as ArtistReleases));
+    }
+
+    if (/(masters)|(releases)/.test(path)) {
+      const releases = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
+      yield put(actions.getReleasePageItemLoaded(releases as ReleasePageItem));
     }
   } catch (error) {
     console.log(error);
   }
 }
+
 // eslint-disable-next-line
 function* getDiscogsInventory(): Generator<any> {
   yield fetchResource(getInventoryResource);
@@ -56,7 +100,7 @@ function* getDiscogsInventory(): Generator<any> {
 }
 
 function* DiscogsSaga() {
-  yield all([takeLatest(AppActions.getUserSuccess, getReleasePageItem)]);
+  yield all([takeLatest(AppActions.getUserSuccess, getResourceIdFromWindowUrl)]);
 }
 
 export default DiscogsSaga;

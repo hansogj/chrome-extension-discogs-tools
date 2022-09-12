@@ -1,4 +1,6 @@
 {
+  "artist.list.title": "Releases from {{artist}} in your {{listName}}",
+  "artist.list.empty": "You have no items of {{artist}} in your {{listName}}",
   "discogs.add.to.folder.submit": "Add (+)",
   "discogs.add.to.folder.submit.message": "Add item to your selected folder",
   "discogs.add.to.folder.submit.disabled.message": "Go to release page to add this item. You are currently on master release",
