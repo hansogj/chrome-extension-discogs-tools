@@ -1,17 +1,16 @@
-import { Artist, Instance, ReleasePageItem } from '../../../domain';
-import { ArtistReleases } from '../../../domain';
+import { Artist, ArtistRelease, Instance, ReleasePageItem } from '../../../domain';
 import { ActionTypes } from '../types';
 
 export interface DiscogsState {
   readonly releasePageItem: Optional<ReleasePageItem>;
-  readonly artistReleases: Optional<ArtistReleases>;
+  readonly artistReleases: Optional<ArtistRelease[]>;
   readonly artist: Optional<Artist>;
 }
 
 export interface DiscogsActionData {
   instance: Optional<Instance>;
   releasePageItem: Optional<ReleasePageItem>;
-  artistReleases: Optional<ArtistReleases>;
+  artistReleases: Optional<ArtistRelease[]>;
   artist: Optional<Artist>;
 }
 

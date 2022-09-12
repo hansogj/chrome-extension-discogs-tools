@@ -1,11 +1,12 @@
-import maybe from 'maybe-for-sure';
-import { HighlightedLabels, MasterRelease, ResourceUrl, Version } from '../domain';
-import { ArtistReleases } from '../domain';
+import maybe from '@hansogj/maybe';
+import { HighlightedLabels, MasterRelease, Paginated, ResourceUrl, Version } from '../domain';
 import { MessageActions } from './message.handlers';
 import messageHandler from './message.handlers/popup.message.handler';
 import { DiscogsActions } from './redux/discogs';
-import { PageResourceIds } from './releasePage.service';
 import { Cache } from './wantlist.service';
+
+const sleep = <T>(timeout: number, v: () => Promise<T>) =>
+  new Promise<T>((r) => setTimeout(() => r(v()), timeout));
 
 export const fetch = async <T>(resource: ResourceUrl, body?: SearchParams) =>
   messageHandler<T>({ type: MessageActions.fetch, resource, body });
@@ -41,17 +42,25 @@ export const getWindowLocation = async () =>
     type: MessageActions.GET_CURRENT_URL,
   }).then((url) => new URL(url));
 
-export const getArtistReleases = async (body: PageResourceIds) =>
-  messageHandler<Optional<ArtistReleases>>({
-    type: MessageActions.GET_ARTIST_RELEASES_ID,
-    body,
-  });
+export const fetchPaginated = async <T>(
+  resource: ResourceUrl,
+  page = 1,
+  current: T[] = [],
+  delay = 0,
+): Promise<T[]> => {
+  const { pagination, ...rest } = await sleep<Paginated<T>>(delay, () =>
+    fetch(resource, {
+      page,
+      per_page: 100,
+    }),
+  );
 
-export const getReleasePageItem = async (body: PageResourceIds) =>
-  messageHandler<Optional<MasterRelease>>({
-    type: MessageActions.GET_RELEASE_PAGE_ITEM_ID,
-    body,
-  });
+  let next = [...current, rest] as T[];
+  let newDelay = pagination.pages > 30 && page % 30 === 0 ? 10000 : 100;
+  return pagination.page < pagination.pages
+    ? fetchPaginated(resource, pagination.page + 1, next, newDelay)
+    : next;
+};
 
 export const reload = async () =>
   messageHandler<Optional<MasterRelease>>({

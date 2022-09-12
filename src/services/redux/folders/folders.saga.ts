@@ -1,5 +1,5 @@
 import '@hansogj/array.utils';
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { all, call, fork, put, race, select, take, takeLatest } from 'redux-saga/effects';
 import {
   Artist,

@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
 import { AppState, ERROR, MustHaveArtistReleases, MustHaveReleaseItem, View } from '../app';

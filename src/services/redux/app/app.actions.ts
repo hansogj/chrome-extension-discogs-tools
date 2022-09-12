@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { HighlightedLabels, User } from '../../../domain';
 import { AppActions, AppActionTypes, ERROR, Notification, View } from './types';
 

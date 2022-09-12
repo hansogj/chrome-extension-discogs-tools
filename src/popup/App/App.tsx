@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { FC, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -8,9 +8,7 @@ import { actions as appActions, Notification } from '../../services/redux/app/';
 
 import {
   getActiveView,
-  getArtistReleases,
   getNotification,
-  getReleasePageItem,
   getUser,
   hasArtistReleases,
   hasReleasePageItem,

@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { getFoldersState, getReleasePageItem } from '../../services/redux/selectors';
 

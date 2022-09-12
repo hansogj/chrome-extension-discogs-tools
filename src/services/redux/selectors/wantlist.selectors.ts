@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { WantList } from '../../../domain';
 import { RootState } from '../root.reducers';

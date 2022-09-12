@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { FC } from 'react';
 import { DropdownInventoryField, InventoryFields } from '../../../domain';
 import { SelectedFields } from '../../../domain/Inventory';

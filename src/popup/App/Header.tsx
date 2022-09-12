@@ -12,7 +12,7 @@ import {
   Thumb,
 } from '../styled';
 
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import styled from 'styled-components';
 import { DISCOGS_LOGO } from '../../constants';
 import { User } from '../../domain';

@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { WantList, WantListItem } from '../../../domain';
 import { empty } from '../../../services/utils/json.utils';
 export type Item = [string, WantListItem];

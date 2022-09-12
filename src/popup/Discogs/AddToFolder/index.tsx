@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../../../services/redux';
 
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 
 import { FC } from 'react';
 import { actions as foldersActions } from '../../../services/redux/folders';

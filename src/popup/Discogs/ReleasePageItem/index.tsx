@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import React, { FC, PropsWithChildren } from 'react';
 import { ReleasePageItem } from '../../../domain';
 import { Card, ContentBody, discogsColors } from '../../styled';

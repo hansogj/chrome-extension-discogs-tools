@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';

@@ -1,5 +1,5 @@
 import '@hansogj/array.utils';
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import {
   all,
   call,
@@ -10,8 +10,7 @@ import {
   SelectEffect,
   takeLatest,
 } from 'redux-saga/effects';
-import { Artist, ReleasePageItem } from '../../../domain';
-import { ArtistReleases } from '../../../domain';
+import { Artist, ArtistReleases, ReleasePageItem } from '../../../domain';
 import * as api from '../../api';
 import { PageResourceIds } from '../../releasePage.service';
 import { AppActions, DISCOGS_BASE_URL } from '../app';
@@ -79,13 +78,19 @@ function* getResourceIdFromWindowUrl(): Generator<any> {
 
     if (/artists/.test(path)) {
       const artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
-      const releases = yield call(api.fetch, (artist as Artist).releases_url);
-      yield put(actions.getArtistReleasesLoaded(artist as Artist, releases as ArtistReleases));
+      const paginatedReleases = yield call(api.fetchPaginated, (artist as Artist).releases_url);
+
+      yield put(
+        actions.artistReleasesLoaded(
+          artist as Artist,
+          (paginatedReleases as ArtistReleases[]).flatMap(({ releases }) => releases),
+        ),
+      );
     }
 
     if (/(masters)|(releases)/.test(path)) {
       const releases = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
-      yield put(actions.getReleasePageItemLoaded(releases as ReleasePageItem));
+      yield put(actions.releasePageItemLoaded(releases as ReleasePageItem));
     }
   } catch (error) {
     console.log(error);

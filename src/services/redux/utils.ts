@@ -1,5 +1,5 @@
 import produce, { Draft } from 'immer';
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 
 type Producer<State, Action> = (draft: Draft<State>, action: Action) => void;
 type SharedKeys<Type, OtherType> = keyof Type & keyof OtherType;

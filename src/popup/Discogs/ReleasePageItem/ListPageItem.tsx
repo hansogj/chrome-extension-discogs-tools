@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { FC } from 'react';
 import { Artist, Image, MasterRelease } from '../../../domain';
 import { Column, Row, Thumb } from '../../styled';

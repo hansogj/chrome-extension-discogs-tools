@@ -1,6 +1,5 @@
-import maybe from 'maybe-for-sure';
-import { Artist, Release, ReleasePageItem } from '../domain';
-import { ArtistReleases } from '../domain';
+import maybe from '@hansogj/maybe';
+import { ArtistReleases, Release, ReleasePageItem } from '../domain';
 import { DISCOGS_BASE_URL } from './redux/app';
 import * as xhr from './xhr';
 

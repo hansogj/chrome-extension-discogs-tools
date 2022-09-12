@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { ResourceUrl } from '../../domain';
 import { DiscogsActions } from '../../services/redux/discogs';
 import { uniqueRelease } from './unique.releases';

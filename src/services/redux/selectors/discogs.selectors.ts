@@ -1,9 +1,8 @@
-import maybe from 'maybe-for-sure';
+import maybe, { Maybe } from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import {
   Artist,
   ArtistRelease,
-  ArtistReleases,
   BasicInformation,
   MasterRelease,
   Want,
@@ -46,7 +45,6 @@ export const getWantedArtistReleases = createSelector(
   getWantList,
   (releases, wantList) =>
     maybe(releases)
-      .mapTo('releases')
       .map((it) =>
         it
           .filter(inWantList)
@@ -66,9 +64,8 @@ export const getWantedArtistReleases = createSelector(
 
 export const getCollectedArtistReleases = createSelector(
   getArtistReleases,
-  (releases: Optional<ArtistReleases>) =>
+  (releases: Optional<ArtistRelease[]>) =>
     maybe(releases)
-      .mapTo('releases')
       .map((it) =>
         it.filter(inCollection).map(({ title, id, artist: name, year, thumb }) => ({
           basic_information: {
@@ -94,6 +91,10 @@ export const getCollectedArtistReleases = createSelector(
         ),
       )
       .valueOr({}),
+);
+
+export const getArtistName = createSelector(getDiscogsState, (discogs) =>
+  (maybe(discogs).mapTo('artist') as Maybe<Artist>).mapTo('name').valueOr('Artist unknown'),
 );
 
 export const hasArtistReleases = createSelector(getArtistReleases, Boolean);

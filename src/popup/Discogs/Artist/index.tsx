@@ -4,12 +4,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../../../services/redux';
 import {
   DispatchProps,
+  getArtistName,
   getCollectedArtistReleases,
   getWantedArtistReleases,
   StateProps,
 } from '../../../services/redux/selectors';
 
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { actions as appActions } from '../../../services/redux/app';
 
 import { Artist, WantList } from '../../../domain';
@@ -52,7 +53,7 @@ export const ArtistComponent = ({ artist, collected, wanted, goToUrl }: Props) =
 export const mapStateToProps = (state: RootState): StateProps<Partial<Props>> => ({
   collected: getCollectedArtistReleases(state),
   wanted: getWantedArtistReleases(state),
-  artist: 'ARTISTEN', //getArtistFromPage(state),
+  artist: getArtistName(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<Props> =>

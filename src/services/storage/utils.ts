@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { PREFIX, Storage, StorageKeys } from './types';
 
 const parse = (val: unknown) => {

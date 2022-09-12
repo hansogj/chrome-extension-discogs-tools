@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import * as userToken from './userToken.service';
 import { empty } from './utils/json.utils';
 

@@ -15,7 +15,7 @@
     "immer": "^9.0.15",
     "jshint": "^2.13.5",
     "madge": "^5.0.1",
-    "maybe-for-sure": "^1.4.3",
+    "@hansogj/maybe": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",

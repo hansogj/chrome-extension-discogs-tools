@@ -1,4 +1,4 @@
-import maybe from 'maybe-for-sure';
+import maybe from '@hansogj/maybe';
 import { BasicInformation, MasterRelease, PaginatedWantList, Want, WantListItem } from '../domain';
 import { get as storageGet, set as storageSet, uniqueKey } from './storage';
 import { fetch } from './xhr';
