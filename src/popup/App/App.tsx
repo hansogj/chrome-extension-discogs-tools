@@ -10,6 +10,7 @@ import {
   getActiveView,
   getNotification,
   getUser,
+  getWindowUrlMatch,
   hasArtistReleases,
   hasReleasePageItem,
   isLoading,
@@ -79,7 +80,16 @@ const App: FC<AppProps> = ({
                       }}
                     />
                   )}
-                  <Header {...{ activeView, setView, user, hasArtistReleases, hasReleaseItems }} />
+                  <Header
+                    {...{
+                      activeView,
+                      setView,
+                      user,
+
+                      hasArtistReleases,
+                      hasReleaseItems,
+                    }}
+                  />
                   <View {...{ activeView }} />
                 </>
               )),
@@ -98,6 +108,7 @@ export const mapStateToProps = (state: RootState): StateProps<Partial<AppProps>>
   activeView: getActiveView(state),
   hasArtistReleases: hasArtistReleases(state),
   hasReleaseItems: hasReleasePageItem(state),
+  //  getUrlMatch: getWindowUrlMatch(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<AppProps> =>

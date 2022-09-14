@@ -8,6 +8,7 @@ import {
   Want,
   WantList,
 } from '../../../domain';
+import { PageResourceIds } from '../../releasePage.service';
 import { toWantList } from '../../wantlist.service';
 import { DiscogsState } from '../discogs';
 import { RootState } from '../root.reducers';

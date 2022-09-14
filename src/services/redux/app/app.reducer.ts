@@ -8,6 +8,7 @@ export const initialState: AppState = {
   isLoading: true,
   view: undefined,
   highlightedLabels: undefined,
+  windowUrl: undefined,
 };
 
 const discogsReducer = reducerForProducers<AppState, AppActionTypes, AppActions>(initialState, {
@@ -30,6 +31,7 @@ const discogsReducer = reducerForProducers<AppState, AppActionTypes, AppActions>
   APP_SET_HIGHLIGHTED_LABELS_SUCCESS: writeToDraft('highlightedLabels'),
   APP_GET_HIGHLIGHTED_LABELS_SUCCESS: writeToDraft('highlightedLabels'),
   APP_LOG_OUT_SUCCESS: writeToDraft('user'),
+  WINDOW_URL_RETRIEVED: writeToDraft('windowUrl'),
 });
 
 export default discogsReducer;

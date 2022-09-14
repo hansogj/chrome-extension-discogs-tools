@@ -10,18 +10,21 @@ import {
   SelectEffect,
   takeLatest,
 } from 'redux-saga/effects';
-import { Artist, ArtistReleases, ReleasePageItem } from '../../../domain';
+import { Artist, ArtistReleases, MasterRelease, Release, ReleasePageItem } from '../../../domain';
 import * as api from '../../api';
 import { PageResourceIds } from '../../releasePage.service';
 import { AppActions, DISCOGS_BASE_URL } from '../app';
 import * as appActions from '../app/app.actions';
+import { getPathToWindowResource } from '../selectors';
 import {
   getFieldsResource,
   getFoldersResource,
   getInventoryResource,
   ResourceSelectors,
 } from '../selectors/resource.selectors';
+
 import * as actions from './discogs.actions';
+import { DiscogsActions } from './types';
 
 export function* fetchResource<T>(
   selector: ResourceSelectors,
@@ -41,42 +44,11 @@ export function* fetchResource<T>(
   return result;
 }
 
-const matchers = {
-  releases: /\/release\//,
-  masters: /\/master\//,
-  artists: /\/artist\//,
-};
-const urlMatch = ({ pathname }: URL) =>
-  Object.entries(matchers).reduce(
-    (cur, [field, reg]: [string, RegExp]) => ({
-      ...cur,
-      [field]: maybe(pathname.split(reg))
-        .map((it) => it.pop())
-        .nothingIf((it) => it === undefined)
-        .map((it) => `${it}`.split('-').shift())
-        .map((it) => parseInt(it!, 10))
-        .nothingIf(isNaN)
-
-        .valueOr(undefined),
-    }),
-
-    {} as PageResourceIds,
-  );
-
-const getPath = (url: URL) =>
-  maybe(urlMatch(url))
-    .map(Object.entries)
-    .map((it) => it.filter(([_, v]) => Boolean(v)))
-    .map((parts) => parts.flatMap((part) => part.join('/')))
-    .map((it) => it.shift())
-    .valueOr('') as string;
-
 function* getResourceIdFromWindowUrl(): Generator<any> {
   try {
-    let url = yield call(api.getWindowLocation);
-    const path: string = getPath(url as URL);
+    let path = yield select(getPathToWindowResource);
 
-    if (/artists/.test(path)) {
+    if (/artists/.test(`${path}`)) {
       const artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
       const paginatedReleases = yield call(api.fetchPaginated, (artist as Artist).releases_url);
 
@@ -88,9 +60,20 @@ function* getResourceIdFromWindowUrl(): Generator<any> {
       );
     }
 
-    if (/(masters)|(releases)/.test(path)) {
-      const releases = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
-      yield put(actions.releasePageItemLoaded(releases as ReleasePageItem));
+    if (/(masters)|(releases)/.test(`${path}`)) {
+      const release = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
+      const releaseId = (release as Release).id;
+      if ((release as Release).master_url) {
+        let master = yield call(api.fetch, (release as Release).master_url);
+        yield put(actions.releasePageItemLoaded({ releaseId, master } as ReleasePageItem));
+      } else {
+        yield put(
+          actions.releasePageItemLoaded({
+            releaseId,
+            master: release,
+          } as ReleasePageItem),
+        );
+      }
     }
   } catch (error) {
     console.log(error);
@@ -105,7 +88,7 @@ function* getDiscogsInventory(): Generator<any> {
 }
 
 function* DiscogsSaga() {
-  yield all([takeLatest(AppActions.getUserSuccess, getResourceIdFromWindowUrl)]);
+  yield all([takeLatest(AppActions.windowUrlRetrieved, getResourceIdFromWindowUrl)]);
 }
 
 export default DiscogsSaga;

@@ -1,6 +1,7 @@
 import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
+import { PageResourceIds } from '../../releasePage.service';
 import { AppState, ERROR, MustHaveArtistReleases, MustHaveReleaseItem, View } from '../app';
 import { RootState } from '../root.reducers';
 import { selectFromRoot } from '../utils';
@@ -47,4 +48,45 @@ export const getActiveView = createSelector(
 
 export const getHighlightedLabels = createSelector(getAppState, ({ highlightedLabels }) =>
   maybe(highlightedLabels).valueOr(DEFAULT_HIGHLIGHTED_LABELS),
+);
+export const getWindowLocation = createSelector(getAppState, (state) =>
+  maybe(state).mapTo('windowUrl').valueOr(undefined),
+);
+
+const matchers = {
+  releases: /\/release\//,
+  masters: /\/master\//,
+  artists: /\/artist\//,
+};
+export const getWindowUrlMatch = createSelector(getWindowLocation, (url) =>
+  maybe(url)
+    .mapTo('pathname')
+    .map((pathname) =>
+      Object.entries(matchers).reduce(
+        (cur, [field, reg]: [string, RegExp]) => ({
+          ...cur,
+          [field]: maybe(pathname.split(reg))
+            .map((it) => it.pop())
+            .nothingIf((it) => it === undefined)
+            .map((it) => `${it}`.split('-').shift())
+            .map((it) => parseInt(it!, 10))
+            .nothingIf(isNaN)
+            .valueOr(undefined),
+        }),
+
+        {} as PageResourceIds,
+      ),
+    )
+    .valueOr({} as PageResourceIds),
+);
+
+export const getPathToWindowResource = createSelector(
+  getWindowUrlMatch,
+  (match: PageResourceIds): string =>
+    maybe(match)
+      .map(Object.entries)
+      .map((it) => it.filter(([_, v]) => Boolean(v)))
+      .map((parts) => parts.flatMap((part) => part.join('/')))
+      .map((it) => it.shift())
+      .valueOr('') as string,
 );

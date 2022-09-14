@@ -7,6 +7,11 @@ export const error = (error: ERROR) => ({
   error,
 });
 
+export const windowUrlRetrieved = (url: URL): AppActionTypes => ({
+  type: AppActions.windowUrlRetrieved,
+  windowUrl: url,
+});
+
 export const warn = ({ message, error, actionBtn }: Partial<Notification>): AppActionTypes => ({
   type: AppActions.notify,
   notification: {

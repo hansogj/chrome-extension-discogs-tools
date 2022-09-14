@@ -35,6 +35,7 @@ const AddToFolderComponent: FC<Props> = ({
   addToFolder,
   ...props
 }: Props) => {
+  debugger;
   return (
     <ReleasePageItem releasePageItem={releasePageItem}>
       <Card style={{ marginTop: base }}>

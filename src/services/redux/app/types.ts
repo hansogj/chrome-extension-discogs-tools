@@ -23,7 +23,8 @@ export interface AppState {
   readonly notification: Optional<Notification>;
   readonly isLoading: boolean;
   readonly view: Optional<View>;
-  highlightedLabels: Optional<HighlightedLabels>;
+  readonly windowUrl: Optional<URL>;
+  readonly highlightedLabels: Optional<HighlightedLabels>;
 }
 
 export enum ERROR {
@@ -39,6 +40,7 @@ export interface AppActionData {
   notification: Notification;
   view: Optional<View>;
   highlightedLabels: Optional<HighlightedLabels>;
+  windowUrl: Optional<URL>;
   url: Optional<string>;
 }
 
@@ -58,6 +60,7 @@ export enum AppActions {
   setView = 'APP_SET_VIEW',
   setViewSuccess = 'APP_SET_VIEW_SUCCESS',
   goToUrl = 'APP_GO_TO_URL',
+  windowUrlRetrieved = 'WINDOW_URL_RETRIEVED',
   setHighlightedLabels = 'APP_SET_HIGHLIGHTED_LABELS',
   setHighlightedLabelsSuccess = 'APP_SET_HIGHLIGHTED_LABELS_SUCCESS',
   getHighlightedLabelsSuccess = 'APP_GET_HIGHLIGHTED_LABELS_SUCCESS',

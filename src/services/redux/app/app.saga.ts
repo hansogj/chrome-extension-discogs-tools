@@ -95,9 +95,13 @@ function* getHightlightedLabels(): Generator<any> {
     debugger;
   }
 }
+function* getWindowUrl(): Generator<any> {
+  let url = yield call(api.getWindowLocation);
+  yield put(actions.windowUrlRetrieved(url as URL));
+}
 
 function* onUserSuccess(): Generator<any> {
-  yield all([getView(), getHightlightedLabels()]);
+  yield all([getView(), getHightlightedLabels(), getWindowUrl()]);
 }
 
 function* goToUrl({ url }: AppActionTypes): Generator<any> {
