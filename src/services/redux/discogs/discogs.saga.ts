@@ -1,5 +1,4 @@
 import '@hansogj/array.utils';
-import maybe from '@hansogj/maybe';
 import {
   all,
   call,
@@ -12,7 +11,6 @@ import {
 } from 'redux-saga/effects';
 import { Artist, ArtistReleases, MasterRelease, Release, ReleasePageItem } from '../../../domain';
 import * as api from '../../api';
-import { PageResourceIds } from '../../releasePage.service';
 import { AppActions, DISCOGS_BASE_URL } from '../app';
 import * as appActions from '../app/app.actions';
 import { getPathToWindowResource } from '../selectors';
@@ -24,7 +22,6 @@ import {
 } from '../selectors/resource.selectors';
 
 import * as actions from './discogs.actions';
-import { DiscogsActions } from './types';
 
 export function* fetchResource<T>(
   selector: ResourceSelectors,
@@ -44,13 +41,16 @@ export function* fetchResource<T>(
   return result;
 }
 
-function* getResourceIdFromWindowUrl(): Generator<any> {
+function* getResourceIdFromWindowUrl() {
   try {
-    let path = yield select(getPathToWindowResource);
+    let path: string = yield select(getPathToWindowResource);
 
     if (/artists/.test(`${path}`)) {
-      const artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
-      const paginatedReleases = yield call(api.fetchPaginated, (artist as Artist).releases_url);
+      const artist: Artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
+      const paginatedReleases: ArtistReleases[] = yield call(
+        api.fetchPaginated,
+        artist.releases_url,
+      );
 
       yield put(
         actions.artistReleasesLoaded(
@@ -61,17 +61,17 @@ function* getResourceIdFromWindowUrl(): Generator<any> {
     }
 
     if (/(masters)|(releases)/.test(`${path}`)) {
-      const release = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
+      const release: Release = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
       const releaseId = (release as Release).id;
-      if ((release as Release).master_url) {
-        let master = yield call(api.fetch, (release as Release).master_url);
-        yield put(actions.releasePageItemLoaded({ releaseId, master } as ReleasePageItem));
+      if (release.master_url) {
+        let master: MasterRelease = yield call(api.fetch, release.master_url);
+        yield put(actions.releasePageItemLoaded({ releaseId, master }));
       } else {
         yield put(
           actions.releasePageItemLoaded({
             releaseId,
-            master: release,
-          } as ReleasePageItem),
+            master: release as unknown as MasterRelease,
+          }),
         );
       }
     }
@@ -81,7 +81,7 @@ function* getResourceIdFromWindowUrl(): Generator<any> {
 }
 
 // eslint-disable-next-line
-function* getDiscogsInventory(): Generator<any> {
+function* getDiscogsInventory() {
   yield fetchResource(getInventoryResource);
   yield fetchResource(getFoldersResource);
   yield fetchResource(getFieldsResource);

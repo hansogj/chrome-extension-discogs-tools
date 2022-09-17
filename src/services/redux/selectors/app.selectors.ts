@@ -1,11 +1,9 @@
 import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
-import { PageResourceIds } from '../../releasePage.service';
-import { AppState, ERROR, MustHaveArtistReleases, MustHaveReleaseItem, View } from '../app';
+import { AppState, ERROR, View, Views } from '../app';
 import { RootState } from '../root.reducers';
 import { selectFromRoot } from '../utils';
-import { hasArtistReleases, hasReleasePageItem } from './discogs.selectors';
 
 export const getAppState = (state: Partial<RootState>): AppState => selectFromRoot(state, 'App')!;
 
@@ -28,22 +26,6 @@ export const isLoading = createSelector(getAppState, ({ isLoading }) => isLoadin
 export const notAuthenticated = createSelector(
   getAppState,
   ({ error }) => error === ERROR.NOT_AUTHENTICATED,
-);
-
-export const getActiveView = createSelector(
-  getAppState,
-  hasReleasePageItem,
-  hasArtistReleases,
-  (appState, hasPageRelease, hasPageArtistRelease): View =>
-    maybe(appState)
-      .mapTo('view')
-      .map((it) =>
-        (MustHaveReleaseItem.includes(it!) && !hasPageRelease) ||
-        (MustHaveArtistReleases.includes(it!) && !hasPageArtistRelease)
-          ? 'Want List'
-          : it,
-      )
-      .valueOr('Settings') as View,
 );
 
 export const getHighlightedLabels = createSelector(getAppState, ({ highlightedLabels }) =>
@@ -74,19 +56,48 @@ export const getWindowUrlMatch = createSelector(getWindowLocation, (url) =>
             .valueOr(undefined),
         }),
 
-        {} as PageResourceIds,
+        {} as Record<keyof typeof matchers, number>,
       ),
     )
-    .valueOr({} as PageResourceIds),
+    .valueOr({} as Record<keyof typeof matchers, number>),
 );
 
 export const getPathToWindowResource = createSelector(
   getWindowUrlMatch,
-  (match: PageResourceIds): string =>
+  (match: Record<keyof typeof matchers, number>): string =>
     maybe(match)
       .map(Object.entries)
       .map((it) => it.filter(([_, v]) => Boolean(v)))
       .map((parts) => parts.flatMap((part) => part.join('/')))
       .map((it) => it.shift())
       .valueOr('') as string,
+);
+
+export const getActiveView = createSelector(
+  getAppState,
+  getWindowUrlMatch,
+  (appState, urlMatch): View =>
+    maybe(appState)
+      .mapTo('view')
+      .nothingIf(
+        (it) =>
+          (it === 'Artist' && !urlMatch.artists) ||
+          (it === 'Item' && !urlMatch.masters && !urlMatch.releases),
+      )
+
+      .valueOr('Settings') as View,
+);
+
+export const getViews = createSelector(getWindowUrlMatch, getActiveView, (urlMatch, activeView) =>
+  maybe(urlMatch)
+    .nothingIf((it) => JSON.stringify(it) === '{}')
+    .map((it) => {
+      console.log(activeView);
+      return Views.filter((view) => {
+        if (view === 'Artist') return Boolean(it.artists);
+        if (view === 'Item') return Boolean(it.masters) || Boolean(it.releases);
+        return true;
+      }).map((view) => ({ view, isActive: view === activeView }));
+    })
+    .valueOr(undefined),
 );

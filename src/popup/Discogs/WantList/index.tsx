@@ -14,6 +14,7 @@ import { entriesFrom, filteredAndSorted, SortMethod, SortMethods } from './utils
 import { actions as appActions } from '../../../services/redux/app';
 import { actions as wantlistActions } from '../../../services/redux/wantlist';
 import { DispatchAction } from '../../../services/redux/store';
+import Loader from '../../App/Loader';
 
 export interface Props extends ListProps {
   wantList: WantList;
@@ -59,27 +60,26 @@ const WantListComponent: FC<Props> = ({ wantList, goToUrl, getSyncedWantlist }: 
     />
   );
 
-  return wantList ? (
+  return (
     <ContentBody filled>
-      <Row>
-        <Column>
-          <h3>
-            {renderText('discogs.wantlist.header', {
-              size: Math.min(pageSize, length),
-              length: Object.entries(wantList).length,
-            })}
-          </h3>
-        </Column>
+      <Row {...{ width: 43 }}>
+        <Loader {...{ cond: !!wantList }}>
+          <Column>
+            <h3>
+              {renderText('discogs.wantlist.header', {
+                size: Math.min(pageSize, length),
+                length: Object.entries(wantList).length,
+              })}
+            </h3>
+          </Column>
+          <CP />
+          {maybe(filteredAndSorted(wantList, sortMethod, pageNr, pageSize))
+            .map((entries) => <List {...{ entries, goToUrl }} />)
+            .valueOr(<></>)}
+          {pageSize > 99 && wantListLength > 99 && <CP />}
+        </Loader>
       </Row>
-      <CP />
-      {maybe(filteredAndSorted(wantList, sortMethod, pageNr, pageSize))
-        .map((entries) => <List {...{ entries, goToUrl }} />)
-        .valueOr(<></>)}
-
-      {pageSize > 99 && wantListLength > 99 && <CP />}
     </ContentBody>
-  ) : (
-    <></>
   );
 };
 

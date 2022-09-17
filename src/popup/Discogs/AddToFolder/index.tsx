@@ -16,6 +16,7 @@ import {
 } from '../../../services/redux/selectors';
 import { DispatchAction } from '../../../services/redux/store';
 import { getText } from '../../../services/texts';
+import Loader from '../../App/Loader';
 import { base, Card, Column, Row, Submit } from '../../styled';
 import ReleasePageItem, { Props as ReleasePageItemProps } from '../ReleasePageItem';
 import { disableSubmitBtn } from '../selectors';
@@ -34,10 +35,9 @@ const AddToFolderComponent: FC<Props> = ({
   disableSubmitBtn,
   addToFolder,
   ...props
-}: Props) => {
-  debugger;
-  return (
-    <ReleasePageItem releasePageItem={releasePageItem}>
+}: Props) => (
+  <ReleasePageItem releasePageItem={releasePageItem}>
+    <Loader {...{ cond: !!releasePageItem }}>
       <Card style={{ marginTop: base }}>
         <Row padding={[1, 0]} width={42}>
           <Column width={21}>
@@ -67,9 +67,9 @@ const AddToFolderComponent: FC<Props> = ({
         </Row>
         <ListFields {...{ fields, ...props }} />
       </Card>
-    </ReleasePageItem>
-  );
-};
+    </Loader>
+  </ReleasePageItem>
+);
 export const mapStateToProps = (state: RootState): StateProps<Partial<Props>> => ({
   folders: getCollectableFolders(state),
   disableSubmitBtn: disableSubmitBtn(state),

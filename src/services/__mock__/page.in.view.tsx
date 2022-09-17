@@ -36,6 +36,7 @@ export const MOCKED_URLS = [
   /*7*/ 'artist/3068399-Horse-Lords',
   /*8*/ 'artist/179749-Magma-6',
   /*9*/ 'artist/97545-John-Coltrane',
+  /*10*/ 'artist/12368-Dead-Can-Dance',
 ];
 
 const getCurrent = () =>

@@ -7,7 +7,7 @@ import { Item } from './utils';
 export type Props = { entries: Item[]; goToUrl: DispatchAction<string> } & Size;
 
 const List: FC<Props> = ({ entries, goToUrl, width }: Props) => (
-  <Row {...{ width }}>
+  <>
     {entries.map(([wantListId, { title, thumb, artists, year }]: Item) => (
       <ReleaseCol key={wantListId} width={12} height={8}>
         <a
@@ -34,7 +34,7 @@ const List: FC<Props> = ({ entries, goToUrl, width }: Props) => (
         </a>
       </ReleaseCol>
     ))}
-  </Row>
+  </>
 );
 
 export default List;

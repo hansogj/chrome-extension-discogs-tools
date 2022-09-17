@@ -11,15 +11,15 @@ import { AppActions, AppActionTypes, DISCOGS_BASE_URL, ERROR, View } from './';
 import * as actions from './app.actions';
 import { ActionButton } from './types';
 
-function* getUser(_: any, count = 0): Generator<any> {
+function* getUser(_: any, count = 0): any {
   try {
-    const storedToken = yield call(userTokenService.get);
+    const storedToken: string = yield call(userTokenService.get);
     if (!Boolean(storedToken)) throw new Error(ERROR.NOT_AUTHENTICATED);
-    const identity = yield call(api.fetch, `${DISCOGS_BASE_URL}/oauth/identity`);
+    const identity: OauthIdentity = yield call(api.fetch, `${DISCOGS_BASE_URL}/oauth/identity`);
     if (identity) {
-      const user = yield call(api.fetch, (identity as OauthIdentity).resource_url);
+      const user: User = yield call(api.fetch, identity.resource_url);
 
-      yield put(actions.getUserSuccess(user as User));
+      yield put(actions.getUserSuccess(user));
       return true;
     } else {
       if (count < MAX_LOGIN_ATTEMPTS) {
@@ -32,10 +32,10 @@ function* getUser(_: any, count = 0): Generator<any> {
   }
 }
 
-export function* getUserId(): Generator<number> {
-  const userId = yield select(appSelectors.getUserId) as any;
+export function* getUserId() {
+  const userId: number = yield select(appSelectors.getUserId);
   if (userId) {
-    yield userId as number;
+    yield userId;
     return userId;
   } else {
     throw new Error('Cannot find any userId ');
@@ -54,9 +54,8 @@ export function* warn(message: string, timeout = 5000) {
   yield put(actions.notifyReset());
 }
 
-function* setUserToken({ userToken }: AppActionTypes): Generator<any> {
+function* setUserToken({ userToken }: AppActionTypes) {
   if (userToken) {
-    debugger;
     yield call(userTokenService.set, userToken!);
     yield call(getUser, 0);
   } else {
@@ -65,46 +64,46 @@ function* setUserToken({ userToken }: AppActionTypes): Generator<any> {
   }
 }
 
-function* setView({ view }: AppActionTypes): Generator<any> {
-  const storedView = yield call(set, 'view', view);
-  yield put(actions.setViewSuccess(storedView as View));
+function* setView({ view }: AppActionTypes) {
+  const storedView: View = yield call(set, 'view', view);
+  yield put(actions.setViewSuccess(storedView));
 }
-function* getView(): Generator<any> {
-  const view = yield call(get, 'view', '');
-  yield put(actions.setViewSuccess(view as View));
+function* getView() {
+  const view: View = yield call(get, 'view', '');
+  yield put(actions.setViewSuccess(view));
 }
 
-function* setHighlightedLabels({ highlightedLabels: labels }: AppActionTypes): Generator<any> {
+function* setHighlightedLabels({ highlightedLabels: labels }: AppActionTypes) {
   try {
     yield call(labelService.set, labels!);
     yield put(actions.setHighlightedLabelsSuccess(labels as HighlightedLabels));
-    yield call(api.applyHighglightedLabels);
+    yield call(api.applyHighlightedLabels);
   } catch (e) {
     debugger;
   }
 }
 
-function* getHightlightedLabels(): Generator<any> {
+function* getHighlightedLabels() {
   try {
-    const labels = yield call(labelService.get);
+    const labels: HighlightedLabels = yield call(labelService.get);
     if (labels) {
-      yield put(actions.getHighlightedLabelsSuccess(labels as HighlightedLabels));
-      yield call(api.applyHighglightedLabels);
+      yield put(actions.getHighlightedLabelsSuccess(labels));
+      yield call(api.applyHighlightedLabels);
     }
   } catch (e) {
     debugger;
   }
 }
-function* getWindowUrl(): Generator<any> {
-  let url = yield call(api.getWindowLocation);
+function* getWindowUrl() {
+  let url: URL = yield call(api.getWindowLocation);
   yield put(actions.windowUrlRetrieved(url as URL));
 }
 
-function* onUserSuccess(): Generator<any> {
-  yield all([getView(), getHightlightedLabels(), getWindowUrl()]);
+function* onUserSuccess() {
+  yield all([getView(), getHighlightedLabels(), getWindowUrl()]);
 }
 
-function* goToUrl({ url }: AppActionTypes): Generator<any> {
+function* goToUrl({ url }: AppActionTypes) {
   yield api.manipulateDom(DiscogsActions.domGoTo, `${url}`);
 }
 

@@ -77,7 +77,7 @@ export const getAllWantedVersionsByFormat = async (
     body: format,
   });
 
-export const applyHighglightedLabels = async () =>
+export const applyHighlightedLabels = async () =>
   messageHandler<HighlightedLabels>({
     type: MessageActions.APPLY_HIGHLIGHTED_LABELS,
   });
