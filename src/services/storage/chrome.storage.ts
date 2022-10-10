@@ -4,7 +4,9 @@ import { Storage, StorageKeys } from './types';
 import { prefixed, valueOr } from './utils';
 
 const storage = (key: StorageKeys) =>
-  key.includes('want-list') ? chrome.storage.local : chrome.storage.sync;
+  key.includes('want-list') || key.includes('user-collection')
+    ? chrome.storage.local
+    : chrome.storage.sync;
 
 export const set: Storage.Set = async <T>(key: StorageKeys, val: T) => {
   return new Promise((resolve, reject) => {
@@ -29,6 +31,15 @@ export const remove = (key: StorageKeys) =>
     } catch (error) {
       reject(error);
     }
+
+    chrome.storage.local.clear(function () {
+      var error = chrome.runtime.lastError;
+      if (error) {
+        console.error(error);
+      }
+      // do something more
+    });
+    chrome.storage.sync.clear(); // callback is optional
   });
 
 export const get: Storage.Get = <T>(key: StorageKeys, or?: T): any =>

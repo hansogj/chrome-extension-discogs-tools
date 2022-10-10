@@ -9,7 +9,7 @@ import {
   SelectEffect,
   takeLatest,
 } from 'redux-saga/effects';
-import { Artist, ArtistReleases, MasterRelease, Release, ReleasePageItem } from '../../../domain';
+import { Artist, ArtistReleases, Release } from '../../../domain';
 import * as api from '../../api';
 import { AppActions, DISCOGS_BASE_URL } from '../app';
 import * as appActions from '../app/app.actions';
@@ -47,7 +47,10 @@ function* getResourceIdFromWindowUrl() {
 
     if (/artists/.test(`${path}`)) {
       const artist: Artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
-      const paginatedReleases: ArtistReleases[] = yield call(
+
+      yield put(actions.getArtistLoadedSuccess(artist));
+
+      /*       const paginatedReleases: ArtistReleases[] = yield call(
         api.fetchPaginated,
         artist.releases_url,
       );
@@ -57,20 +60,20 @@ function* getResourceIdFromWindowUrl() {
           artist as Artist,
           (paginatedReleases as ArtistReleases[]).flatMap(({ releases }) => releases),
         ),
-      );
+      ); */
     }
 
     if (/(masters)|(releases)/.test(`${path}`)) {
-      const release: Release = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
-      const releaseId = (release as Release).id;
+      const release: Release.DTO = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
+      const releaseId = (release as Release.DTO).id;
       if (release.master_url) {
-        let master: MasterRelease = yield call(api.fetch, release.master_url);
+        let master: Release.MasterReleaseDTO = yield call(api.fetch, release.master_url);
         yield put(actions.releasePageItemLoaded({ releaseId, master }));
       } else {
         yield put(
           actions.releasePageItemLoaded({
             releaseId,
-            master: release as unknown as MasterRelease,
+            master: release as unknown as Release.MasterReleaseDTO,
           }),
         );
       }

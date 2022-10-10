@@ -1,6 +1,6 @@
 import { BasicInformation } from './BasicInformation';
 import { Artist } from './Artist';
-import { MasterRelease, Release } from './Release';
+import { Release } from './Release';
 
 export type Urls = {} & {
   first: string;
@@ -36,8 +36,8 @@ export interface Pagination {
 export type Paginated<T> = { pagination: Pagination } & T;
 
 export interface ReleasePageItem {
-  releaseId: Release['id'];
-  master: MasterRelease;
+  releaseId: Release.DTO['id'];
+  master: Release.MasterReleaseDTO;
 }
 
 export interface Instance {

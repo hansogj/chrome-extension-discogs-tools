@@ -9,3 +9,4 @@ export * from './Release';
 export * from './User';
 export * from './Versions';
 export * from './Wants';
+export * from './Collection';

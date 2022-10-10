@@ -1,6 +1,6 @@
 import { isProduction } from '../../constants';
 import domResolver from '../../content/dom';
-import { Version } from '../../domain';
+import { Versions } from '../../domain';
 import * as highlightedLabelsService from '../highlighted.labels.service';
 import { ActionTypes } from '../redux';
 
@@ -36,7 +36,7 @@ export const messageResolverFactory = (): MessageResolver => (action: ActionType
     .matcher(MessageActions.GET_ALL_WANTED_VERSIONS_BY_FORMAT, (action: MessageActionTypes) =>
       versionsService.getAllWantedVersionsByFormat(
         action.resource!,
-        action.body as Optional<Version['format']>,
+        action.body as Optional<Versions.DTO['format']>,
       ),
     )
     .resolve();

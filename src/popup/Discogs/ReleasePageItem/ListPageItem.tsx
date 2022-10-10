@@ -1,10 +1,10 @@
 import maybe from '@hansogj/maybe';
 import { FC } from 'react';
-import { Artist, Image, MasterRelease } from '../../../domain';
+import { Artist, Image, Release } from '../../../domain';
 import { Column, Row, Thumb } from '../../styled';
 
 export type Props = {
-  releasePageItem: MasterRelease;
+  releasePageItem: Release.MasterReleaseDTO;
 };
 
 const ReleasePageItem: FC<Props> = ({ releasePageItem }: Props) =>

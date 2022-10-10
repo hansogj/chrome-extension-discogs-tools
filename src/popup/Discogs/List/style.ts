@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { WantList } from '../../../domain';
 import {
   AugmentetCol,
   base,
@@ -9,10 +8,6 @@ import {
   shade,
   spacings,
 } from '../../styled';
-
-export interface Props {
-  wantList: WantList;
-}
 
 export const ReleaseCol = styled(Column)`
   ${AugmentetCol}

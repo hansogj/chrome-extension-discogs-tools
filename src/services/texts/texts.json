@@ -1,5 +1,5 @@
 {
-  "artist.list.title": "Releases from {{artist}} in your {{listName}}",
+  "artist.list.title": "Listing  {{number}} releases of {{artist}} in your {{listName}}",
   "artist.list.empty": "You have no items of {{artist}} in your {{listName}}",
   "discogs.add.to.folder.submit": "Add (+)",
   "discogs.add.to.folder.submit.message": "Add item to your selected folder",
@@ -14,16 +14,20 @@
   "log.out": "Log out",
   "notification.general.error": "Something went wrong when loading the app",
   "settings.resync.btn": "Sync Wantlist",
-  "settings.resync.explained": "Loads all wantet items into storage and filters on unique items",
+  "settings.resync.explained": "Loads all wantet items into storage and filters on unique items. This may take quiet some time",
+  "settings.collection.sync.btn": "Sync Collection",
+  "settings.collection.sync.explained": "Loads you whole collection into storage. This may take some while",
   "settings.clear.storage": "Clear storage",
   "settings.clear.storage.explained": "Clears the selcted folder, notes, custom-field etc used to speed-add our items into your favorite folder",
   "settings.favorite.placeholder": "Highlight {{label}} labels",
   "settings.favorite.explained": "<strong>Highlighted Labels</strong> are used to emphasis good and less good record labels, in categories from poor to very good, as seen below. Fill in the lists of your {{label}} labels - separated by line break",
+  "settings.inventory": "You have synced {{number}} items in your {{list}}",
   "token.info.title": "Missing access token",
   "token.info.ingress": "In order to access the <strong>Discogs</strong>-api, you need to fill inn your personal api-token. This can be found on",
   "token.info.link.url": "https://www.discogs.com/settings/developers",
   "token.info.link.text": "www.discogs.com",
   "token.input.placeholder": "token: ###",
   "token.input.submit": "Submit",
-  "wantlist.add.item.failed": "Failed to add items to your want list"
+  "wantlist.add.item.failed": "Failed to add items to your want list",
+  "wantlist.empty": "You need to sync your wantlist first. Go to settings and click sync button"
 }

@@ -24,6 +24,7 @@ export enum MessageActions {
   GET_ALL_WANTED_VERSIONS_BY_FORMAT = 'GET_ALL_WANTED_VERSIONS_BY_FORMAT',
   APPLY_HIGHLIGHTED_LABELS = 'APPLY_HIGHLIGHTED_LABELS',
   WANT_LIST_IS_SYNCING = 'WANT_LIST_IS_SYNCING',
+  SYNC_COLLECTION = 'SYNC_COLLECTION',
 }
 
 export type MessageActionTypes = ReduxActinTypes<MessageActions, MessageActionData>;

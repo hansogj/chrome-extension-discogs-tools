@@ -11,7 +11,6 @@ export const getFoldersResource = fromUser('collection_folders_url');
 export const getFieldsResource = fromUser('collection_fields_url');
 export const getInventoryResource = fromUser('inventory_url');
 export const getWantListResource = fromUser('wantlist_url');
-export const getFolderResource = fromUser('collection_folders_url');
 
 export const getCollectionResource = createSelector(getFolders, (folders) =>
   maybe(folders)
@@ -20,10 +19,13 @@ export const getCollectionResource = createSelector(getFolders, (folders) =>
     .valueOr(undefined),
 );
 
-export const getAddReleaseToFolderResource = (release_id: number) => {
-  return createSelector(getFolderResource, getSelectedFields, (folderResource, { folders }) =>
+export const getAddReleaseToFolderResource = (release_id: number) =>
+  createSelector(getFoldersResource, getSelectedFields, (folderResource, { folders }) =>
     [folderResource, folders, 'releases', release_id].join('/'),
   );
-};
+
+export const getAllFoldersReleasesResource = createSelector(getFoldersResource, (folderResource) =>
+  [folderResource, 0, 'releases'].join('/'),
+);
 
 export type ResourceSelectors = typeof getFieldsResource | typeof getCollectionResource;

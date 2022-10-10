@@ -1,4 +1,5 @@
 import { Folder, InventoryFields, SelectedFields } from '../../../domain';
+import { setView } from '../app/app.actions';
 import { FoldersActions, FoldersActionTypes } from './types';
 
 export const getFolders = (): FoldersActionTypes => ({
@@ -14,8 +15,6 @@ export const getInventoryFieldsSuccess = (fields: InventoryFields) => ({
   type: FoldersActions.getInventoryFieldsSuccess,
   fields,
 });
-
-export const clearSelectedFields = () => setSelectedFields(undefined as any);
 
 export const setSelectedFields = (selectedFields: SelectedFields): FoldersActionTypes => ({
   type: FoldersActions.setSelectedFields,

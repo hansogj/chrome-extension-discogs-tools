@@ -11,15 +11,15 @@ export const initialState: FoldersState = {
 const wantlistReducer = reducerForProducers<FoldersState, FoldersActionTypes, FoldersActions>(
   initialState,
   {
-    ADD_TO_FOLDER: (draft) => {
+    [FoldersActions.addToFolder]: (draft) => {
       draft.addingToFolder = true;
     },
-    ADD_TO_FOLDER_SUCCESS: (draft) => {
+    [FoldersActions.addToFolderSuccess]: (draft) => {
       draft.addingToFolder = false;
     },
-    GET_FOLDERS_SUCCESS: writeToDraft('folders'),
-    GET_INVENTORY_FIELDS_SUCCESS: writeToDraft('fields'),
-    SET_SELECTED_FIELDS_SUCCESS: writeToDraft('selectedFields'),
+    [FoldersActions.getFoldersSuccess]: writeToDraft('folders'),
+    [FoldersActions.getInventoryFieldsSuccess]: writeToDraft('fields'),
+    [FoldersActions.setSelectedFieldsSuccess]: writeToDraft('selectedFields'),
   },
 );
 

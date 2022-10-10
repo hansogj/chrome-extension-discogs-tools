@@ -3,8 +3,9 @@ import { MAX_LOGIN_ATTEMPTS } from '../../../constants';
 import { HighlightedLabels, OauthIdentity, User } from '../../../domain';
 import * as api from '../../api';
 import * as labelService from '../../highlighted.labels.service';
-import { get, set } from '../../storage';
+import { get, set, uniqueKey, remove } from '../../storage';
 import * as userTokenService from '../../userToken.service';
+import { empty } from '../../utils/json.utils';
 import { DiscogsActions } from '../discogs';
 import * as appSelectors from '../selectors/app.selectors';
 import { AppActions, AppActionTypes, DISCOGS_BASE_URL, ERROR, View } from './';
@@ -27,8 +28,13 @@ function* getUser(_: any, count = 0): any {
       } else throw new Error(ERROR.NOT_AUTHENTICATED);
     }
   } catch (error) {
-    console.log(error);
+    console.log('caught authentication error', error);
     yield put(actions.error(ERROR.NOT_AUTHENTICATED));
+    if (count < MAX_LOGIN_ATTEMPTS) {
+      getUser(_, count + 1);
+    } else {
+      yield put(actions.getUserFailed());
+    }
   }
 }
 
@@ -65,12 +71,12 @@ function* setUserToken({ userToken }: AppActionTypes) {
 }
 
 function* setView({ view }: AppActionTypes) {
-  const storedView: View = yield call(set, 'view', view);
-  yield put(actions.setViewSuccess(storedView));
+  yield call(set, 'view', view);
+  yield put(actions.setViewSuccess(view!));
 }
 function* getView() {
   const view: View = yield call(get, 'view', '');
-  yield put(actions.setViewSuccess(view));
+  yield put(actions.setViewSuccess(empty(view) ? undefined : view));
 }
 
 function* setHighlightedLabels({ highlightedLabels: labels }: AppActionTypes) {
@@ -81,6 +87,23 @@ function* setHighlightedLabels({ highlightedLabels: labels }: AppActionTypes) {
   } catch (e) {
     debugger;
   }
+}
+
+function* clearStorage() {
+  const userId: number = yield select(appSelectors.getUserId);
+  /*   | 'token'
+  | 'want-list'
+  | 'user-collection'
+  | 'cache'
+  | 'selected-fields'
+  | 'view'
+  | 'highlighted-labels'; */
+
+  yield call(remove, 'view');
+  yield call(remove, 'highlighted-labels');
+  yield call(remove, uniqueKey('user-collection', userId));
+  yield call(remove, uniqueKey('selected-fields', userId));
+  yield call(remove, uniqueKey('want-list', userId));
 }
 
 function* getHighlightedLabels() {
@@ -118,6 +141,7 @@ function* AppSaga() {
       takeLatest(AppActions.getUserSuccess, onUserSuccess),
       takeLatest(AppActions.setHighlightedLabels, setHighlightedLabels),
       takeLatest(AppActions.goToUrl, goToUrl),
+      takeLatest(AppActions.clearStorage, clearStorage),
     ]);
   } catch (e) {
     console.error(e);

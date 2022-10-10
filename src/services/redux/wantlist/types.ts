@@ -1,16 +1,18 @@
-import { Version, WantList } from '../../../domain';
+import { Versions, WantList, Collection } from '../../../domain';
 import { ActionTypes } from '../types';
 
 export interface WantListState {
-  readonly wantList: WantList;
+  readonly wantList: WantList.Item[];
+  readonly collection: Collection.Item[];
   readonly isSyncing: boolean;
   readonly addingToWantList: boolean;
 }
 
 export interface WantListActionData {
-  wantList: Optional<WantList>;
+  collection: Optional<Collection.Item[]>;
+  wantList: Optional<WantList.Item[]>;
   page: Optional<number>;
-  format: Optional<Version['format']>;
+  format: Optional<Versions.DTO['format']>;
 }
 
 export enum WantListActions {
@@ -19,6 +21,10 @@ export enum WantListActions {
   syncWantlistEnded = 'SYNC_WANT_LIST_ENDED',
   getWantListSuccess = 'GET_WANT_LIST_SUCCESS',
   getWantListFailed = 'GET_WANT_LIST_FAILED',
+  syncCollection = 'SYNC_COLLECTION',
+  syncCollectionEnded = 'SYNC_COLLECTION_ENDED',
+  getCollection = 'GET_COLLECTION_',
+  getCollectionSuccess = 'GET_COLLECTION_SUCCESSs',
 }
 
 export type WantListActionTypes = ActionTypes<WantListActions, WantListActionData>;

@@ -1,9 +1,9 @@
-import { PaginatedVersions, Version } from '../domain';
+import { Versions } from '../domain';
 import * as xhr from './xhr';
 
 export const getAllWantedVersionsByFormat = (
   versions_url: string,
-  format: Optional<Version['format']>,
+  format: Optional<Versions.DTO['format']>,
 ) =>
   getAllVersions(versions_url).then((allVersions) =>
     format
@@ -21,13 +21,13 @@ export const getAllWantedVersionsOfItem = async (versions_url: string) =>
 export const getAllVersions = async (
   versions_url: string,
   page = 1,
-  result = [] as Version[],
-): Promise<Version[]> =>
+  result = [] as Versions.DTO[],
+): Promise<Versions.DTO[]> =>
   (
     xhr.fetch(versions_url, {
       per_page: 100,
       page,
-    }) as Promise<PaginatedVersions>
+    }) as Promise<Versions.PaginatedVersions>
   ).then(({ pagination, versions }) =>
     page < pagination.pages
       ? getAllVersions(versions_url, page + 1, result.concat(versions))

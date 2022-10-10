@@ -45,6 +45,10 @@ export const getUserSuccess = (user: User): AppActionTypes => ({
   user,
 });
 
+export const getUserFailed = (): AppActionTypes => ({
+  type: AppActions.getUserFailed,
+});
+
 export const logOut = (): AppActionTypes => ({
   type: AppActions.logOut,
 });
@@ -76,7 +80,7 @@ export const setView = (view: View): AppActionTypes => ({
   view,
 });
 
-export const setViewSuccess = (view: View): AppActionTypes => ({
+export const setViewSuccess = (view?: View): AppActionTypes => ({
   type: AppActions.setViewSuccess,
   view,
 });
@@ -104,3 +108,4 @@ export const getHighlightedLabelsSuccess = (
   type: AppActions.getHighlightedLabelsSuccess,
   highlightedLabels,
 });
+export const clearStorage = () => ({ type: AppActions.clearStorage });

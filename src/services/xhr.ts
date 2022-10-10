@@ -1,9 +1,31 @@
-import axios, { AxiosResponse } from 'axios';
 import maybe from '@hansogj/maybe';
+import axios, { AxiosResponse } from 'axios';
 import * as userToken from './userToken.service';
 import { empty } from './utils/json.utils';
 
 import adapter from '@vespaiach/axios-fetch-adapter';
+
+let stack: number[] = [];
+export const stdDelay = 200;
+export const __resetStack = () => (stack = []);
+export const rateLimit = 60;
+
+export const getDelay = () => {
+  const timestamp = Date.now();
+  stack.unshift(timestamp);
+  let actualDelay = stack && stack.length > rateLimit ? 500 : stdDelay;
+  return maybe(stack)
+    .map((it) => it[rateLimit - 2])
+    .nothingUnless(Boolean)
+    .map((it) => timestamp - it)
+    .nothingIf((it) => it < actualDelay)
+    .map((it) => rateLimit * 1200 - it)
+    .nothingIf((it) => it < actualDelay)
+    .valueOr(actualDelay);
+};
+
+const sleep = (delay = getDelay()) =>
+  new Promise<number>((resolve, reject) => setTimeout(() => resolve(delay), delay));
 
 const unRest = ({ data }: AxiosResponse) => data;
 const serialize = (obj: Record<string, string | number>): string =>
@@ -26,10 +48,29 @@ const url = (resource: string, params?: SearchParams) =>
       .valueOr(resource),
   );
 
-export const fetch = async (resource: string, params?: SearchParams) =>
-  url(resource, params)
+export const fetch = async (resource: string, params?: SearchParams) => {
+  return sleep()
+    .then((delay) =>
+      console.log(`Calling ${resource} after ${delay} millis: ${Date.now()} `, {
+        size: stack.length,
+        last: maybe(stack)
+          .map((it) => it[0])
+          .map((it) => new Date(it))
+          .map((it) => [it.getSeconds(), it.getMilliseconds()].join(':'))
+          .valueOr('undef'),
+        delay,
+      }),
+    )
+    .then(() => url(resource, params))
     .then((u) => axios.get(u, { adapter }))
-    .then(unRest);
+    .then(unRest)
+    .catch((e) => {
+      return Promise.reject({
+        latest: stack[0],
+        rateLimit: stack[rateLimit - 1],
+      });
+    });
+};
 
 export const deleteResource = async (resource: string) =>
   url(resource).then(axios.delete).then(unRest);

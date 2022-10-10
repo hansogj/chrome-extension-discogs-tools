@@ -1,5 +1,5 @@
 import maybe from '@hansogj/maybe';
-import { HighlightedLabels, MasterRelease, Paginated, ResourceUrl, Version } from '../domain';
+import { HighlightedLabels, Release, Paginated, ResourceUrl, Versions } from '../domain';
 import { MessageActions } from './message.handlers';
 import messageHandler from './message.handlers/popup.message.handler';
 import { DiscogsActions } from './redux/discogs';
@@ -28,6 +28,13 @@ export const manipulateDom = async (body: DiscogsActions, resource: ResourceUrl)
 export const syncWantList = async (userId: number, url: string) =>
   messageHandler<Cache>({
     type: MessageActions.SYNC_WANT_LIST,
+    body: url,
+    userId,
+  }).then((cache) => maybe(cache).valueOr({}) as Cache);
+
+export const syncCollection = async (userId: number, url: string) =>
+  messageHandler<Cache>({
+    type: MessageActions.SYNC_COLLECTION,
     body: url,
     userId,
   }).then((cache) => maybe(cache).valueOr({}) as Cache);
@@ -63,15 +70,15 @@ export const fetchPaginated = async <T>(
 };
 
 export const reload = async () =>
-  messageHandler<Optional<MasterRelease>>({
+  messageHandler<Optional<Release.MasterReleaseDTO>>({
     type: MessageActions.WINDOW_RELOAD,
   });
 
 export const getAllWantedVersionsByFormat = async (
   resource: string,
-  format: Optional<Version['format']>,
+  format: Optional<Versions.DTO['format']>,
 ) =>
-  messageHandler<Optional<MasterRelease>>({
+  messageHandler<Optional<Release.MasterReleaseDTO>>({
     type: MessageActions.GET_ALL_WANTED_VERSIONS_BY_FORMAT,
     resource,
     body: format,

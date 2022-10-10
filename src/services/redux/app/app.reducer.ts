@@ -5,33 +5,43 @@ export const initialState: AppState = {
   user: undefined,
   notification: undefined,
   error: undefined,
-  isLoading: true,
+  isLoading: false,
   view: undefined,
   highlightedLabels: undefined,
   windowUrl: undefined,
 };
 
 const discogsReducer = reducerForProducers<AppState, AppActionTypes, AppActions>(initialState, {
-  SET_USER_TOKEN: (draft, action) => {
+  [AppActions.setUserToken]: (draft, action) => {
     draft.isLoading = true;
   },
+  [AppActions.getUser]: (draft, action) => {
+    draft.isLoading = true;
+  },
+  [AppActions.getUserFailed]: (draft, action) => {
+    draft.isLoading = false;
+  },
 
-  GET_USER_SUCCESS: (draft, action) => {
+  [AppActions.getUserSuccess]: (draft, action) => {
     draft.isLoading = false;
     draft.user = action.user;
     draft.error = undefined;
   },
-  APP_ERROR: (draft, action) => {
+  [AppActions.error]: (draft, action) => {
     draft.isLoading = false;
     draft.error = action.error;
   },
-  APP_NOTIFY: writeToDraft('notification'),
-  APP_NOTIFY_RESET: writeToDraft('notification'),
-  APP_SET_VIEW_SUCCESS: writeToDraft('view'),
-  APP_SET_HIGHLIGHTED_LABELS_SUCCESS: writeToDraft('highlightedLabels'),
-  APP_GET_HIGHLIGHTED_LABELS_SUCCESS: writeToDraft('highlightedLabels'),
-  APP_LOG_OUT_SUCCESS: writeToDraft('user'),
-  WINDOW_URL_RETRIEVED: writeToDraft('windowUrl'),
+  [AppActions.notify]: writeToDraft('notification'),
+  [AppActions.notifyReset]: writeToDraft('notification'),
+  [AppActions.setViewSuccess]: writeToDraft('view'),
+  [AppActions.setHighlightedLabelsSuccess]: writeToDraft('highlightedLabels'),
+  [AppActions.getHighlightedLabelsSuccess]: writeToDraft('highlightedLabels'),
+  [AppActions.logOutSuccess]: writeToDraft('user'),
+  [AppActions.windowUrlRetrieved]: writeToDraft('windowUrl'),
+  [AppActions.clearStorage]: (draft) => {
+    draft.view = undefined;
+    draft.highlightedLabels = undefined;
+  },
 });
 
 export default discogsReducer;

@@ -22,7 +22,7 @@ import Loader from './Loader';
 import NotificationComponent from './Notification';
 import TokenInput, { TokenInputProps } from './TokenInput';
 
-interface AppProps extends TokenInputProps, ViewProps, HeaderProps {
+export interface AppProps extends TokenInputProps, ViewProps, HeaderProps {
   activeView: ViewType;
   notification: Notification;
   isLoading: boolean;
@@ -30,7 +30,7 @@ interface AppProps extends TokenInputProps, ViewProps, HeaderProps {
   getUser: typeof appActions.getUser;
 }
 
-const App: FC<AppProps> = ({
+export const App: FC<AppProps> = ({
   notification,
   setUserToken,
   isLoading,
@@ -40,6 +40,7 @@ const App: FC<AppProps> = ({
   ...headerProps
 }: AppProps) => {
   let ref = useRef(null);
+
   useEffect(() => {
     getUser();
   }, [getUser]);
@@ -57,20 +58,14 @@ const App: FC<AppProps> = ({
           )
           .or(
             maybe(headerProps)
-              .nothingUnless((it) => !!it.user && !!it.views)
+              .mapTo('user')
+              .nothingUnless(Boolean)
               .map(() => (
-                <>
-                  {notification && (
-                    <NotificationComponent
-                      {...{
-                        refObject: ref,
-                        notification,
-                      }}
-                    />
-                  )}
+                <div data-test-main-content>
+                  {notification && <NotificationComponent {...{ refObject: ref, notification }} />}
                   <Header {...headerProps} />
                   <View {...{ activeView }} />
-                </>
+                </div>
               )),
           )
           .valueOr(<TokenInput setUserToken={setUserToken} />)}

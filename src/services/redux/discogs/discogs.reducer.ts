@@ -11,6 +11,7 @@ const discogsReducer = reducerForProducers<DiscogsState, DiscogsActionTypes, Dis
   initialState,
   {
     [DiscogsActions.getReleasePageItemLoaded]: writeToDraft('releasePageItem'),
+    [DiscogsActions.getArtistLoadedSuccess]: writeToDraft('artist'),
     [DiscogsActions.getArtistReleasesLoaded]: (draft, { artist, artistReleases }) => {
       draft.artist = artist;
       draft.artistReleases = artistReleases;

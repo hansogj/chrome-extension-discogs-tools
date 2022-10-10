@@ -20,8 +20,8 @@ export const releasePage = ({
   return itemUri
     ? xhr
         .fetch(`${DISCOGS_BASE_URL}/${itemUri}`)
-        .then(({ master_url, ...rest }: Release) => (master_url ? xhr.fetch(master_url) : rest))
-        .then((master: Release) => ({ master, releaseId } as any))
+        .then(({ master_url, ...rest }: Release.DTO) => (master_url ? xhr.fetch(master_url) : rest))
+        .then((master: Release.DTO) => ({ master, releaseId } as any))
     : Promise.reject('cannot find a release on this page');
 };
 

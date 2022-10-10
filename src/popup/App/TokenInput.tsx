@@ -22,6 +22,12 @@ const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
     'token.input.placeholder',
     'token.input.submit',
   );
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setUserToken(token);
+    }
+  };
   return (
     <ContentBody filled>
       <Row>
@@ -44,6 +50,7 @@ const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
               width={18}
               placeholder={placeholder}
               value={token}
+              onKeyPress={handleKeyPress}
               onChange={(e) => setToken(e.target.value)}
             ></Input>
             <Submit onClick={() => setUserToken(token)}>{submit}</Submit>

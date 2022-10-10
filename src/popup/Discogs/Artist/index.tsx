@@ -13,28 +13,29 @@ import {
 import maybe from '@hansogj/maybe';
 import { actions as appActions } from '../../../services/redux/app';
 
-import { Artist, WantList } from '../../../domain';
+import { Artist } from '../../../domain';
 import { renderText } from '../../../services/texts';
 import Loader from '../../App/Loader';
 import { Column, ContentBody, Row } from '../../styled';
-import List, { Props as ListProps } from '../WantList/List';
+import List, { ListItem, Props as ListProps } from '../List';
 
 export interface Props extends ListProps {
   artist: Optional<Artist['name']>;
-  collected: Optional<WantList>;
-  wanted: Optional<WantList>;
+  collected: Optional<ListItem[]>;
+  wanted: Optional<ListItem[]>;
 }
 
 export const ArtistComponent = ({ artist, collected, wanted, goToUrl }: Props) => {
-  const render = (list: Optional<WantList>, listName: string) =>
+  const render = (list: Optional<ListItem[]>, listName: string) =>
     maybe(list)
-      .map(Object.entries)
       .nothingIf((it) => it.length < 1)
       .map((entries) => (
         <>
           <Row padding={[2, 0, 0, 0]}>
             <Column>
-              <h3>{renderText('artist.list.title', { listName, artist })}</h3>
+              <h3>
+                {renderText('artist.list.title', { listName, number: entries.length, artist })}
+              </h3>
             </Column>
           </Row>
           <List {...{ entries, goToUrl }} width={43} />
@@ -45,7 +46,7 @@ export const ArtistComponent = ({ artist, collected, wanted, goToUrl }: Props) =
   return (
     <ContentBody filled>
       <Row {...{ width: 43 }}>
-        <Loader {...{ cond: Boolean(collected) && Boolean(wanted) }}>
+        <Loader {...{ cond: [collected, wanted].some((it) => it !== undefined) }}>
           {render(collected, 'collection')}
           {render(wanted, 'wantlist')}
         </Loader>

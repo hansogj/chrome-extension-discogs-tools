@@ -17,6 +17,7 @@ export interface DiscogsActionData {
 export enum DiscogsActions {
   getReleasePageItem = 'GET_RELEASE_PAGE_ITEM',
   getReleasePageItemLoaded = 'GET_RELEASE_PAGE_ITEM_LOADED',
+  getArtistLoadedSuccess = 'GET_ARTIST_LOADED_SUCCESS',
   getArtistReleasesLoaded = 'GET_ARTIST_RELEASES_LOADED',
   domGoTo = 'DOM_GO_TO',
   domFilterSellers = 'DOM_FILTER_SELLERS',

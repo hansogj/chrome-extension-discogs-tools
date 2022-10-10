@@ -1,7 +1,11 @@
 import maybe from '@hansogj/maybe';
-import { WantList, WantListItem } from '../../../domain';
+import { WantList } from '../../../domain';
+
 import { empty } from '../../../services/utils/json.utils';
-export type Item = [string, WantListItem];
+import { ListItem } from '../List';
+
+type Item = WantList.Item;
+
 export type SortMethod = keyof SortMethods;
 type CompareFn = (a: Item, b: Item) => number;
 
@@ -14,7 +18,7 @@ export interface SortMethods {
   'Added (rev)': CompareFn;
 }
 
-const sort = (a: any, b: any) => {
+const sort = (a: string | number, b: string | number) => {
   if (a < b) {
     return -1;
   }
@@ -25,18 +29,23 @@ const sort = (a: any, b: any) => {
   return 0;
 };
 
-const byName = ([_, a]: Item, [__, b]: Item) => sort(a.artists[0].name, b.artists[0].name);
+const getName = (item: Item) =>
+  maybe(item)
+    .mapTo('mainRelease')
+    // @ts-ignore"
+    .mapTo('artists')
+    .map((it) => it[0])
+    .mapTo('name')
+    .valueOr('');
 
-const byNameRev = ([_, a]: Item, [__, b]: Item) => sort(b.artists[0].name, a.artists[0].name);
-
-const byReleaseYear = ([_, a]: Item, [__, b]: Item) => sort(a.year, b.year);
-
-const byReleaseYearRev = ([_, a]: Item, [__, b]: Item) => sort(b.year, a.year);
-
-const byAdded = ([_, a]: Item, [__, b]: Item) =>
+const byName = (a: Item, b: Item) => sort(getName(a), getName(b));
+const byNameRev = (a: Item, b: Item) => sort(getName(b), getName(a));
+const byReleaseYear = (a: Item, b: Item) => sort(a?.mainRelease?.year!, b?.mainRelease?.year!);
+const byReleaseYearRev = (a: Item, b: Item) => sort(b?.mainRelease?.year!, a?.mainRelease?.year!);
+const byAdded = (a: Item, b: Item) =>
   sort(new Date(a.date_added).getTime(), new Date(b.date_added).getTime());
 
-const byAddedReverse = ([_, a]: Item, [__, b]: Item) =>
+const byAddedReverse = (a: Item, b: Item) =>
   sort(new Date(b.date_added).getTime(), new Date(a.date_added).getTime());
 
 export const sortMap: SortMethods = {
@@ -55,17 +64,20 @@ export const sortMethods = Object.keys(sortMap);
 const paginated = (i: number, page: number, size: number) =>
   i >= page * size && i < (page + 1) * size;
 
-export const entriesFrom = (wantList: WantList) =>
-  maybe(wantList).nothingIf(empty).map(Object.entries).valueOr(undefined);
+export const entriesFrom = (wantList: WantList.Item[]) =>
+  maybe(wantList).nothingIf(empty).valueOr([]);
 
 export const filteredAndSorted = (
-  wantList: WantList,
+  wantList: WantList.Item[],
   sortMethod: SortMethod,
   page: number,
   size: number,
-) =>
-  maybe(entriesFrom(wantList))
-    .map((entries) =>
-      entries.sort(sortMap[sortMethod]).filter((_: Item, i: number) => paginated(i, page, size)),
+) => {
+  return maybe(wantList)
+    .map((it) => it.slice())
+    .map((it) =>
+      it.sort(sortMap[sortMethod]).filter((_: Item, i: number) => paginated(i, page, size)),
     )
-    .valueOr(undefined);
+    .map((it) => it.map(({ mainRelease }) => mainRelease).filter(Boolean))
+    .valueOr([]) as ListItem[];
+};

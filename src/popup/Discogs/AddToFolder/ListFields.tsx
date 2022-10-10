@@ -1,5 +1,5 @@
 import maybe from '@hansogj/maybe';
-import { FC } from 'react';
+import React from 'react';
 import { DropdownInventoryField, InventoryFields } from '../../../domain';
 import { SelectedFields } from '../../../domain/Inventory';
 import { DispatchAction } from '../../../services/redux/store';
@@ -11,7 +11,7 @@ export type Props = {
   setSelectedFields: DispatchAction<SelectedFields>;
 };
 
-const ListFields: FC<Props> = ({ fields, selectedFields, setSelectedFields }: Props) => (
+const ListFields = ({ fields, selectedFields, setSelectedFields }: Props) => (
   <Row>
     {fields.map(({ type, name, id, ...field }) => (
       <Column width={10} height={4} key={`fieldId-${id}-col`} padding={[0.2, 0]}>

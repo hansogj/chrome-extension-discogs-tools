@@ -5,6 +5,11 @@ export const getReleasePageItem = (): DiscogsActionTypes => ({
   type: DiscogsActions.getReleasePageItem,
 });
 
+export const getArtistLoadedSuccess = (artist: Artist) => ({
+  type: DiscogsActions.getArtistLoadedSuccess,
+  artist,
+});
+
 export const releasePageItemLoaded = (releasePageItem: ReleasePageItem): DiscogsActionTypes => ({
   type: DiscogsActions.getReleasePageItemLoaded,
   releasePageItem,

@@ -79,12 +79,12 @@ export const getActiveView = createSelector(
   (appState, urlMatch): View =>
     maybe(appState)
       .mapTo('view')
-      .nothingIf(
-        (it) =>
+      .nothingIf((it) => {
+        return (
           (it === 'Artist' && !urlMatch.artists) ||
-          (it === 'Item' && !urlMatch.masters && !urlMatch.releases),
-      )
-
+          (it === 'Item' && !urlMatch.masters && !urlMatch.releases)
+        );
+      })
       .valueOr('Settings') as View,
 );
 

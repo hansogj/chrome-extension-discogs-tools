@@ -14,6 +14,7 @@ export declare module Storage {
 export type StorageKeys =
   | 'token'
   | 'want-list'
+  | 'user-collection'
   | 'cache'
   | 'selected-fields'
   | 'view'

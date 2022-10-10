@@ -6,8 +6,8 @@ import {
   Folder,
   Instance,
   InventoryFields,
-  MasterRelease,
   ReleasePageItem,
+  Release,
 } from '../../../domain';
 import * as api from '../../api';
 import * as selectedFieldsService from '../../selectedFields.service';
@@ -103,8 +103,10 @@ function* notifyNewInstance(instance: Instance): Generator<any> {
 
   if (!resource) throw new Error('Now resource found on instance');
 
-  const title = (yield select(fromReleasePageMaster('title'))) as MasterRelease['title'];
-  const artists = (yield select(fromReleasePageMaster('artists'))) as MasterRelease['artists'];
+  const title = (yield select(fromReleasePageMaster('title'))) as Release.MasterReleaseDTO['title'];
+  const artists = (yield select(
+    fromReleasePageMaster('artists'),
+  )) as Release.MasterReleaseDTO['artists'];
 
   const artist = maybe(artists)
     .map((it) => it[0] as Artist)

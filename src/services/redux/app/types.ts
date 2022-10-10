@@ -65,6 +65,7 @@ export enum AppActions {
   setHighlightedLabels = 'APP_SET_HIGHLIGHTED_LABELS',
   setHighlightedLabelsSuccess = 'APP_SET_HIGHLIGHTED_LABELS_SUCCESS',
   getHighlightedLabelsSuccess = 'APP_GET_HIGHLIGHTED_LABELS_SUCCESS',
+  clearStorage = 'APP_CLEAR_STORAGE',
 }
 
 export type AppActionTypes = ActionTypes<AppActions, AppActionData>;
