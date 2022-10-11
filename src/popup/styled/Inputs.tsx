@@ -71,7 +71,8 @@ export const Button = styled.button<
   text-shadow: 0 1px 1px ${discogsColors.darkShade};
   &:disabled,
   &:active {
-    filter: grayscale(1);
+    background-color: ${discogsColors.dark};
+    color: ${discogsColors.bright};
     text-shadow: 0 1px 1px ${discogsColors.darkShade};
   }
 `;

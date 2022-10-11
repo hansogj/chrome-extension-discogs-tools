@@ -21,7 +21,6 @@ import Header, { Props as HeaderProps } from './Header';
 import Loader from './Loader';
 import NotificationComponent from './Notification';
 import TokenInput, { TokenInputProps } from './TokenInput';
-
 export interface AppProps extends TokenInputProps, ViewProps, HeaderProps {
   activeView: ViewType;
   notification: Notification;

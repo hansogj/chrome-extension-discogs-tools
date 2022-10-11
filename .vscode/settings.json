@@ -14,5 +14,8 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "files.insertFinalNewline": true,
-  "cSpell.words": ["wantlist"]
+  "cSpell.words": [
+    "wantlist"
+  ],
+  "jest.autoRun": {}
 }

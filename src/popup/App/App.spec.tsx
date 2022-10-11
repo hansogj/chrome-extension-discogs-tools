@@ -6,10 +6,16 @@ import Loader from './Loader';
 import TokenInput from './TokenInput';
 import NotificationComponent from './Notification';
 import Header from './Header';
-jest.mock('../View', () => ({
-  __esModule: true,
-  default: () => <div>View</div>,
-}));
+jest
+  .mock('../View', () => ({
+    __esModule: true,
+    default: () => <div>View</div>,
+  }))
+  .mock('../../services/storage', () => ({
+    __esModule: true,
+    default: () => {},
+  }));
+
 describe('App', () => {
   let props: AppProps = {} as AppProps;
   const setUp = (pProps = {}) => (props = { ...props, ...pProps });

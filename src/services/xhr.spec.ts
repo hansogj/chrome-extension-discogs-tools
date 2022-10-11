@@ -1,16 +1,21 @@
 import { getDelay, stdDelay, __resetStack } from './xhr';
 
-jest.mock('@vespaiach/axios-fetch-adapter', () => ({
-  __esModule: true,
-  default: () => {},
-}));
+jest
+  .mock('./storage', () => ({
+    __esModule: true,
+    default: () => {},
+  }))
+  .mock('@vespaiach/axios-fetch-adapter', () => ({
+    __esModule: true,
+    default: () => {},
+  }));
 
 const _01012020 = 1577836800000;
 const mockDate = (millis = 0) => (Date.now = jest.fn(() => _01012020 + millis));
 
 describe('xhr', () => {
   describe('getDelay', () => {
-    describe.only.each([
+    describe.each([
       [1, stdDelay],
       [2, stdDelay],
 
@@ -18,17 +23,17 @@ describe('xhr', () => {
       [10, stdDelay],
       [57, stdDelay],
       [58, stdDelay],
-      [59, 48400],
-      [117, stdDelay],
-      [118, 48400],
-      [119, stdDelay],
+      [59, 60400],
+      [117, 500],
+      [118, 43300],
+      [119, 500],
 
       [2, stdDelay, [0, 4000]],
-      [59, 40400, [58, 8000]],
-      [59, stdDelay, [58, 48400]],
-      [59, 200, [58, 54000]],
-      [118, 40400, [58, 8000]],
-      [118, stdDelay, [58, 48400]],
+      [59, 52400, [58, 8000]],
+      [59, stdDelay, [58, 60400]],
+      [59, stdDelay * 2, [58, 60000]],
+      [118, 43300, [58, 8000]],
+      [118, 500, [58, 60400]],
     ] as Array<[number, number, number[]?]>)(
       'when %s th call to server',
       (nthCall, expected, [onCallIndex, extraDelayOnCall] = []) => {
