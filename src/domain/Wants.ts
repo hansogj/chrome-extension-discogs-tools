@@ -17,7 +17,10 @@ export declare module WantList {
   }>;
 
   export type Basics = Pick<BasicInformation, 'id' | 'master_id' | 'master_url' | 'resource_url'>;
-  export type Release = Pick<Release.DTO, 'master_id' | 'title' | 'thumb' | 'year'> & {
+  export type Release = Pick<
+    Release.DTO,
+    'master_id' | 'master_url' | 'title' | 'thumb' | 'year'
+  > & {
     artists: Pick<Artist, 'id' | 'name'>[];
   };
 

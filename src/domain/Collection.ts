@@ -14,7 +14,10 @@ export declare module Collection {
     releases: DTO[];
   }>;
 
-  export type Release = Pick<BasicInformation, 'master_id' | 'title' | 'thumb' | 'year'> & {
+  export type Release = Pick<
+    BasicInformation,
+    'master_url' | 'master_id' | 'resource_url' | 'title' | 'thumb' | 'year'
+  > & {
     artists: Pick<Artist, 'id' | 'name'>[];
   };
 

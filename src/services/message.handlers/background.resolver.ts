@@ -15,7 +15,7 @@ export const messageResolverFactory = (): MessageResolver => (action: ActionType
       collection.sync(action.userId as number, action.body as string),
     )
 
-    .matcher(MessageActions.WANT_LIST_IS_SYNCING, () =>
+    .matcher(MessageActions.HAS_ONGOING_SYNC, () =>
       Promise.all([wanList.isSyncing(), collection.isSyncing()]).then((res) => res.some(Boolean)),
     )
     .resolve();

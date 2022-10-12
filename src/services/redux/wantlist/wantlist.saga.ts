@@ -30,7 +30,7 @@ function* syncCollection() {
 }
 
 function* wantlistIsSyncing(): any {
-  const stillSyncing: boolean = yield call(api.wantlistIsSyncing);
+  const stillSyncing: boolean = yield call(api.hasOngoingSync);
   if (stillSyncing) {
     yield delay(2000);
     yield call(wantlistIsSyncing);
@@ -58,14 +58,13 @@ function* getCollection() {
   }
 }
 
-function* DiscogsSaga() {
+function* WantListSaga() {
   yield all([
     takeLatest(AppActions.getUserSuccess, getWantList),
     takeLatest(AppActions.getUserSuccess, getCollection),
-
     takeLatest(WantListActions.syncWantList, syncWantList),
     takeLatest(WantListActions.syncCollection, syncCollection),
   ]);
 }
 
-export default DiscogsSaga;
+export default WantListSaga;

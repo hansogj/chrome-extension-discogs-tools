@@ -26,20 +26,15 @@ export interface Props extends ListProps {
 }
 
 export const ArtistComponent = ({ artist, collected, wanted, goToUrl }: Props) => {
-  const render = (list: Optional<ListItem[]>, listName: string) =>
+  const header = (list: Optional<ListItem[]>, listName: string) =>
     maybe(list)
       .nothingIf((it) => it.length < 1)
       .map((entries) => (
-        <>
-          <Row padding={[2, 0, 0, 0]}>
-            <Column>
-              <h3>
-                {renderText('artist.list.title', { listName, number: entries.length, artist })}
-              </h3>
-            </Column>
-          </Row>
-          <List {...{ entries, goToUrl }} width={43} />
-        </>
+        <Row padding={[2, 0, 0, 0]}>
+          <Column>
+            <h3>{renderText('artist.list.title', { listName, number: entries.length, artist })}</h3>
+          </Column>
+        </Row>
       ))
       .valueOr(<h3>{renderText('artist.list.empty', { listName, artist })}</h3>);
 
@@ -47,8 +42,18 @@ export const ArtistComponent = ({ artist, collected, wanted, goToUrl }: Props) =
     <ContentBody filled>
       <Row {...{ width: 43 }}>
         <Loader {...{ cond: [collected, wanted].some((it) => it !== undefined) }}>
-          {render(collected, 'collection')}
-          {render(wanted, 'wantlist')}
+          {header(collected, 'collection')}
+          <Row>
+            <List {...{ entries: collected!, goToUrl }} />
+          </Row>
+
+          {header(wanted, 'wantlist')}
+          <Row>
+            <List {...{ entries: wanted!, goToUrl }} />
+          </Row>
+
+          {/*           <div>{render(collected, 'collection')}</div>
+          <div>{render(wanted, 'wantlist')}</div> */}
         </Loader>
       </Row>
     </ContentBody>

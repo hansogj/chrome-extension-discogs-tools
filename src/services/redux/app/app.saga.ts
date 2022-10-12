@@ -1,6 +1,6 @@
 import { all, call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { MAX_LOGIN_ATTEMPTS } from '../../../constants';
-import { HighlightedLabels, OauthIdentity, User } from '../../../domain';
+import { HighlightedLabels, OauthIdentity, User, Release } from '../../../domain';
 import * as api from '../../api';
 import * as labelService from '../../highlighted.labels.service';
 import { get, set, uniqueKey, remove } from '../../storage';
@@ -127,7 +127,12 @@ function* onUserSuccess() {
 }
 
 function* goToUrl({ url }: AppActionTypes) {
-  yield api.manipulateDom(DiscogsActions.domGoTo, `${url}`);
+  try {
+    const { uri }: Release.DTO = yield call(api.fetch, `${url}`);
+    yield api.manipulateDom(DiscogsActions.domGoTo, uri);
+  } catch (error) {
+    yield api.manipulateDom(DiscogsActions.domGoTo, `${url}`);
+  }
 }
 
 function* AppSaga() {

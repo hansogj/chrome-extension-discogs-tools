@@ -1,10 +1,23 @@
-import { Collection } from '../domain';
+import maybe from '@hansogj/maybe';
+import { Artist, Collection } from '../domain';
 import { get as storageGet, set as storageSet, uniqueKey } from './storage';
 import { StorageKeys } from './storage/types';
 import { fetch } from './xhr';
 type Cache = Collection.Release[];
 const storageTarget = 'user-collection';
 let isOngoingSyncing = false;
+
+const extractor = (releases: Collection.DTO[]): Cache =>
+  releases.map((release) =>
+    maybe(release)
+      .mapTo('basic_information')
+      .pick('title', 'master_id', 'master_url', 'thumb', 'year', 'artists', 'resource_url')
+      .map(({ artists, ...it }) => ({
+        ...it,
+        artists: (artists as Artist[]).map(({ id, name }) => ({ id, name })),
+      }))
+      .valueOr({} as any),
+  );
 
 const getPaginatedCollection = async (url: string, page = 1, cache: Cache): Promise<Cache> => {
   isOngoingSyncing = true;
@@ -14,16 +27,7 @@ const getPaginatedCollection = async (url: string, page = 1, cache: Cache): Prom
   })
     .then(({ pagination, releases }: Collection.PaginatedCollection) => ({
       pagination,
-      build: [
-        ...cache,
-        ...releases.map(({ basic_information: { title, master_id, thumb, year, artists } }) => ({
-          thumb,
-          title,
-          master_id,
-          year,
-          artists: artists.map(({ id, name }) => ({ id, name })),
-        })),
-      ],
+      build: [...cache, ...extractor(releases)],
     }))
     .then(({ build, pagination }) =>
       pagination.page < pagination.pages

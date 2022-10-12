@@ -18,7 +18,7 @@ const NotificationContentBody = styled(ContentBody)<
   position: fixed;
   width: ${(props) => props.width + 'px' || '100%'};
   height: ${(props) => props.height + 'px' || '100%'};
-
+  justify-content: start;
   transition: 1s ease-in-out;
   background-color: ${discogsColors.darkTransparent};
   top: 0;
@@ -60,7 +60,7 @@ const NotificationComponent: FC<Props> = ({ notification, refObject }: Props) =>
     }))
     .map(({ __html, isError, actionBtn }) => (
       <NotificationContentBody {...{ ...size, error: isError }}>
-        <Row center>
+        <Row>
           <Column center width={46}>
             <Card className="card">
               <Row>

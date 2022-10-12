@@ -20,6 +20,11 @@ export const shade = css`
     ${discogsColors.darkShade};
 `;
 
+export const darkerShade = css`
+  box-shadow: ${borderRadius.medium} ${borderRadius.small} ${borderRadius.small}
+    ${discogsColors.black};
+`;
+
 const centerRow = css<Center>`
   justify-content: ${(props) => (!!props.center ? 'space-evenly' : 'space-between')};
 `;
@@ -88,7 +93,7 @@ export const Column = styled.div<Size & Padded & Center>`
   justify-content: space-between;
 `;
 
-export const AugmentetCol = css`
+export const AugmentedCol = css`
   padding: ${base};
   margin-top: calc(${base} / 2);
   overflow: hidden;

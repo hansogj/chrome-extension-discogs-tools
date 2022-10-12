@@ -9,7 +9,7 @@ import {
   SelectEffect,
   takeLatest,
 } from 'redux-saga/effects';
-import { Artist, ArtistReleases, Release } from '../../../domain';
+import { Artist, Release } from '../../../domain';
 import * as api from '../../api';
 import { AppActions, DISCOGS_BASE_URL } from '../app';
 import * as appActions from '../app/app.actions';
@@ -20,7 +20,6 @@ import {
   getInventoryResource,
   ResourceSelectors,
 } from '../selectors/resource.selectors';
-
 import * as actions from './discogs.actions';
 
 export function* fetchResource<T>(
@@ -47,20 +46,7 @@ function* getResourceIdFromWindowUrl() {
 
     if (/artists/.test(`${path}`)) {
       const artist: Artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);
-
       yield put(actions.getArtistLoadedSuccess(artist));
-
-      /*       const paginatedReleases: ArtistReleases[] = yield call(
-        api.fetchPaginated,
-        artist.releases_url,
-      );
-
-      yield put(
-        actions.artistReleasesLoaded(
-          artist as Artist,
-          (paginatedReleases as ArtistReleases[]).flatMap(({ releases }) => releases),
-        ),
-      ); */
     }
 
     if (/(masters)|(releases)/.test(`${path}`)) {

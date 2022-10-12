@@ -52,7 +52,6 @@ const recoverFromExceededRateLimit = (
   storageKey: StorageKeys,
 ): Promise<Cache> => {
   const awaitWhileRecovering = e.rateLimit ? new Date(e.rateLimit).getMilliseconds() : 60000;
-  debugger;
   isOngoingSyncing = false;
   return new Promise((resolve) =>
     setTimeout(() => {
@@ -168,13 +167,3 @@ export const pick = (
 
 export const omit = (a: Cache, b: Cache): Cache =>
   pick(a, b, ([key, _]) => !Object.keys(b).includes(key));
-/*   Object.entries(a)
-    .filter(()
-    .reduce(
-      (curr, [key, val]) => ({
-        ...curr,
-        [key]: val,
-      }),
-      {} as Cache,
-    );
- */

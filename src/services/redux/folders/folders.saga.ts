@@ -6,8 +6,8 @@ import {
   Folder,
   Instance,
   InventoryFields,
-  ReleasePageItem,
   Release,
+  ReleasePageItem,
 } from '../../../domain';
 import * as api from '../../api';
 import * as selectedFieldsService from '../../selectedFields.service';
@@ -17,7 +17,6 @@ import { sagas as discogsSaga } from '../discogs';
 import {
   fromReleasePageMaster,
   getAddReleaseToFolderResource,
-  getCollectionResource,
   getFieldsResource,
   getFoldersResource,
   getReleasePageId,
@@ -91,10 +90,6 @@ function* updateSelectedFieldsValues(instance: Instance): Generator<any> {
   );
 }
 
-function* getCollection(): Generator<any> {
-  yield discogsSaga.fetchResource(getCollectionResource);
-}
-
 function* notifyNewInstance(instance: Instance): Generator<any> {
   const resource = maybe(instance)
     .mapTo('basic_information')
@@ -151,7 +146,6 @@ function* onUserSuccess() {
 function* DiscogsSaga() {
   yield all([
     takeLatest(AppActions.getUserSuccess, onUserSuccess),
-    takeLatest(FoldersActions.getFoldersSuccess, getCollection),
     takeLatest(FoldersActions.setSelectedFields, setSelectedFields),
     takeLatest(FoldersActions.addToFolder, addToFolder),
   ]);

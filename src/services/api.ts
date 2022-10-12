@@ -39,9 +39,9 @@ export const syncCollection = async (userId: number, url: string) =>
     userId,
   }).then((cache) => maybe(cache).valueOr({}) as Cache);
 
-export const wantlistIsSyncing = async () =>
+export const hasOngoingSync = async () =>
   messageHandler<boolean>({
-    type: MessageActions.WANT_LIST_IS_SYNCING,
+    type: MessageActions.HAS_ONGOING_SYNC,
   });
 
 export const getWindowLocation = async () =>

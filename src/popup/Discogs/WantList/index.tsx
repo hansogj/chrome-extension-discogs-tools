@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { WantList } from '../../../domain';
@@ -10,11 +10,9 @@ import List, { Props as ListProps } from '../List';
 import ControlPanel from './ControlPanel';
 import { filteredAndSorted, SortMethod, SortMethods } from './utils';
 
-import { actions as appActions } from '../../../services/redux/app';
-import { DispatchAction } from '../../../services/redux/store';
-import { actions as wantlistActions } from '../../../services/redux/wantlist';
-import Loader from '../../App/Loader';
 import maybe from '@hansogj/maybe';
+import { actions as appActions } from '../../../services/redux/app';
+import Loader from '../../App/Loader';
 
 export interface Props extends ListProps {
   wantList: WantList.Item[];
@@ -68,7 +66,7 @@ const WantListComponent: FC<Props> = ({ wantList, goToUrl }: Props) => {
                 </Column>
                 <CP />
                 {maybe(filteredAndSorted(wantList, sortMethod, pageNr, pageSize))
-                  .map((entries) => <List {...{ entries, goToUrl }} />)
+                  .map((entries) => <List {...{ entries, goToUrl, offset: 'giveOffset' }} />)
                   .valueOr(null)}
                 {pageSize > 24 && wantListLength > 24 && <CP />}
               </>
