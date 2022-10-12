@@ -1,7 +1,7 @@
 import { Artist } from './Artist';
 import { BasicInformation } from './BasicInformation';
 import { Paginated } from './div';
-import { Release } from './Release';
+import { Release as ReleaseDTO } from './Release';
 
 export declare module WantList {
   export interface DTO {
@@ -18,7 +18,7 @@ export declare module WantList {
 
   export type Basics = Pick<BasicInformation, 'id' | 'master_id' | 'master_url' | 'resource_url'>;
   export type Release = Pick<
-    Release.DTO,
+    ReleaseDTO.DTO,
     'master_id' | 'master_url' | 'title' | 'thumb' | 'year'
   > & {
     artists: Pick<Artist, 'id' | 'name'>[];

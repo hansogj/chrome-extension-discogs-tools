@@ -9,10 +9,8 @@ import { RootState } from '../../services/redux';
 import { actions as appActions } from '../../services/redux/app';
 import {
   DispatchProps,
-  getCollection,
   getHighlightedLabels,
   getInventory,
-  getWantList,
   isSyncing,
   StateProps,
 } from '../../services/redux/selectors';

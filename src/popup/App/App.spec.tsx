@@ -1,11 +1,10 @@
-import React from 'react';
 import { App, AppProps } from './App';
 
-import { shallow, mount, render } from 'enzyme';
-import Loader from './Loader';
-import TokenInput from './TokenInput';
-import NotificationComponent from './Notification';
+import { shallow } from 'enzyme';
 import Header from './Header';
+import Loader from './Loader';
+import NotificationComponent from './Notification';
+import TokenInput from './TokenInput';
 jest
   .mock('../View', () => ({
     __esModule: true,

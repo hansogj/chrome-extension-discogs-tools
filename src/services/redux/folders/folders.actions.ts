@@ -1,5 +1,4 @@
 import { Folder, InventoryFields, SelectedFields } from '../../../domain';
-import { setView } from '../app/app.actions';
 import { FoldersActions, FoldersActionTypes } from './types';
 
 export const getFolders = (): FoldersActionTypes => ({
