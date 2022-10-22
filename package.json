@@ -9,7 +9,7 @@
     "@craco/craco": "6.4.5",
     "@hansogj/array.utils": "1.1.0",
     "@hansogj/maybe": "2.1.0",
-    "@vespaiach/axios-fetch-adapter": "0.3.0",
+    "@vespaiach/axios-fetch-adapter": "0.3.1",
     "axios": "0.27.2",
     "craco-less": "2.0.0",
     "find-js": "4.0.4",
