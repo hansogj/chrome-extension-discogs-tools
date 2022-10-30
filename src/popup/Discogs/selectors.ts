@@ -2,11 +2,16 @@ import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { Release, ReleasePageItem } from '../../domain';
 import { getFoldersState, getReleasePageItem } from '../../services/redux/selectors';
+import { empty } from '../../services/utils/json.utils';
 
 export const isMasterRelease = (releasePageItem: Optional<ReleasePageItem>) =>
   maybe(releasePageItem)
     .pick('releaseId', 'master')
-    .map(({ releaseId, master }) => releaseId === (master as Release.MasterReleaseDTO)?.id)
+    .nothingIf(empty)
+    .map(
+      ({ releaseId, master }) =>
+        Boolean(releaseId) && releaseId === (master as Release.MasterReleaseDTO)?.id,
+    )
     .valueOr(false);
 
 export const disableSubmitBtn = createSelector(
