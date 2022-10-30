@@ -1,63 +1,154 @@
-import { getDelay, stdDelay, __resetStack } from './xhr';
+import * as xhr from './xhr';
 
-jest
-  .mock('./storage', () => ({
-    __esModule: true,
-    default: () => {},
-  }))
-  .mock('@vespaiach/axios-fetch-adapter', () => ({
-    __esModule: true,
-    default: () => {},
-  }));
+import { FetchMock } from 'jest-fetch-mock';
+import { MockUtil, shouldIt } from '../../gist/jest-utils/jest.utils';
+import * as userTokenService from './userToken.service';
 
-const _01012020 = 1577836800000;
-const mockDate = (millis = 0) => (Date.now = jest.fn(() => _01012020 + millis));
+const fetchMock = fetch as FetchMock;
+
+jest.mock('./userToken.service').mock('./call.stack', () => ({
+  __esModule: true,
+  sleep: () => Promise.resolve(),
+}));
+
+const userTokenMock = MockUtil<typeof userTokenService>(jest).requireMocks('./userToken.service');
 
 describe('xhr', () => {
-  describe('getDelay', () => {
+  it('should have the shape of', () =>
+    expect(Object.keys(xhr).sort()).toEqual(['deleteResource', 'get', 'post', 'put']));
+
+  describe('accessors', () => {
+    const baseRequest = {
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+    };
+    const url = '/url';
+    beforeEach(() => {
+      fetchMock.resetMocks();
+      userTokenMock.get?.mockResolvedValue('USER_TOKEN');
+    });
+
     describe.each([
-      [1, stdDelay],
-      [2, stdDelay],
+      ['get', 'GET', false],
+      ['post', 'POST', true],
+      ['put', 'PUT', true],
+      ['deleteResource', 'DELETE', true, true],
+    ] as Array<[string, string, boolean, boolean]>)(
+      'calling method xhr.%s',
+      (calledFn, method, hasBodyPayload, noPayloadOrResponse) => {
+        let result: any;
 
-      [3, stdDelay],
-      [10, stdDelay],
-      [57, stdDelay],
-      [58, stdDelay],
-      [59, 60400],
-      [117, 500],
-      [118, 43300],
-      [119, 500],
+        const responseContent = { artist: 'Magma' };
 
-      [2, stdDelay, [0, 4000]],
-      [59, 52400, [58, 8000]],
-      [59, stdDelay, [58, 60400]],
-      [59, stdDelay * 2, [58, 60000]],
-      [118, 43300, [58, 8000]],
-      [118, 500, [58, 60400]],
-    ] as Array<[number, number, number[]?]>)(
-      'when %s th call to server',
-      (nthCall, expected, [onCallIndex, extraDelayOnCall] = []) => {
-        let delays: number[];
-        let itPlus = extraDelayOnCall
-          ? `
-         and there is a ${extraDelayOnCall} seconds delay on call ${onCallIndex}
-         `
-          : '';
-        beforeEach(() => {
-          __resetStack();
-          delays = Array.from(Array(nthCall).keys()).reduce((curr, _, index) => {
-            const timeSpent = curr.reduce((a, b) => a + b, 0);
-            const extraDelay = index >= onCallIndex ? extraDelayOnCall : 0;
-
-            mockDate(timeSpent + extraDelay);
-            return [...curr, getDelay()];
-          }, [] as number[]);
+        beforeEach(async () => {
+          fetchMock.mockResponseOnce(JSON.stringify(responseContent));
+          result = await xhr[calledFn](url);
         });
 
-        it(`${itPlus} last call should have a ${expected} seconds delay`, () => {
-          // console.log(delays);
-          return expect(delays[delays.length - 1]).toBe(expected);
+        it(`should get userToken`, () => expect(userTokenMock.get).toHaveBeenCalled());
+        it(`should fetch resource`, () => expect(fetchMock).toHaveBeenCalled());
+
+        if (!noPayloadOrResponse) {
+          shouldIt('fetch resource with userToken and headers AND payloadBody', hasBodyPayload)
+            .dont(() =>
+              expect(fetchMock).toHaveBeenCalledWith(`${url}?token=USER_TOKEN`, {
+                ...baseRequest,
+                method,
+              }),
+            )
+            .then(() =>
+              expect(fetchMock).toHaveBeenCalledWith(`${url}?token=USER_TOKEN`, {
+                ...baseRequest,
+                method,
+                body: '{}',
+              }),
+            );
+
+          it(`return ${JSON.stringify(responseContent)}`, () =>
+            expect(result).toEqual(responseContent));
+        }
+      },
+    );
+    const responseContent = {
+      artist: 'Magma',
+      album: 'Mekanïk Destruktïw Kommandöh',
+    };
+
+    describe.each([
+      [undefined, `${url}?token=USER_TOKEN`],
+      [{}, `${url}?token=USER_TOKEN`],
+      [{ artist: 'Magma' }, `${url}?artist=Magma&token=USER_TOKEN`],
+      [
+        {
+          artist: 'Magma',
+          album: 'Mekanïk Destruktïw Kommandöh',
+        },
+        '/url?artist=Magma&album=Mekan%C3%AFk%20Destrukt%C3%AFw%20Kommand%C3%B6h&token=USER_TOKEN',
+      ],
+    ] as Array<[URLSearchParams, string]>)(`calling get(${url}, %j)`, (params, expectedUrl) => {
+      beforeEach(async () => {
+        fetchMock.mockResponseOnce(JSON.stringify(responseContent));
+        await xhr.get(url, params);
+      });
+      it('appends search params to url, and adds no extra to payload', () =>
+        expect(fetchMock).toHaveBeenCalledWith(expectedUrl, {
+          ...baseRequest,
+          method: 'GET',
+        }));
+    });
+
+    describe(`calling deleteResource(${url})`, () => {
+      beforeEach(async () => {
+        fetchMock.mockResponseOnce(JSON.stringify(responseContent));
+        await xhr.deleteResource(url);
+      });
+      it('appends search params to url, and adds no extra to payload', () =>
+        expect(fetchMock).toHaveBeenCalledWith(url + '?token=USER_TOKEN', {
+          method: 'DELETE',
+        }));
+    });
+
+    describe.each([
+      [undefined, '{}', `${url}?token=USER_TOKEN`],
+      [{}, '{}', `${url}?token=USER_TOKEN`],
+      [{ payLoad: { pl: 1 } }, '{"pl":1}', `${url}?token=USER_TOKEN`],
+      [{ artist: 'Magma' }, '{}', `${url}?artist=Magma&token=USER_TOKEN`],
+      [{ artist: 'Magma', payLoad: { pl: 1 } }, '{"pl":1}', `${url}?artist=Magma&token=USER_TOKEN`],
+    ] as Array<[URLSearchParams, string, string]>)(
+      `calling post(${url}, %j)`,
+      (params, body, expectedUrl) => {
+        beforeEach(async () => {
+          fetchMock.mockResponseOnce(JSON.stringify(responseContent));
+          await xhr.post(url, params);
         });
+        it('appends search params to url, and adds extra payload as body option', () =>
+          expect(fetchMock).toHaveBeenCalledWith(expectedUrl, {
+            ...baseRequest,
+            body,
+            method: 'POST',
+          }));
+      },
+    );
+
+    describe.each([
+      [undefined, '{}', `${url}?token=USER_TOKEN`],
+      [{}, '{}', `${url}?token=USER_TOKEN`],
+      [{ payLoad: { pl: 1 } }, '{"pl":1}', `${url}?token=USER_TOKEN`],
+      [{ artist: 'Magma' }, '{}', `${url}?artist=Magma&token=USER_TOKEN`],
+      [{ artist: 'Magma', payLoad: { pl: 1 } }, '{"pl":1}', `${url}?artist=Magma&token=USER_TOKEN`],
+    ] as Array<[URLSearchParams, string, string]>)(
+      `calling put(${url}, %j)`,
+      (params, body, expectedUrl) => {
+        beforeEach(async () => {
+          fetchMock.mockResponseOnce(JSON.stringify(responseContent));
+          await xhr.put(url, params);
+        });
+        it('appends search params to url, and adds extra payload as body option', () =>
+          expect(fetchMock).toHaveBeenCalledWith(expectedUrl, {
+            ...baseRequest,
+            body,
+            method: 'PUT',
+          }));
       },
     );
   });

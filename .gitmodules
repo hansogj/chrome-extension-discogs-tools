@@ -1,0 +1,3 @@
+[submodule "gist/jest-utils"]
+	path = gist/jest-utils
+	url = git@gist.github.com:8c7ed5f5c30fb0bb180c07699bebe71b.git
