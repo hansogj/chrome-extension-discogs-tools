@@ -27,7 +27,7 @@ const ReleasePageItem: FC<Props> = ({ releasePageItem }: Props) =>
                   .valueOr('')}
                 <br />
                 <i>{it.title}</i>
-                <br />( {it.year})
+                <br />( {it.year} )
               </Column>
             </Row>
           ))

@@ -2,7 +2,7 @@ import maybe from '@hansogj/maybe';
 import { BasicInformation, Release, WantList } from '../domain';
 import { get as storageGet, set as storageSet, uniqueKey } from './storage';
 import { StorageKeys } from './storage/types';
-import { fetch } from './xhr';
+import { get as xhrGet } from './xhr';
 
 export type Cache = Record<string, WantList.Item>;
 const storageTarget = 'want-list';
@@ -12,13 +12,13 @@ const fetchMainRelease = async (basics: WantList.Basics): Promise<Release.DTO> =
   const { master_url, resource_url } = basics;
 
   if (master_url) {
-    return fetch(master_url).then(
+    return xhrGet(master_url).then(
       ({ main_release_url }: Release.MasterReleaseDTO) =>
-        fetch(main_release_url) as Promise<Release.DTO>,
+        xhrGet(main_release_url) as Promise<Release.DTO>,
     );
   }
   if (resource_url) {
-    return fetch(resource_url) as Promise<Release.DTO>;
+    return xhrGet(resource_url) as Promise<Release.DTO>;
   }
 
   return Promise.reject(
@@ -89,7 +89,7 @@ const updateWithMainRelease = async (
 const getWantListId = (item: BasicInformation) => maybe(item).mapTo('master_id').valueOr(item.id);
 
 const getPaginatedWantlist = async (url: string, page = 1, prev: Cache): Promise<Cache> => {
-  const { pagination, wants }: WantList.PaginatedWantList = await fetch(url, {
+  const { pagination, wants }: WantList.PaginatedWantList = await xhrGet(url, {
     page,
     per_page: 100,
   });

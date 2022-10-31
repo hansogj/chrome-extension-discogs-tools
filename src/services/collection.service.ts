@@ -2,7 +2,7 @@ import maybe from '@hansogj/maybe';
 import { Artist, Collection } from '../domain';
 import { get as storageGet, set as storageSet, uniqueKey } from './storage';
 import { StorageKeys } from './storage/types';
-import { fetch } from './xhr';
+import { get as xhrGet } from './xhr';
 type Cache = Collection.Release[];
 const storageTarget = 'user-collection';
 let isOngoingSyncing = false;
@@ -21,7 +21,7 @@ const extractor = (releases: Collection.DTO[]): Cache =>
 
 const getPaginatedCollection = async (url: string, page = 1, cache: Cache): Promise<Cache> => {
   isOngoingSyncing = true;
-  return fetch(url, {
+  return xhrGet(url, {
     page,
     per_page: 100,
   })
