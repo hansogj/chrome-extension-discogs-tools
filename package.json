@@ -11,7 +11,7 @@
     "@hansogj/maybe": "2.1.0",
     "craco-less": "2.0.0",
     "find-js": "4.0.4",
-    "immer": "9.0.15",
+    "immer": "9.0.16",
     "jshint": "2.13.5",
     "madge": "5.0.1",
     "react": "18.2.0",
