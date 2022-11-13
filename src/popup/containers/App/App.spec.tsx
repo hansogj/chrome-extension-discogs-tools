@@ -1,16 +1,20 @@
-import { App, AppProps } from './App';
+import { App } from './App';
 
 import { shallow } from 'enzyme';
-import Header from './Header';
-import Loader from './Loader';
-import NotificationComponent from './Notification';
-import TokenInput from './TokenInput';
+import {
+  Header,
+  Loader,
+  Notification as NotificationComponent,
+  TokenInput,
+} from '../../components/App';
+import { AppProps } from './types';
+
 jest
-  .mock('../View', () => ({
+  .mock('../../components/App/Loader', () => ({
     __esModule: true,
     default: () => <div>View</div>,
   }))
-  .mock('../../services/storage', () => ({
+  .mock('../../../services/storage', () => ({
     __esModule: true,
     default: () => {},
   }));

@@ -1,27 +1,30 @@
 import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
-import { AppState, ERROR, View, Views } from '../app';
+import { User } from '../../../domain';
+import { AppState, ERROR } from '../app';
 import { RootState } from '../root.reducers';
 import { selectFromRoot } from '../utils';
 
 export const getAppState = (state: Partial<RootState>): AppState => selectFromRoot(state, 'App')!;
 
-export const getUser = createSelector(getAppState, ({ user }) => user);
+export const fromApp = <Key extends keyof AppState>(prop: Key) =>
+  createSelector(getAppState, (appState) => maybe(appState).mapTo(prop).valueOr(undefined));
 
-export const getUserId = createSelector(getUser, (user) =>
-  maybe(user).mapTo('id').valueOr(undefined),
-);
+export const getUser = fromApp('user');
+export const getNotification = fromApp('notification');
+export const getError = fromApp('error');
+export const isLoading = fromApp('isLoading');
+export const getView = fromApp('view');
 
-export const getNotification = createSelector(getAppState, (appState: AppState) =>
-  maybe(appState).mapTo('notification').valueOr(undefined),
-);
+export const fromUser = <Key extends keyof User>(prop: Key) =>
+  createSelector(getUser, (user) =>
+    maybe(user as User)
+      .mapTo(prop)
+      .valueOr(undefined),
+  );
 
-export const getError = createSelector(getAppState, (appState: AppState) =>
-  maybe(appState).mapTo('error').valueOr(undefined),
-);
-
-export const isLoading = createSelector(getAppState, ({ isLoading }) => isLoading);
+export const getUserId = fromUser('id');
 
 export const notAuthenticated = createSelector(
   getAppState,
@@ -40,6 +43,7 @@ const matchers = {
   masters: /\/master\//,
   artists: /\/artist\//,
 };
+
 export const getWindowUrlMatch = createSelector(getWindowLocation, (url) =>
   maybe(url)
     .mapTo('pathname')
@@ -71,33 +75,4 @@ export const getPathToWindowResource = createSelector(
       .map((parts) => parts.flatMap((part) => part.join('/')))
       .map((it) => it.shift())
       .valueOr('') as string,
-);
-
-export const getActiveView = createSelector(
-  getAppState,
-  getWindowUrlMatch,
-  (appState, urlMatch): View =>
-    maybe(appState)
-      .mapTo('view')
-      .nothingIf((it) => {
-        return (
-          (it === 'Artist' && !urlMatch.artists) ||
-          (it === 'Item' && !urlMatch.masters && !urlMatch.releases)
-        );
-      })
-      .valueOr('Settings') as View,
-);
-
-export const getViews = createSelector(getWindowUrlMatch, getActiveView, (urlMatch, activeView) =>
-  maybe(urlMatch)
-    .nothingIf((it) => JSON.stringify(it) === '{}')
-    .map((it) => {
-      console.log(activeView);
-      return Views.filter((view) => {
-        if (view === 'Artist') return Boolean(it.artists);
-        if (view === 'Item') return Boolean(it.masters) || Boolean(it.releases);
-        return true;
-      }).map((view) => ({ view, isActive: view === activeView }));
-    })
-    .valueOr(undefined),
 );

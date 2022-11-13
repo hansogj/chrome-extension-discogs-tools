@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Collection, Head, List, Settings } from '../../assets/icons';
-import { View } from '../../services/redux/app';
-import { DispatchAction } from '../../services/redux/store';
+import { Collection, Head, List, Settings } from '../../../assets/icons';
+import { View } from '../../../services/redux/app';
+import { DispatchAction } from '../../../services/redux/store';
 import {
   base,
   Column as StyledColumn,
@@ -10,14 +10,14 @@ import {
   NavButton,
   Row as StyledRow,
   Thumb,
-} from '../styled';
+} from '../../styled';
 
 import maybe from '@hansogj/maybe';
 import styled from 'styled-components';
-import { DISCOGS_LOGO } from '../../constants';
-import { User } from '../../domain';
+import { DISCOGS_LOGO } from '../../../constants';
+import { User } from '../../../domain';
+import { SwitchedView } from '../../containers/App';
 
-import { getViews } from '../../services/redux/selectors';
 const IconMap: Record<View, (fill: string) => JSX.Element> = {
   Item: (fill: string) => <Collection {...{ fill }} />,
   Artist: (fill: string) => <Head style={{ color: fill }} />,
@@ -28,7 +28,7 @@ const IconMap: Record<View, (fill: string) => JSX.Element> = {
 export interface Props {
   setView: DispatchAction<View>;
   user: User;
-  views: ReturnType<typeof getViews>;
+  views: SwitchedView[];
 }
 
 const Row = styled(StyledRow)`

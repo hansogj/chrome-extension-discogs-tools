@@ -13,16 +13,14 @@ import * as api from '../../api';
 import * as selectedFieldsService from '../../selectedFields.service';
 import { renderText } from '../../texts';
 import { actions as appActions, AppActions, sagas as appSagas } from '../app';
-import { sagas as discogsSaga } from '../discogs';
+import { fromReleasePageMaster, getReleasePageId, sagas as discogsSaga } from '../discogs';
 import {
-  fromReleasePageMaster,
   getAddReleaseToFolderResource,
   getFieldsResource,
   getFoldersResource,
-  getReleasePageId,
-  getSelectedFields as getSelectedFieldsSelector,
-} from '../selectors';
+} from '../selectors/combined.selectors';
 import * as actions from './folders.actions';
+import { getSelectedFields as getSelectedFieldsSelector } from './selectors';
 import { FoldersActions, FoldersActionTypes } from './types';
 
 function* getFolders(): Generator<any> {

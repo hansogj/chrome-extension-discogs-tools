@@ -2,8 +2,8 @@ import maybe from '@hansogj/maybe';
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Notification } from '../../services/redux/app';
-import { base, Card, Column, ContentBody, discogsColors, Row, Button } from '../styled';
+import { Notification } from '../../../services/redux/app';
+import { base, Card, Column, ContentBody, discogsColors, Row, Button } from '../../styled';
 
 export interface Props {
   notification: Notification;

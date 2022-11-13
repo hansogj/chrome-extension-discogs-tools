@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
-import record from '../../assets/round-record.png';
-import { ContentBody, Row } from '../styled';
+import record from '../../../assets/round-record.png';
+import { ContentBody, Row } from '../../styled';
 
 import { AppLogo, ContentHeader } from './style';
 

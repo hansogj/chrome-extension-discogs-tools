@@ -2,20 +2,19 @@ import { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../../../services/redux';
-import {
-  DispatchProps,
-  getArtistName,
-  getCollectedArtistReleases,
-  getWantedArtistReleases,
-  StateProps,
-} from '../../../services/redux/selectors';
 
 import maybe from '@hansogj/maybe';
 import { actions as appActions } from '../../../services/redux/app';
 
 import { Artist } from '../../../domain';
+import { getArtistName } from '../../../services/redux/discogs';
+import {
+  getCollectedArtistReleases,
+  getWantedArtistReleases,
+} from '../../../services/redux/selectors/combined.selectors';
+import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
 import { renderText } from '../../../services/texts';
-import Loader from '../../App/Loader';
+import Loader from '../../components/App/Loader';
 import { Column, ContentBody, Row } from '../../styled';
 import List, { ListItem, Props as ListProps } from '../List';
 

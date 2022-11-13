@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { WantList } from '../../../domain';
 import { RootState } from '../../../services/redux';
-import { DispatchProps, getWantList, StateProps } from '../../../services/redux/selectors';
+import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
 import { getTexts, renderText } from '../../../services/texts';
 import { Column, ContentBody, Row } from '../../styled';
 import List, { Props as ListProps } from '../List';
@@ -12,7 +12,8 @@ import { filteredAndSorted, SortMethod, SortMethods } from './utils';
 
 import maybe from '@hansogj/maybe';
 import { actions as appActions } from '../../../services/redux/app';
-import Loader from '../../App/Loader';
+import { getWantList } from '../../../services/redux/wantlist';
+import Loader from '../../components/App/Loader';
 
 export interface Props extends ListProps {
   wantList: WantList.Item[];

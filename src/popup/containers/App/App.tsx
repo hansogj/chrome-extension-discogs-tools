@@ -2,32 +2,23 @@ import maybe from '@hansogj/maybe';
 import { FC, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { RootState } from '../../services/redux';
-import { actions as appActions, Notification } from '../../services/redux/app/';
+import { RootState } from '../../../services/redux';
+import { actions as appActions } from '../../../services/redux/app/';
 
-import { View as ViewType } from '../../services/redux/app';
+import { getNotification, getUser, isLoading, notAuthenticated } from '../../../services/redux/app';
+
+import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
+import { Container, Content } from '../../styled';
+import View from '../../View';
+
 import {
-  getActiveView,
-  getNotification,
-  getUser,
-  getViews,
-  isLoading,
-  notAuthenticated,
-} from '../../services/redux/selectors';
-import { DispatchProps, StateProps } from '../../services/redux/selectors/utils';
-import { Container, Content } from '../styled';
-import View, { Props as ViewProps } from '../View';
-import Header, { Props as HeaderProps } from './Header';
-import Loader from './Loader';
-import NotificationComponent from './Notification';
-import TokenInput, { TokenInputProps } from './TokenInput';
-export interface AppProps extends TokenInputProps, ViewProps, HeaderProps {
-  activeView: ViewType;
-  notification: Notification;
-  isLoading: boolean;
-  notAuthenticated: boolean;
-  getUser: typeof appActions.getUser;
-}
+  Header,
+  Loader,
+  Notification as NotificationComponent,
+  TokenInput,
+} from '../../components/App';
+import { getActiveView, getAvailableViews } from './selectors';
+import { AppProps } from './types';
 
 export const App: FC<AppProps> = ({
   notification,
@@ -78,7 +69,7 @@ export const mapStateToProps = (state: RootState): StateProps<Partial<AppProps>>
   isLoading: isLoading(state),
   notAuthenticated: notAuthenticated(state),
   notification: getNotification(state),
-  views: getViews(state),
+  views: getAvailableViews(state),
   activeView: getActiveView(state),
 });
 

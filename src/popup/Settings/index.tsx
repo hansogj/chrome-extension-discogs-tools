@@ -6,16 +6,11 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Bin, Collection, Eye, Off } from '../../assets/icons';
 import { HighlightedLabels } from '../../domain';
 import { RootState } from '../../services/redux';
-import { actions as appActions } from '../../services/redux/app';
-import {
-  DispatchProps,
-  getHighlightedLabels,
-  getInventory,
-  isSyncing,
-  StateProps,
-} from '../../services/redux/selectors';
+import { actions as appActions, getHighlightedLabels } from '../../services/redux/app';
+
+import { DispatchProps, StateProps } from '../../services/redux/selectors/utils';
 import { DispatchAction } from '../../services/redux/store';
-import { actions as wantListActions } from '../../services/redux/wantlist';
+import { actions as wantListActions, getInventory, isSyncing } from '../../services/redux/wantlist';
 import { getTexts, renderText } from '../../services/texts';
 import { discogsColors, Submit } from '../styled';
 import LabelsControlPanel from './highlighted.labels.control.panel';
