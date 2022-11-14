@@ -16,7 +16,7 @@ import { DispatchProps, StateProps } from '../../../services/redux/selectors/uti
 import { renderText } from '../../../services/texts';
 import Loader from '../../components/App/Loader';
 import { Column, ContentBody, Row } from '../../styled';
-import List, { ListItem, Props as ListProps } from '../List';
+import List, { ListItem, Props as ListProps } from '../../components/List';
 
 export interface Props extends ListProps {
   artist: Optional<Artist['name']>;

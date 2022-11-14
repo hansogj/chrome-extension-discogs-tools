@@ -1,10 +1,10 @@
-import { View } from '../services/redux/app';
-import AddToFolder from './Discogs/AddToFolder';
-import Artist from './Discogs/Artist';
-import WantList from './Discogs/WantList';
-import { ContentBody } from './styled';
+import { View } from '../../services/redux/app';
+import AddToFolder from '../containers/AddToFolder';
+import Artist from '../containers/Artist';
+import WantList from '../containers/WantList';
+import { ContentBody } from '../styled';
 
-import Settings from './Settings';
+import Settings from '../Settings';
 
 export interface Props {
   activeView: View;

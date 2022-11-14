@@ -9,7 +9,7 @@ import { getNotification, getUser, isLoading, notAuthenticated } from '../../../
 
 import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
 import { Container, Content } from '../../styled';
-import View from '../../View';
+import View from '../../components/View';
 
 import {
   Header,

@@ -2,7 +2,7 @@ import { actions as appActions, Notification } from '../../../services/redux/app
 
 import { View } from '../../../services/redux/app';
 
-import { Props as ViewProps } from '../../View';
+import { Props as ViewProps } from '../../components/View';
 
 import { HeaderProps, TokenInputProps } from '../../components/App';
 

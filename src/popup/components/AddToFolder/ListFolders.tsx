@@ -1,17 +1,14 @@
 import maybe from '@hansogj/maybe';
 import { FC } from 'react';
 import { Folder } from '../../../domain';
-import { SelectedFields } from '../../../domain/Inventory';
-import { DispatchAction } from '../../../services/redux/store';
-import { Select, discogsColors } from '../../styled';
+import { discogsColors, Select } from '../../styled';
 
-export type Props = {
-  folders: Folder[];
-  setSelectedFields: DispatchAction<Record<string, string>>;
-  selectedFields: SelectedFields;
-};
-
-const ListFolders: FC<Props> = ({ folders, selectedFields, setSelectedFields }: Props) => (
+import { ListFoldersProps } from './types';
+const ListFolders: FC<ListFoldersProps> = ({
+  folders,
+  selectedFields,
+  setSelectedFields,
+}: ListFoldersProps) => (
   <>
     <label>Folder</label>
     <Select

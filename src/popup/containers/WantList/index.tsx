@@ -6,8 +6,8 @@ import { RootState } from '../../../services/redux';
 import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
 import { getTexts, renderText } from '../../../services/texts';
 import { Column, ContentBody, Row } from '../../styled';
-import List, { Props as ListProps } from '../List';
-import ControlPanel from './ControlPanel';
+import List, { Props as ListProps } from '../..//components/List';
+import ControlPanel from '../../components/ControlPanel';
 import { filteredAndSorted, SortMethod, SortMethods } from './utils';
 
 import maybe from '@hansogj/maybe';

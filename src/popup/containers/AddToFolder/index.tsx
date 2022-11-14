@@ -11,17 +11,23 @@ import { DispatchAction } from '../../../services/redux/store';
 import { getText } from '../../../services/texts';
 import Loader from '../../components/App/Loader';
 import { base, Card, Column, Row, Submit } from '../../styled';
-import ReleasePageItem, { Props as ReleasePageItemProps } from '../ReleasePageItem';
-import { disableSubmitBtn } from '../selectors';
-import ListFields, { Props as ListFieldsProps } from './ListFields';
-import ListFolders, { Props as ListFoldersProps } from './ListFolders';
-import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
+
 import { getReleasePageItem } from '../../../services/redux/discogs';
 import {
   getCollectableFolders,
   getFields,
   getSelectedFields,
 } from '../../../services/redux/folders/selectors';
+import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
+import { disableSubmitBtn } from './selectors';
+
+import {
+  ListFields,
+  ListFieldsProps,
+  ListFolders,
+  ListFoldersProps,
+} from '../../components/AddToFolder';
+import ReleasePageItem, { Props as ReleasePageItemProps } from '../../components/ReleasePageItem';
 
 export interface Props extends ListFoldersProps, ListFieldsProps, ReleasePageItemProps {
   addToFolder: DispatchAction<void>;

@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { getText } from '../../../services/texts';
+import { pageSizes, SortMethod, SortMethods, sortMethods } from '../../containers/WantList/utils';
 import { Button, Column, Row, Select } from '../../styled';
-import { pageSizes, SortMethod, sortMethods, SortMethods } from './utils';
+
 export type Props = {
   sortMethod: keyof SortMethods;
   pageSize: number;

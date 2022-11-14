@@ -1,15 +1,17 @@
-import { MockUtil, shouldIt } from '../../../gist/jest-utils/jest.utils';
 import { Optional } from '@hansog/maybe';
-import { ReleasePageItem } from '../../domain';
-import { isMasterRelease, disableSubmitBtn } from './selectors';
-import * as folderSelectors from '../../services/redux/folders/selectors';
-import { FoldersState } from '../../services/redux/folders';
-import * as discogsSelectors from '../../services/redux/discogs/selectors';
+import { MockUtil } from '../../../../gist/jest-utils/jest.utils';
+import { ReleasePageItem } from '../../../domain';
+import * as discogsSelectors from '../../../services/redux/discogs/selectors';
+import { FoldersState } from '../../../services/redux/folders';
+import * as folderSelectors from '../../../services/redux/folders/selectors';
+import { disableSubmitBtn, isMasterRelease } from './selectors';
 
-jest.mock('../../services/redux/folders/selectors').mock('../../services/redux/discogs/selectors');
+jest
+  .mock('../../../services/redux/folders/selectors')
+  .mock('../../../services/redux/discogs/selectors');
 const mocks = MockUtil<typeof folderSelectors & typeof discogsSelectors>(jest).requireMocks(
-  '../../services/redux/folders/selectors',
-  '../../services/redux/discogs/selectors',
+  '../../../services/redux/folders/selectors',
+  '../../../services/redux/discogs/selectors',
 );
 
 describe('Discogs selectors', () => {

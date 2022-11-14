@@ -2,7 +2,7 @@ import maybe from '@hansogj/maybe';
 import { WantList } from '../../../domain';
 
 import { empty } from '../../../services/utils/json.utils';
-import { ListItem } from '../List';
+import { ListItem } from '../..//components/List';
 
 type Item = WantList.Item;
 

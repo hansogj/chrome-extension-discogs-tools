@@ -1,10 +1,10 @@
 import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
-import { Release, ReleasePageItem } from '../../domain';
-import { getFoldersState } from '../../services/redux/folders/selectors';
-import { getReleasePageItem } from '../../services/redux/discogs/selectors';
+import { Release, ReleasePageItem } from '../../../domain';
+import { getFoldersState } from '../../../services/redux/folders/selectors';
+import { getReleasePageItem } from '../../../services/redux/discogs/selectors';
 
-import { empty } from '../../services/utils/json.utils';
+import { empty } from '../../../services/utils/json.utils';
 
 export const isMasterRelease = (releasePageItem: Optional<ReleasePageItem>) =>
   maybe(releasePageItem)
