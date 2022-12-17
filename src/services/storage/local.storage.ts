@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Storage, StorageKeys } from './types';
 import { prefixed, valueOr } from './utils';
-console.log('LOCAL STORAGE');
 
 const asPromised = async <T>(cb: () => T): Promise<T> =>
   new Promise((resolve, reject) => {

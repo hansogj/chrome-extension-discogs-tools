@@ -3,7 +3,7 @@ import { ActionTypes as AnyActionTypes } from '../store';
 import { ActionTypes } from '../types';
 export const DISCOGS_BASE_URL = 'https://api.discogs.com';
 
-export const Views = ['Item', 'Artist', 'Want List', 'Settings'] as const;
+export const Views = ['Artist', 'Item', 'Settings', 'Want List'] as const;
 export type View = typeof Views[number];
 
 export type ActionButton = { action: AnyActionTypes; text: string };

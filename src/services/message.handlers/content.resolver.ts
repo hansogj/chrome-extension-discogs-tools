@@ -20,7 +20,7 @@ export const messageResolverFactory = (): MessageResolver => (action: ActionType
       xhr.post(action.resource!, action.body as SearchParams & PayLoad),
     )
     .matcher(MessageActions.fetch, (action: MessageActionTypes) =>
-      xhr.fetch(action.resource!, action.body as SearchParams),
+      xhr.get(action.resource!, action.body as SearchParams),
     )
     .matcher(MessageActions.put, (action: MessageActionTypes) =>
       xhr.put(action.resource!, action.body as SearchParams & PayLoad),
