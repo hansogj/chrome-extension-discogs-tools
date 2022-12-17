@@ -1,14 +1,9 @@
 import { Cache, omit, pick } from './wantlist.service';
 
-jest
-  .mock('./storage', () => ({
-    __esModule: true,
-    default: () => {},
-  }))
-  .mock('@vespaiach/axios-fetch-adapter', () => ({
-    __esModule: true,
-    default: () => {},
-  }));
+jest.mock('./storage', () => ({
+  __esModule: true,
+  default: () => {},
+}));
 
 describe('wantlist service', () => {
   describe.each([
