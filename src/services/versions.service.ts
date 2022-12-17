@@ -24,7 +24,7 @@ export const getAllVersions = async (
   result = [] as Versions.DTO[],
 ): Promise<Versions.DTO[]> =>
   (
-    xhr.fetch(versions_url, {
+    xhr.get(versions_url, {
       per_page: 100,
       page,
     }) as Promise<Versions.PaginatedVersions>

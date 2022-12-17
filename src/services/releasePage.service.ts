@@ -19,13 +19,13 @@ export const releasePage = ({
 
   return itemUri
     ? xhr
-        .fetch(`${DISCOGS_BASE_URL}/${itemUri}`)
-        .then(({ master_url, ...rest }: Release.DTO) => (master_url ? xhr.fetch(master_url) : rest))
+        .get(`${DISCOGS_BASE_URL}/${itemUri}`)
+        .then(({ master_url, ...rest }: Release.DTO) => (master_url ? xhr.get(master_url) : rest))
         .then((master: Release.DTO) => ({ master, releaseId } as any))
     : Promise.reject('cannot find a release on this page');
 };
 
 export const artistPage = ({ artist: artistId }: PageResourceIds): Promise<ArtistReleases> =>
   artistId
-    ? xhr.fetch(`${DISCOGS_BASE_URL}/artists/${artistId}/releases`)
+    ? xhr.get(`${DISCOGS_BASE_URL}/artists/${artistId}/releases`)
     : Promise.reject('cannot find a release on this page');

@@ -7,7 +7,7 @@ import { get, set, uniqueKey, remove } from '../../storage';
 import * as userTokenService from '../../userToken.service';
 import { empty } from '../../utils/json.utils';
 import { DiscogsActions } from '../discogs';
-import * as appSelectors from '../selectors/app.selectors';
+import * as appSelectors from './selectors';
 import { AppActions, AppActionTypes, DISCOGS_BASE_URL, ERROR, View } from './';
 import * as actions from './app.actions';
 import { ActionButton } from './types';

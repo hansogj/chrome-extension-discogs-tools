@@ -11,16 +11,16 @@ import {
 } from 'redux-saga/effects';
 import { Artist, Release } from '../../../domain';
 import * as api from '../../api';
-import { AppActions, DISCOGS_BASE_URL } from '../app';
+import { AppActions, DISCOGS_BASE_URL, getPathToWindowResource } from '../app';
 import * as appActions from '../app/app.actions';
-import { getPathToWindowResource } from '../selectors';
+import * as actions from './discogs.actions';
+
 import {
   getFieldsResource,
   getFoldersResource,
   getInventoryResource,
   ResourceSelectors,
-} from '../selectors/resource.selectors';
-import * as actions from './discogs.actions';
+} from '../selectors/combined.selectors';
 
 export function* fetchResource<T>(
   selector: ResourceSelectors,
