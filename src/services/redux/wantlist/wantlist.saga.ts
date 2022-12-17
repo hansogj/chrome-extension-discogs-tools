@@ -9,7 +9,7 @@ import { AppActions, sagas as appSagas } from '../app';
 import {
   getAllFoldersReleasesResource,
   getWantListResource,
-} from '../selectors/resource.selectors';
+} from '../selectors/combined.selectors';
 import { WantListActions } from './types';
 import * as wantListActions from './wantlist.actions';
 
