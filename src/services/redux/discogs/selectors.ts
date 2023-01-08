@@ -4,7 +4,7 @@ import { Artist, Release } from '../../../domain';
 
 import { DiscogsState } from '../discogs';
 import { RootState } from '../root.reducers';
-import { selectFromRoot } from '../utils';
+import { selectFromRoot } from '../../../gist/immer-utils/immer.utils';
 
 export const getDiscogsState = (state: Partial<RootState>): DiscogsState =>
   selectFromRoot(state, 'Discogs')!;

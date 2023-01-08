@@ -2,7 +2,7 @@ import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 
 import { RootState } from '../root.reducers';
-import { selectFromRoot } from '../utils';
+import { selectFromRoot } from '../../../gist/immer-utils/immer.utils';
 import { WantListState } from '../wantlist';
 
 export const getWantListState = (state: Partial<RootState>): WantListState =>

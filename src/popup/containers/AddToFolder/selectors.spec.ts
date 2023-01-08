@@ -1,5 +1,5 @@
 import { Optional } from '@hansog/maybe';
-import { MockUtil } from '../../../../gist/jest-utils/jest.utils';
+import { MockUtil } from '../../../gist/jest-utils/jest.utils';
 import { ReleasePageItem } from '../../../domain';
 import * as discogsSelectors from '../../../services/redux/discogs/selectors';
 import { FoldersState } from '../../../services/redux/folders';

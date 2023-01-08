@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { DropdownInventoryField } from '../../../domain';
 import { FoldersState } from '../folders';
 import { RootState } from '../root.reducers';
-import { selectFromRoot } from '../utils';
+import { selectFromRoot } from '../../../gist/immer-utils/immer.utils';
 
 export const getFoldersState = (state: Partial<RootState>): FoldersState =>
   selectFromRoot(state, 'Folders')!;

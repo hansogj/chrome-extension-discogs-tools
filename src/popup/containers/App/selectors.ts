@@ -34,5 +34,5 @@ export const getAvailableViews = createSelector(
           .filter(Boolean)
           .map((view: View) => ({ view, isActive: view === activeView } as SwitchedView)),
       )
-      .valueOr(undefined),
+      .valueOr([]),
 );

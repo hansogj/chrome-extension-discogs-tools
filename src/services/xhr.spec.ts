@@ -1,7 +1,7 @@
 import * as xhr from './xhr';
 
 import { FetchMock } from 'jest-fetch-mock';
-import { MockUtil, shouldIt } from '../../gist/jest-utils/jest.utils';
+import { MockUtil, shouldIt } from '../gist/jest-utils/jest.utils';
 import * as userTokenService from './userToken.service';
 
 const fetchMock = fetch as FetchMock;

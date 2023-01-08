@@ -3,8 +3,9 @@ import { createSelector } from 'reselect';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
 import { User } from '../../../domain';
 import { AppState, ERROR } from '../app';
+import { getLoadedResult } from '../domain';
 import { RootState } from '../root.reducers';
-import { selectFromRoot } from '../utils';
+import { selectFromRoot } from '../../../gist/immer-utils/immer.utils';
 
 export const getAppState = (state: Partial<RootState>): AppState => selectFromRoot(state, 'App')!;
 
@@ -17,19 +18,18 @@ export const getError = fromApp('error');
 export const isLoading = fromApp('isLoading');
 export const getView = fromApp('view');
 
+export const getUserLoaded = createSelector(getUser, (user) =>
+  maybe(user).map(getLoadedResult).valueOr(undefined),
+);
+
 export const fromUser = <Key extends keyof User>(prop: Key) =>
-  createSelector(getUser, (user) =>
+  createSelector(getUserLoaded, (user) =>
     maybe(user as User)
       .mapTo(prop)
       .valueOr(undefined),
   );
 
 export const getUserId = fromUser('id');
-
-export const notAuthenticated = createSelector(
-  getAppState,
-  ({ error }) => error === ERROR.NOT_AUTHENTICATED,
-);
 
 export const getHighlightedLabels = createSelector(getAppState, ({ highlightedLabels }) =>
   maybe(highlightedLabels).valueOr(DEFAULT_HIGHLIGHTED_LABELS),

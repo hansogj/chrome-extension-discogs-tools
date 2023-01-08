@@ -1,9 +1,10 @@
-import { actions as appActions, Notification } from '../../../services/redux/app/';
+import { Notification } from '../../../services/redux/app/';
 
 import { View } from '../../../services/redux/app';
 
 import { Props as ViewProps } from '../../components/View';
 
+import { Async } from '../../../services/redux/domain';
 import { HeaderProps, TokenInputProps } from '../../components/App';
 
 export type SwitchedView = {
@@ -11,10 +12,15 @@ export type SwitchedView = {
   isActive: boolean;
 };
 
-export interface AppProps extends TokenInputProps, ViewProps, HeaderProps {
+export interface AppProps
+  extends TokenInputProps,
+    ViewProps,
+    Modify<
+      HeaderProps,
+      {
+        user: Async.User;
+      }
+    > {
   activeView: View;
   notification: Notification;
-  isLoading: boolean;
-  notAuthenticated: boolean;
-  getUser: typeof appActions.getUser;
 }

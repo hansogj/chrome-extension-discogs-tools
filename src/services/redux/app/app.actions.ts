@@ -1,5 +1,7 @@
 import maybe from '@hansogj/maybe';
+import { AsyncData } from '@swan-io/boxed';
 import { HighlightedLabels, User } from '../../../domain';
+import { Async } from '../domain';
 import { AppActions, AppActionTypes, ERROR, Notification, View } from './types';
 
 export const error = (error: ERROR) => ({
@@ -36,25 +38,18 @@ export const notify = ({
   notification: { message, actionBtn, isError: false },
 });
 
-export const getUser = (): AppActionTypes => ({
+export const getUserInit = (): AppActionTypes => ({
+  type: AppActions.getUserInit,
+});
+
+export const getUser = (user: Async.User): AppActionTypes => ({
   type: AppActions.getUser,
-});
-
-export const getUserSuccess = (user: User): AppActionTypes => ({
-  type: AppActions.getUserSuccess,
   user,
-});
-
-export const getUserFailed = (): AppActionTypes => ({
-  type: AppActions.getUserFailed,
 });
 
 export const logOut = (): AppActionTypes => ({
   type: AppActions.logOut,
-});
-
-export const logOutSuccess = (): AppActionTypes => ({
-  type: AppActions.logOutSuccess,
+  user: AsyncData.NotAsked(),
 });
 
 export const setUserToken = (userToken: string): AppActionTypes => ({

@@ -12,6 +12,7 @@
   "folder.add.item.failed": "Failing to add new item {{releaseId}}",
   "folder.fetch.item.failed": "Fail to fetch resource for release {{releaseId}}",
   "log.out": "Log out",
+  "log.inn.error": "Failed to log in",
   "notification.general.error": "Something went wrong when loading the app",
   "settings.resync.btn": "Sync Wantlist",
   "settings.resync.explained": "Loads all wantet items into storage and filters on unique items. This may take quiet some time",

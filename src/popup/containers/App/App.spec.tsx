@@ -1,6 +1,9 @@
+import { mockModuleWithProps } from '../../../_mock_';
 import { App } from './App';
 
+import { AsyncData } from '@swan-io/boxed';
 import { shallow } from 'enzyme';
+import { asyncOk } from '../../../services/redux/domain';
 import {
   Header,
   Loader,
@@ -10,10 +13,7 @@ import {
 import { AppProps } from './types';
 
 jest
-  .mock('../../components/App/Loader', () => ({
-    __esModule: true,
-    default: () => <div>View</div>,
-  }))
+  .mock('../../components/App/Loader', () => mockModuleWithProps())
   .mock('../../../services/storage', () => ({
     __esModule: true,
     default: () => {},
@@ -25,7 +25,7 @@ describe('App', () => {
   const wrapper = () => shallow(<App {...{ ...props }} />);
 
   describe('isLoading', () => {
-    beforeEach(() => setUp({ isLoading: true }));
+    beforeEach(() => setUp({ user: AsyncData.Loading() }));
     it('renders Loader', () => expect(wrapper().find(Loader).length).toBe(1));
 
     it('renders no TokenInput', () => expect(wrapper().find(TokenInput).length).toBe(0));
@@ -34,7 +34,7 @@ describe('App', () => {
   });
 
   describe('notAuthenticated', () => {
-    beforeEach(() => setUp({ isLoading: false, notAuthenticated: true }));
+    beforeEach(() => setUp({ user: AsyncData.NotAsked() }));
 
     it('renders TokenInput Component', () => expect(wrapper().find(TokenInput).length).toBe(1));
 
@@ -45,7 +45,7 @@ describe('App', () => {
   });
 
   describe('has user', () => {
-    beforeEach(() => setUp({ isLoading: false, notAuthenticated: false, user: {} }));
+    beforeEach(() => setUp({ user: asyncOk({}) }));
 
     it('renders TokenInput Component', () => expect(wrapper().find(TokenInput).length).toBe(0));
 
@@ -60,9 +60,7 @@ describe('App', () => {
     });
 
     describe('has notification', () => {
-      beforeEach(() =>
-        setUp({ isLoading: false, notAuthenticated: false, user: {}, notification: 'HELP' }),
-      );
+      beforeEach(() => setUp({ user: asyncOk({}), notification: 'HELP' }));
       it('renders Notification Component', () => {
         expect(wrapper().find(NotificationComponent).length).toBe(1);
         expect(wrapper().find(NotificationComponent).props()).toEqual({

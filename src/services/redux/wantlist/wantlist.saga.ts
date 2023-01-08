@@ -5,7 +5,7 @@ import * as api from '../../api';
 import { getText } from '../../texts';
 import * as wantListService from '../../wantlist.service';
 import * as collectionService from '../../collection.service';
-import { AppActions, sagas as appSagas } from '../app';
+import { AppActions, AppActionTypes, sagas as appSagas } from '../app';
 import {
   getAllFoldersReleasesResource,
   getWantListResource,
@@ -41,6 +41,12 @@ function* wantlistIsSyncing(): any {
   }
 }
 
+function* onUserSuccess({ user }: AppActionTypes) {
+  if (user?.isDone() && user?.get().isOk()) {
+    yield all([getWantList(), getCollection()]);
+  }
+}
+
 function* getWantList() {
   const userId: number = yield call(appSagas.getUserId);
   let result: WantList.Item[] = yield call(wantListService.get, userId);
@@ -60,8 +66,8 @@ function* getCollection() {
 
 function* WantListSaga() {
   yield all([
-    takeLatest(AppActions.getUserSuccess, getWantList),
-    takeLatest(AppActions.getUserSuccess, getCollection),
+    takeLatest(AppActions.getUser, onUserSuccess),
+
     takeLatest(WantListActions.syncWantList, syncWantList),
     takeLatest(WantListActions.syncCollection, syncCollection),
   ]);

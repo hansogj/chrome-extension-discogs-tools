@@ -1,8 +1,13 @@
-import { reducerForProducers, writeToDraft } from '../utils';
+import { AsyncData } from '@swan-io/boxed';
+import {
+  reducerForProducers,
+  writeToDraft,
+  writeValuesToDraft,
+} from '../../../gist/immer-utils/immer.utils';
 import { AppActions, AppActionTypes, AppState } from './types';
 
 export const initialState: AppState = {
-  user: undefined,
+  user: AsyncData.NotAsked(),
   notification: undefined,
   error: undefined,
   isLoading: false,
@@ -12,19 +17,8 @@ export const initialState: AppState = {
 };
 
 const discogsReducer = reducerForProducers<AppState, AppActionTypes, AppActions>(initialState, {
-  [AppActions.setUserToken]: (draft, action) => {
-    draft.isLoading = true;
-  },
   [AppActions.getUser]: (draft, action) => {
-    draft.isLoading = true;
-  },
-  [AppActions.getUserFailed]: (draft, action) => {
-    draft.isLoading = false;
-  },
-
-  [AppActions.getUserSuccess]: (draft, action) => {
-    draft.isLoading = false;
-    draft.user = action.user;
+    draft.user = action.user ? action.user : draft.user;
     draft.error = undefined;
   },
   [AppActions.error]: (draft, action) => {
@@ -36,12 +30,11 @@ const discogsReducer = reducerForProducers<AppState, AppActionTypes, AppActions>
   [AppActions.setViewSuccess]: writeToDraft('view'),
   [AppActions.setHighlightedLabelsSuccess]: writeToDraft('highlightedLabels'),
   [AppActions.getHighlightedLabelsSuccess]: writeToDraft('highlightedLabels'),
-  [AppActions.logOutSuccess]: writeToDraft('user'),
   [AppActions.windowUrlRetrieved]: writeToDraft('windowUrl'),
-  [AppActions.clearStorage]: (draft) => {
-    draft.view = undefined;
-    draft.highlightedLabels = undefined;
-  },
+  [AppActions.clearStorage as any]: writeValuesToDraft({
+    view: undefined,
+    highlightedLabels: undefined,
+  }),
 });
 
 export default discogsReducer;

@@ -1,8 +1,9 @@
 import { Optional } from '@hansogj/maybe';
 import { CombinedState } from 'redux';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
-import { shape } from '../../../__mock__';
+import { shape } from '../../../_mock_';
 import { AppState, ERROR } from '../app';
+import { asyncOk } from '../domain';
 import { RootState } from '../root.reducers';
 import {
   getAppState,
@@ -15,7 +16,6 @@ import {
   getWindowLocation,
   getWindowUrlMatch,
   isLoading,
-  notAuthenticated,
 } from './selectors';
 
 type State = Partial<CombinedState<AppState>>;
@@ -39,7 +39,7 @@ describe('App selectors', () => {
   describe.each([
     [{ App: {} }, undefined as any],
     [{ App: { user: {} } }, undefined],
-    [{ App: { user: { id: 123 } } }, 123],
+    [{ App: { user: asyncOk({ id: 123 }) } }, 123],
   ] as Array<[Optional<Partial<RootState>>, State]>)('with AppState %j', (appState, expected) => {
     it(`getUserId should be ${expected}`, () =>
       expect(getUserId(appState as State)).toBe(expected));
@@ -71,16 +71,6 @@ describe('App selectors', () => {
   ] as Array<[Optional<Partial<RootState>>, State]>)('with AppState %j', (appState, expected) => {
     it(`isLoading should be ${expected}`, () =>
       expect(isLoading(appState as State)).toBe(expected));
-  });
-
-  describe.each([
-    [{ App: {} }, false as any],
-    [{ App: { error: undefined } }, false],
-    [{ App: { error: 'error' } }, false],
-    [{ App: { error: ERROR.NOT_AUTHENTICATED } }, true],
-  ] as Array<[Optional<Partial<RootState>>, State]>)('with AppState %j', (appState, expected) => {
-    it(`notAuthenticated should be ${expected}`, () =>
-      expect(notAuthenticated(appState as State)).toBe(expected));
   });
 
   describe.each([

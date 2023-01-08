@@ -1,4 +1,6 @@
+import { AsyncData } from '@swan-io/boxed';
 import { HighlightedLabels, User } from '../../../domain';
+import { Async } from '../domain';
 import { ActionTypes as AnyActionTypes } from '../store';
 import { ActionTypes } from '../types';
 export const DISCOGS_BASE_URL = 'https://api.discogs.com';
@@ -19,7 +21,7 @@ export type Notification = {
 };
 
 export interface AppState {
-  readonly user: Optional<User>;
+  readonly user: Async.User;
   readonly error: Optional<ErrorType>;
   readonly notification: Optional<Notification>;
   readonly isLoading: boolean;
@@ -36,7 +38,7 @@ export enum ERROR {
 export interface AppActionData {
   identity: Optional<string>;
   error: Optional<ErrorType>;
-  user: Optional<User>;
+  user: Async.User;
   userToken: Optional<string>;
   notification: Notification;
   view: Optional<View>;
@@ -51,13 +53,12 @@ export enum AppActions {
   notifyReset = 'APP_NOTIFY_RESET',
   getIdentity = 'GET_IDENTITY',
   getIdentitySuccess = 'GET_IDENTITY_SUCCESS',
+  getUserInit = 'GET_USER_INIT',
   getUser = 'GET_USER',
-  getUserSuccess = 'GET_USER_SUCCESS',
-  getUserFailed = 'GET_USER_FAILED',
+
   setUserToken = 'SET_USER_TOKEN',
   setUserTokenSuccess = 'SET_USER_TOKEN_SUCCESS',
   logOut = 'APP_LOG_OUT',
-  logOutSuccess = 'APP_LOG_OUT_SUCCESS',
   setView = 'APP_SET_VIEW',
   setViewSuccess = 'APP_SET_VIEW_SUCCESS',
   goToUrl = 'APP_GO_TO_URL',

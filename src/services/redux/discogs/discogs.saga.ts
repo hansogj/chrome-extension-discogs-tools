@@ -21,6 +21,7 @@ import {
   getInventoryResource,
   ResourceSelectors,
 } from '../selectors/combined.selectors';
+import * as appSaga from '../app/app.saga';
 
 export function* fetchResource<T>(
   selector: ResourceSelectors,
@@ -32,7 +33,8 @@ export function* fetchResource<T>(
     if (resource) {
       result = yield call(api.fetch as any, resource, body);
     } else {
-      yield put(appActions.getUser());
+      yield call(appSaga.getUser, undefined, 0);
+      // yield put(appActions.getUser());
     }
   } catch (error) {
     yield put(appActions.warn({ error: error as Error }));

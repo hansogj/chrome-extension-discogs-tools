@@ -12,7 +12,7 @@ import {
 import * as api from '../../api';
 import * as selectedFieldsService from '../../selectedFields.service';
 import { renderText } from '../../texts';
-import { actions as appActions, AppActions, sagas as appSagas } from '../app';
+import { actions as appActions, AppActions, AppActionTypes, sagas as appSagas } from '../app';
 import { fromReleasePageMaster, getReleasePageId, sagas as discogsSaga } from '../discogs';
 import {
   getAddReleaseToFolderResource,
@@ -132,10 +132,12 @@ function* raceForResponse(): Generator<any> {
   }
 }
 
-function* onUserSuccess() {
+function* onUserSuccess({ user }: AppActionTypes) {
   try {
     yield put(appActions.notifyReset());
-    yield all([getFolders(), getFields(), getSelectedFields()]);
+    if (user?.isDone() && user?.get().isOk()) {
+      yield all([getFolders(), getFields(), getSelectedFields()]);
+    }
   } catch (e) {
     console.log(e);
   }
@@ -143,7 +145,7 @@ function* onUserSuccess() {
 
 function* DiscogsSaga() {
   yield all([
-    takeLatest(AppActions.getUserSuccess, onUserSuccess),
+    takeLatest(AppActions.getUser, onUserSuccess),
     takeLatest(FoldersActions.setSelectedFields, setSelectedFields),
     takeLatest(FoldersActions.addToFolder, addToFolder),
   ]);

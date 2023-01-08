@@ -1,4 +1,4 @@
-import { reducerForProducers, writeToDraft } from '../utils';
+import { reducerForProducers, writeToDraft } from '../../../gist/immer-utils/immer.utils';
 import { WantListActions, WantListActionTypes, WantListState } from './types';
 
 export const initialState: WantListState = {

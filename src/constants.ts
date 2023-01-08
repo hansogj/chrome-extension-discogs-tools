@@ -53,6 +53,8 @@ export const DEFAULT_HIGHLIGHTED_LABELS: HighlightedLabels = {
     'AKT',
     'Audio Fidelity',
     'Blue Note',
+    'ECM',
+    'ECM Records',
     'Impulse!',
     'Jazzaway',
     'Jazzland',

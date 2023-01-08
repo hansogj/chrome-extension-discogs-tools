@@ -3,24 +3,36 @@ import { MAX_LOGIN_ATTEMPTS } from '../../../constants';
 import { HighlightedLabels, OauthIdentity, User, Release } from '../../../domain';
 import * as api from '../../api';
 import * as labelService from '../../highlighted.labels.service';
-import { get, set, uniqueKey, remove } from '../../storage';
+
+import * as storage from '../../storage';
 import * as userTokenService from '../../userToken.service';
 import { empty } from '../../utils/json.utils';
 import { DiscogsActions } from '../discogs';
 import * as appSelectors from './selectors';
-import { AppActions, AppActionTypes, DISCOGS_BASE_URL, ERROR, View } from './';
+import { AppActions, AppActionTypes, DISCOGS_BASE_URL, View } from './';
 import * as actions from './app.actions';
-import { ActionButton } from './types';
+import { ActionButton, ERROR } from './types';
+import { AsyncData } from '@swan-io/boxed';
+import { asyncError, asyncOk } from '../domain';
+import { getText } from '../../texts';
 
-function* getUser(_: any, count = 0): any {
+export const unauthorizedUser = asyncError({
+  error: ERROR.NOT_AUTHENTICATED,
+  message: getText('log.inn.error'),
+  isError: true,
+});
+
+export function* getUser(_: any, count = 0): any {
+  console.log(count);
   try {
+    yield put(actions.getUser(AsyncData.Loading()));
     const storedToken: string = yield call(userTokenService.get);
-    if (!Boolean(storedToken)) throw new Error(ERROR.NOT_AUTHENTICATED);
+    if (!Boolean(storedToken) || empty(storedToken)) throw new Error(ERROR.NOT_AUTHENTICATED);
     const identity: OauthIdentity = yield call(api.fetch, `${DISCOGS_BASE_URL}/oauth/identity`);
     if (identity) {
       const user: User = yield call(api.fetch, identity.resource_url);
 
-      yield put(actions.getUserSuccess(user));
+      yield put(actions.getUser(asyncOk(user)));
       return true;
     } else {
       if (count < MAX_LOGIN_ATTEMPTS) {
@@ -33,18 +45,20 @@ function* getUser(_: any, count = 0): any {
     if (count < MAX_LOGIN_ATTEMPTS) {
       getUser(_, count + 1);
     } else {
-      yield put(actions.getUserFailed());
+      yield put(actions.getUser(unauthorizedUser));
     }
   }
 }
 
 export function* getUserId() {
+  console.warn('stop using this - use selector in consuming saga instead');
   const userId: number = yield select(appSelectors.getUserId);
+
   if (userId) {
     yield userId;
     return userId;
   } else {
-    throw new Error('Cannot find any userId ');
+    yield put(actions.getUser(unauthorizedUser));
   }
 }
 
@@ -60,45 +74,47 @@ export function* warn(message: string, timeout = 5000) {
   yield put(actions.notifyReset());
 }
 
-function* setUserToken({ userToken }: AppActionTypes) {
+export function* setUserToken({ userToken }: AppActionTypes) {
   if (userToken) {
     yield call(userTokenService.set, userToken!);
     yield call(getUser, 0);
   } else {
     yield call(userTokenService.remove);
-    yield put(actions.logOutSuccess());
+    yield put(actions.getUser(AsyncData.NotAsked()));
   }
 }
 
-function* setView({ view }: AppActionTypes) {
-  yield call(set, 'view', view);
+export function* setView({ view }: AppActionTypes) {
+  yield call(storage.set, 'view', view);
   yield put(actions.setViewSuccess(view!));
 }
-function* getView() {
-  const view: View = yield call(get, 'view', '');
+
+export function* getView() {
+  const view: View = yield call(storage.get, 'view', '');
   yield put(actions.setViewSuccess(empty(view) ? undefined : view));
 }
 
-function* setHighlightedLabels({ highlightedLabels: labels }: AppActionTypes) {
+export function* setHighlightedLabels({ highlightedLabels: labels }: AppActionTypes) {
   try {
     yield call(labelService.set, labels!);
     yield put(actions.setHighlightedLabelsSuccess(labels as HighlightedLabels));
     yield call(api.applyHighlightedLabels);
-  } catch (e) {
-    debugger;
-  }
+  } catch (e) {}
 }
 
-function* clearStorage() {
-  const userId: number = yield select(appSelectors.getUserId);
-  /*   | 'token'
-  | 'want-list'
-  | 'user-collection'
-  | 'cache'
-  | 'selected-fields'
-  | 'view'
-  | 'highlighted-labels'; */
+export function* getHighlightedLabels() {
+  try {
+    const labels: HighlightedLabels = yield call(labelService.get);
+    if (labels) {
+      yield put(actions.getHighlightedLabelsSuccess(labels));
+      yield call(api.applyHighlightedLabels);
+    }
+  } catch (e) {}
+}
 
+export function* clearStorage() {
+  const userId: number = yield select(appSelectors.getUserId);
+  const { remove, uniqueKey } = storage;
   yield call(remove, 'view');
   yield call(remove, 'highlighted-labels');
   yield call(remove, uniqueKey('user-collection', userId));
@@ -106,24 +122,15 @@ function* clearStorage() {
   yield call(remove, uniqueKey('want-list', userId));
 }
 
-function* getHighlightedLabels() {
-  try {
-    const labels: HighlightedLabels = yield call(labelService.get);
-    if (labels) {
-      yield put(actions.getHighlightedLabelsSuccess(labels));
-      yield call(api.applyHighlightedLabels);
-    }
-  } catch (e) {
-    debugger;
-  }
-}
 function* getWindowUrl() {
   let url: URL = yield call(api.getWindowLocation);
   yield put(actions.windowUrlRetrieved(url as URL));
 }
 
-function* onUserSuccess() {
-  yield all([getView(), getHighlightedLabels(), getWindowUrl()]);
+function* onUserSuccess({ user }: AppActionTypes) {
+  if (user?.isDone() && user?.get().isOk()) {
+    yield all([getView(), getHighlightedLabels(), getWindowUrl()]);
+  }
 }
 
 function* goToUrl({ url }: AppActionTypes) {
@@ -138,12 +145,11 @@ function* goToUrl({ url }: AppActionTypes) {
 function* AppSaga() {
   try {
     yield all([
-      takeLatest(AppActions.getUser, getUser),
       takeLatest(AppActions.logOut, setUserToken),
       takeLatest(AppActions.setUserToken, setUserToken),
       takeLatest(AppActions.setUserTokenSuccess, getUser),
       takeLatest(AppActions.setView, setView),
-      takeLatest(AppActions.getUserSuccess, onUserSuccess),
+      takeLatest(AppActions.getUser, onUserSuccess),
       takeLatest(AppActions.setHighlightedLabels, setHighlightedLabels),
       takeLatest(AppActions.goToUrl, goToUrl),
       takeLatest(AppActions.clearStorage, clearStorage),
@@ -151,6 +157,7 @@ function* AppSaga() {
   } catch (e) {
     console.error(e);
   }
+  yield call(getUser, undefined);
 }
 
 export default AppSaga;

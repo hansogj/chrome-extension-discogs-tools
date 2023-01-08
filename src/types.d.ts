@@ -3,6 +3,8 @@ declare module '*.svg';
 declare type Fn<H, T> = (..._: H) => T;
 type Optional<T> = T | undefined;
 
+declare type Modify<T, R> = Omit<T, keyof R> & R;
+
 interface Hash<T> {
   [key: string]: T;
 }

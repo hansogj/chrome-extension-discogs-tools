@@ -27,7 +27,7 @@ const IconMap: Record<View, (fill: string) => JSX.Element> = {
 
 export interface Props {
   setView: DispatchAction<View>;
-  user: User;
+  user?: User;
   views: SwitchedView[];
 }
 

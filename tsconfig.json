@@ -22,7 +22,6 @@
   },
   "include": [
     "src",
-    "./gist/**/*",
     "types.d.ts"
   ],
   "exclude": [

@@ -1,4 +1,4 @@
-import { reducerForProducers, writeToDraft } from '../utils';
+import { reducerForProducers, writeToDraft } from '../../../gist/immer-utils/immer.utils';
 import { DiscogsActions, DiscogsActionTypes, DiscogsState } from './types';
 
 export const initialState: DiscogsState = {
