@@ -40,6 +40,7 @@ export const DEFAULT_HIGHLIGHTED_LABELS: HighlightedLabels = {
 
   good: [
     'Analogue Productions',
+    'Carisma',
     'Cisco',
     'EMC',
     'Flightless',

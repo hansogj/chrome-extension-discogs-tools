@@ -1,8 +1,8 @@
 import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { Release, ReleasePageItem } from '../../../domain';
-import { getFoldersState } from '../../../services/redux/folders/selectors';
 import { getReleasePageItem } from '../../../services/redux/discogs/selectors';
+import { getIsAddingToFolder } from '../../../services/redux/folders/selectors';
 
 import { empty } from '../../../services/utils/json.utils';
 
@@ -17,11 +17,11 @@ export const isMasterRelease = (releasePageItem: Optional<ReleasePageItem>) =>
     .valueOr(false);
 
 export const disableSubmitBtn = createSelector(
-  getFoldersState,
+  getIsAddingToFolder,
   getReleasePageItem,
-  (folderState, releasePageItem) =>
+  (isAdding, releasePageItem) =>
     Boolean(
-      maybe(folderState).mapTo('addingToFolder').valueOr(false) ||
+      isAdding ||
         maybe(releasePageItem).mapTo('releaseId').isNothing() ||
         (isMasterRelease(releasePageItem) &&
           maybe(releasePageItem)

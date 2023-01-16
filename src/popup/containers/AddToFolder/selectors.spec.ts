@@ -1,8 +1,7 @@
 import { Optional } from '@hansog/maybe';
-import { MockUtil } from '../../../gist/jest-utils/jest.utils';
 import { ReleasePageItem } from '../../../domain';
+import { MockUtil } from '../../../gist/jest-utils/jest.utils';
 import * as discogsSelectors from '../../../services/redux/discogs/selectors';
-import { FoldersState } from '../../../services/redux/folders';
 import * as folderSelectors from '../../../services/redux/folders/selectors';
 import { disableSubmitBtn, isMasterRelease } from './selectors';
 
@@ -18,6 +17,7 @@ describe('Discogs selectors', () => {
   beforeEach(() => {
     mocks.getFoldersState?.mockReturnValue({});
     mocks.getReleasePageItem?.mockReturnValue({});
+    mocks.getIsAddingToFolder?.mockReturnValue(false);
   });
   describe.each([
     [undefined, false],
@@ -36,33 +36,21 @@ describe('Discogs selectors', () => {
     },
   );
 
-  describe.each([
-    [{}, {}, true],
-    [{ addingToFolder: false }, {}, true],
-    [{ addingToFolder: true }, {}, true],
-    [{ addingToFolder: true }, { releaseId: 123 }, true],
-    [{ addingToFolder: false }, { releaseId: 123 }, false],
-    [{ addingToFolder: false }, { releaseId: 123, master: { id: 123 } }, false],
-    [
-      { addingToFolder: false },
-      { releaseId: 123, master: { id: 123, resource_url: 'master/url' } },
-      true,
-    ],
-    [
-      { addingToFolder: false },
-      { releaseId: 123, master: { id: 123, resource_url: 'release/url' } },
-      false,
-    ],
-    [
-      { addingToFolder: false },
-      { releaseId: 124, master: { id: 123, resource_url: 'release/url' } },
-      false,
-    ],
-  ] as Array<[Optional<FoldersState>, Optional<ReleasePageItem>, boolean]>)(
-    'with folderState %j and releasePageItem %j',
-    (folderState, releasePageItem, expected) => {
+  describe.only.each([
+    [false, {}, true],
+    [false, {}, true],
+    [true, {}, true],
+    [true, { releaseId: 123 }, true],
+    [false, { releaseId: 123 }, false],
+    [false, { releaseId: 123, master: { id: 123 } }, false],
+    [false, { releaseId: 123, master: { id: 123, resource_url: 'master/url' } }, true],
+    [false, { releaseId: 123, master: { id: 123, resource_url: 'release/url' } }, false],
+    [false, { releaseId: 124, master: { id: 123, resource_url: 'release/url' } }, false],
+  ] as Array<[Optional<Boolean>, Optional<ReleasePageItem>, boolean]>)(
+    'with isAddingToFolder is %j and releasePageItem %j',
+    (isAdding, releasePageItem, expected) => {
       beforeEach(() => {
-        mocks.getFoldersState?.mockReturnValueOnce(folderState);
+        mocks.getIsAddingToFolder?.mockReturnValueOnce(isAdding);
         mocks.getReleasePageItem?.mockReturnValueOnce(releasePageItem);
       });
       it(`disableSubmitBtn should be ${expected}`, () =>

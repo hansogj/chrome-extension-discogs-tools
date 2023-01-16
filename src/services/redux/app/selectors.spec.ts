@@ -2,7 +2,7 @@ import { Optional } from '@hansogj/maybe';
 import { CombinedState } from 'redux';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
 import { shape } from '../../../_mock_';
-import { AppState, ERROR } from '../app';
+import { AppState } from '../app';
 import { asyncOk } from '../domain';
 import { RootState } from '../root.reducers';
 import {
@@ -143,15 +143,4 @@ describe('App selectors', () => {
     it(`getPathToWindowResource should be ${shape(expected)}`, () =>
       expect(getPathToWindowResource({ App: { windowUrl } } as State)).toEqual(expected));
   });
-  /*   describe.each([
-    [{ pathname: undefined }, ''],
-    [{ pathname: '/url' }, ''],
-    [{ pathname: '/releases' }, ''],
-    [{ pathname: '/release/123' }, 'releases/123'],
-    [{ pathname: '/master/298833-Benny-Golson' }, 'masters/298833'],
-    [{ pathname: '/artist/179749-Magma-6' }, 'artists/179749'],
-  ] as Array<[Optional<Partial<RootState>>, string]>)('with AppState %j', (windowUrl, expected) => {
-    it(`getActiveView should be ${shape(expected)}`, () =>
-      expect(getActiveView({ App: { windowUrl } } as State)).toEqual(expected));
-  }); */
 });

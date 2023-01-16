@@ -23,7 +23,6 @@ export const unauthorizedUser = asyncError({
 });
 
 export function* getUser(_: any, count = 0): any {
-  console.log(count);
   try {
     yield put(actions.getUser(AsyncData.Loading()));
     const storedToken: string = yield call(userTokenService.get);
@@ -40,7 +39,7 @@ export function* getUser(_: any, count = 0): any {
       } else throw new Error(ERROR.NOT_AUTHENTICATED);
     }
   } catch (error) {
-    console.log('caught authentication error', error);
+    console.warn('caught authentication error', error);
     yield put(actions.error(ERROR.NOT_AUTHENTICATED));
     if (count < MAX_LOGIN_ATTEMPTS) {
       getUser(_, count + 1);

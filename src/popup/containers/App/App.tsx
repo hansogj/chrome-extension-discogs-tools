@@ -2,8 +2,8 @@ import { FC, useRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../../../services/redux';
-import { getNotification, getUser } from '../../../services/redux/app';
-import { actions as appActions } from '../../../services/redux/app/';
+
+import { actions as appActions, selectors as appSelectors } from '../../../services/redux/app/';
 import { DispatchProps, StateProps } from '../../../services/redux/selectors/utils';
 import View from '../../components/View';
 import { Container, Content } from '../../styled';
@@ -55,8 +55,8 @@ export const App = ({
 };
 
 export const mapStateToProps = (state: RootState): StateProps<Partial<AppProps>> => ({
-  user: getUser(state),
-  notification: getNotification(state),
+  user: appSelectors.getUser(state),
+  notification: appSelectors.getNotification(state),
   views: getAvailableViews(state),
   activeView: getActiveView(state),
 });

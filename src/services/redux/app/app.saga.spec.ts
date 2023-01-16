@@ -5,15 +5,13 @@ import { OauthIdentity, User } from '../../../domain';
 import * as api from '../../api';
 import * as labelService from '../../highlighted.labels.service';
 import * as storage from '../../storage';
-import { getText } from '../../texts';
 import * as userTokenService from '../../userToken.service';
-import { asyncError, asyncOk } from '../domain';
+import { asyncOk } from '../domain';
 import * as appActions from './app.actions';
 import {
   clearStorage,
   getHighlightedLabels,
   getUser,
-  getUserId,
   getView,
   notify,
   setHighlightedLabels,
@@ -33,6 +31,11 @@ const IDENTITY: OauthIdentity = {
   consumer_name: 'consumer_name',
 };
 const USER: User = IDENTITY as unknown as User;
+
+beforeAll(() => {
+  jest.spyOn(console, 'warn').mockImplementation(() => {});
+});
+afterAll(() => jest.restoreAllMocks());
 
 describe('app saga', () => {
   describe('getUser', () => {
@@ -59,7 +62,6 @@ describe('app saga', () => {
         .next()
         .call(userTokenService.get)
         .next({})
-
         .next()
         .isDone();
     });
@@ -104,26 +106,6 @@ describe('app saga', () => {
     });
   });
 
-  describe('getUserId', () => {
-    it('should yield and return userId', () => {
-      testSaga(getUserId)
-        .next()
-        .select(appSelectors.getUserId)
-        .next(USER_ID)
-        .next(USER_ID)
-        .isDone();
-    });
-
-    it('should yield unauthorized user', () => {
-      testSaga(getUserId)
-        .next()
-        .select(appSelectors.getUserId)
-        .next(undefined)
-        .put(appActions.getUser(unauthorizedUser))
-        .next()
-        .isDone();
-    });
-  });
   describe('notify', () => {
     it('should dispatch message and reset', () => {
       testSaga(notify, 'message')

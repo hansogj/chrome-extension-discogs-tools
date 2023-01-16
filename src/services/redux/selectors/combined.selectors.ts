@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import maybe from '@hansogj/maybe';
 import { WantList } from '../../../domain';
 import { fromUser } from '../app/selectors';
-import { getArtistId } from '../discogs/selectors';
+import { getArtistId, getReleasePageId } from '../discogs/selectors';
 import { getSelectedFields } from '../folders/selectors';
 import { getCollection, getWantList } from '../wantlist/selectors';
 
@@ -10,10 +10,14 @@ export const getFoldersResource = fromUser('collection_folders_url');
 export const getFieldsResource = fromUser('collection_fields_url');
 export const getInventoryResource = fromUser('inventory_url');
 export const getWantListResource = fromUser('wantlist_url');
-export const getAddReleaseToFolderResource = (release_id: number) =>
-  createSelector(getFoldersResource, getSelectedFields, (folderResource, { folders }) =>
+
+export const combinedGetAddReleaseToFolderResource = createSelector(
+  getReleasePageId,
+  getFoldersResource,
+  getSelectedFields,
+  (release_id, folderResource, { folders }) =>
     [folderResource, folders, 'releases', release_id].join('/'),
-  );
+);
 
 export const getAllFoldersReleasesResource = createSelector(getFoldersResource, (folderResource) =>
   [folderResource, 0, 'releases'].join('/'),

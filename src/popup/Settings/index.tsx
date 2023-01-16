@@ -6,7 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Bin, Collection, Eye, Off } from '../../assets/icons';
 import { HighlightedLabels } from '../../domain';
 import { RootState } from '../../services/redux';
-import { actions as appActions, getHighlightedLabels } from '../../services/redux/app';
+import { actions as appActions, selectors as appSelectors } from '../../services/redux/app';
 
 import { DispatchProps, StateProps } from '../../services/redux/selectors/utils';
 import { DispatchAction } from '../../services/redux/store';
@@ -100,7 +100,7 @@ const Settings = ({
 
 export const mapStateToProps = (state: RootState): StateProps<Partial<Props>> => ({
   isSyncing: isSyncing(state),
-  highlightedLabels: getHighlightedLabels(state),
+  highlightedLabels: appSelectors.getHighlightedLabels(state),
   inventory: getInventory(state),
 });
 

@@ -1,6 +1,6 @@
 import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
-import { DropdownInventoryField } from '../../../domain';
+import { DropdownInventoryField, SelectedFields } from '../../../domain';
 import { FoldersState } from '../folders';
 import { RootState } from '../root.reducers';
 import { selectFromRoot } from '../../../gist/immer-utils/immer.utils';
@@ -15,20 +15,23 @@ export const getFolders = createSelector(getFoldersState, (folderState) =>
 export const getCollectableFolders = createSelector(getFolders, (folders) =>
   folders.filter((it) => it.id !== 0),
 );
+export const getIsAddingToFolder = createSelector(getFoldersState, (folderState) =>
+  maybe(folderState).mapTo('addingToFolder').valueOr(false),
+);
 
 export const getFields = createSelector(
   getFoldersState,
-  (discogs) =>
-    maybe(discogs)
+  (folderState) =>
+    maybe(folderState)
       .mapTo('fields')
       .map((it) => it.filter((field) => field.type === 'dropdown'))
       .valueOr([]) as DropdownInventoryField[],
 );
 
-const getSelectedAbleFields = createSelector(getFoldersState, (discogs) =>
-  maybe(discogs)
+const getSelectedAbleFields = createSelector(getFoldersState, (folderState) =>
+  maybe(folderState)
     .mapTo('selectedFields')
-    .valueOr({} as FoldersState['selectedFields']),
+    .valueOr({} as SelectedFields),
 );
 
 export const getSelectedFields = createSelector(

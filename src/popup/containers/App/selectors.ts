@@ -6,20 +6,25 @@ import { View } from '../../../services/redux/app/types';
 import { empty } from '../../../services/utils/json.utils';
 import { SwitchedView } from './types';
 
+const alwaysAvailable: View[] = ['Settings', 'Want List'];
+
 const getViewFromUrlMatch = (urlMatch: ReturnType<typeof getWindowUrlMatch>) =>
   maybe(urlMatch)
     .nothingIf(() => empty(urlMatch))
     .map(({ artists }) => (Boolean(artists) ? 'Artist' : 'Item'))
     .valueOr(undefined);
 
+const viewIsAlwaysOkOrFallbackToViewFromUrl = (
+  it: View,
+  optionalUrlMatch: Record<string, number>,
+) => (alwaysAvailable.includes(it) ? it : getViewFromUrlMatch(optionalUrlMatch));
+
 export const getActiveView = createSelector(
   getView,
   getWindowUrlMatch,
   (optionalView, optionalUrlMatch): View =>
     maybe(optionalView)
-      .map((it: View) =>
-        ['Settings', 'Want List'].includes(it) ? it : getViewFromUrlMatch(optionalUrlMatch),
-      )
+      .map((view) => viewIsAlwaysOkOrFallbackToViewFromUrl(view, optionalUrlMatch))
       .valueOr('Settings') as View,
 );
 

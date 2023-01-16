@@ -11,7 +11,7 @@ import {
 } from 'redux-saga/effects';
 import { Artist, Release } from '../../../domain';
 import * as api from '../../api';
-import { AppActions, DISCOGS_BASE_URL, getPathToWindowResource } from '../app';
+import { AppActions, DISCOGS_BASE_URL, selectors as appSelectors } from '../app';
 import * as appActions from '../app/app.actions';
 import * as actions from './discogs.actions';
 
@@ -44,7 +44,7 @@ export function* fetchResource<T>(
 
 function* getResourceIdFromWindowUrl() {
   try {
-    let path: string = yield select(getPathToWindowResource);
+    let path: string = yield select(appSelectors.getPathToWindowResource);
 
     if (/artists/.test(`${path}`)) {
       const artist: Artist = yield call(api.fetch, `${DISCOGS_BASE_URL}/${path}`);

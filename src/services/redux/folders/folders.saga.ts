@@ -8,56 +8,62 @@ import {
   InventoryFields,
   Release,
   ReleasePageItem,
+  SelectedFields,
 } from '../../../domain';
 import * as api from '../../api';
 import * as selectedFieldsService from '../../selectedFields.service';
-import { renderText } from '../../texts';
-import { actions as appActions, AppActions, AppActionTypes, sagas as appSagas } from '../app';
-import { fromReleasePageMaster, getReleasePageId, sagas as discogsSaga } from '../discogs';
+import { getText, renderText } from '../../texts';
 import {
-  getAddReleaseToFolderResource,
-  getFieldsResource,
-  getFoldersResource,
-} from '../selectors/combined.selectors';
+  actions as appActions,
+  AppActions,
+  AppActionTypes,
+  sagas as appSagas,
+  selectors as appSelectors,
+} from '../app';
+import { sagas as discogsSaga, selectors as discogsSelectors } from '../discogs';
+import * as combinedSelectors from '../selectors/combined.selectors';
 import * as actions from './folders.actions';
-import { getSelectedFields as getSelectedFieldsSelector } from './selectors';
+import * as folderSelectors from './selectors';
 import { FoldersActions, FoldersActionTypes } from './types';
 
-function* getFolders(): Generator<any> {
-  const result = yield discogsSaga.fetchResource(getFoldersResource);
-  if (result) {
-    yield put(actions.getFoldersSuccess((result as { folders: Folder[] }).folders));
-  }
+export function* getFolders() {
+  const result: { folders: Folder[] } = yield discogsSaga.fetchResource(
+    combinedSelectors.getFoldersResource,
+  );
+  if (result && result.folders) yield put(actions.getFoldersSuccess(result.folders));
+  else yield put(appActions.warn({ message: getText('folder.fetched.failed') }));
 }
 
-function* getFields(): Generator<any> {
-  const result = yield discogsSaga.fetchResource(getFieldsResource);
-  if (result)
-    yield put(actions.getInventoryFieldsSuccess((result as { fields: InventoryFields }).fields));
+export function* getFields() {
+  const result: { fields: InventoryFields } = yield discogsSaga.fetchResource(
+    combinedSelectors.getFieldsResource,
+  );
+  if (result && result.fields) yield put(actions.getInventoryFieldsSuccess(result.fields));
+  else yield put(appActions.warn({ message: getText('fields.fetched.failed') }));
 }
 
-function* setSelectedFields({ selectedFields }: FoldersActionTypes): Generator<any> {
-  const userId = yield call(appSagas.getUserId);
-  const allFields = yield call(selectedFieldsService.set, userId as number, selectedFields!);
-  yield put(actions.setSelectedFieldsSuccess(allFields as Record<string, string>));
+export function* setSelectedFields({ selectedFields }: FoldersActionTypes) {
+  const userId: number = yield select(appSelectors.getUserId);
+  const allFields: SelectedFields = yield call(selectedFieldsService.set, userId, selectedFields!);
+  yield put(actions.setSelectedFieldsSuccess(allFields));
 }
 
-function* getSelectedFields(): Generator<any> {
-  const userId = yield call(appSagas.getUserId);
-  const allFields = yield call(selectedFieldsService.get, userId as number);
-
-  yield put(actions.setSelectedFieldsSuccess(allFields as Record<string, string>));
+export function* getSelectedFields() {
+  const userId: number = yield select(appSelectors.getUserId);
+  const allFields: SelectedFields = yield call(selectedFieldsService.get, userId);
+  yield put(actions.setSelectedFieldsSuccess(allFields));
 }
 
-function* addToFolder(): Generator<any> {
-  const releaseId = (yield select(getReleasePageId)) as ReleasePageItem['releaseId'];
+export function* addToFolder() {
+  const releaseId: ReleasePageItem['releaseId'] = yield select(discogsSelectors.getReleasePageId);
 
   try {
-    const resource = yield select(getAddReleaseToFolderResource(releaseId));
+    const resource: string = yield select(combinedSelectors.combinedGetAddReleaseToFolderResource);
+
     if (resource) {
-      const result = (yield call(api.post, resource as string)) as Instance;
+      const result: Instance = yield call(api.post, resource);
       yield updateSelectedFieldsValues(result);
-      yield fork(notifyNewInstance, result);
+      yield fork(notifyNewInstance);
       yield raceForResponse();
     } else {
       yield fork(appSagas.warn, renderText('folder.add.item.failed', { releaseId }));
@@ -67,64 +73,56 @@ function* addToFolder(): Generator<any> {
   }
 }
 
-function* updateSelectedFieldsValues(instance: Instance): Generator<any> {
-  const fields = (yield select(getSelectedFieldsSelector)) as Record<string, string>;
+export function* updateSelectedFieldsValues(instance: Instance) {
+  const fields: SelectedFields = yield select(folderSelectors.getSelectedFields);
 
   const url = instance.resource_url
     .split('?')
     .first()
     .concat(['instances', `${instance?.instance_id}`])
     .join('/');
-
-  yield all(
-    Object.entries(fields)
-      .filter(([field, _]) => field !== 'folders')
-      .map(([field_id, value]) => ({
-        resource: `${url}/fields/${field_id}`,
-        payLoad: { value },
-      }))
-
-      .map(({ resource, payLoad }) => call(api.post as any, resource, { payLoad })),
-  );
+  try {
+    yield all(
+      Object.entries(fields)
+        .filter(([field, _]) => field !== 'folders')
+        .map(([field_id, value]) => ({
+          resource: `${url}/fields/${field_id}`,
+          payLoad: { value },
+        }))
+        .map(({ resource, payLoad }) => call(api.post as any, resource, { payLoad })),
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function* notifyNewInstance(instance: Instance): Generator<any> {
-  const resource = maybe(instance)
-    .mapTo('basic_information')
-    .map(({ master_url, resource_url }) => master_url || resource_url)
-    .valueOr(undefined);
-
-  if (!resource) throw new Error('Now resource found on instance');
-
-  const title = (yield select(fromReleasePageMaster('title'))) as Release.MasterReleaseDTO['title'];
-  const artists = (yield select(
-    fromReleasePageMaster('artists'),
-  )) as Release.MasterReleaseDTO['artists'];
-
-  const artist = maybe(artists)
-    .map((it) => it[0] as Artist)
-    .map(({ name }) => name)
-    .valueOr('');
-  const masterUrl = yield select(fromReleasePageMaster('uri'));
+export function* notifyNewInstance() {
+  const { uri, title, artists }: Release.MasterReleaseDTO = yield select(
+    discogsSelectors.getReleasePageMaster,
+  );
 
   yield fork(
     appSagas.notify,
     renderText('folder.add.item.success', {
-      artist,
+      artist: maybe(artists)
+        .map((it) => it[0] as Artist)
+        .map(({ name }) => name)
+        .valueOr(''),
       title,
     }),
     {
-      action: appActions.goToUrl(masterUrl as string),
+      action: appActions.goToUrl(uri),
       text: 'Yes please',
     },
   );
 }
 
-function* raceForResponse(): Generator<any> {
+export function* raceForResponse(): Generator<any> {
   const result = yield race({
     notify: take(AppActions.notifyReset),
     remove: take(AppActions.goToUrl),
   });
+
   if ((result as any).notify) {
     yield api.reload();
   } else {

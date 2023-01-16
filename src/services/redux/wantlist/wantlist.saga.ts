@@ -5,7 +5,7 @@ import * as api from '../../api';
 import { getText } from '../../texts';
 import * as wantListService from '../../wantlist.service';
 import * as collectionService from '../../collection.service';
-import { AppActions, AppActionTypes, sagas as appSagas } from '../app';
+import { AppActions, AppActionTypes, sagas as appSagas, selectors as appSelectors } from '../app';
 import {
   getAllFoldersReleasesResource,
   getWantListResource,
@@ -15,7 +15,8 @@ import * as wantListActions from './wantlist.actions';
 
 function* syncWantList() {
   const resource: string = yield select(getWantListResource);
-  const userId: number = yield call(appSagas.getUserId);
+  //const userId: number = yield call(appSagas.getUserId);
+  const userId: number = yield select(appSelectors.getUserId);
   yield call(api.syncWantList, userId, resource);
   yield appSagas.notify(getText('settings.resync.explained'));
   yield call(wantlistIsSyncing);
@@ -23,7 +24,8 @@ function* syncWantList() {
 
 function* syncCollection() {
   const resource: string = yield select(getAllFoldersReleasesResource);
-  const userId: number = yield call(appSagas.getUserId);
+  //const userId: number = yield call(appSagas.getUserId);
+  const userId: number = yield select(appSelectors.getUserId);
   yield call(api.syncCollection, userId, resource);
   yield appSagas.notify(getText('settings.collection.sync.explained'));
   yield call(wantlistIsSyncing);
@@ -48,7 +50,8 @@ function* onUserSuccess({ user }: AppActionTypes) {
 }
 
 function* getWantList() {
-  const userId: number = yield call(appSagas.getUserId);
+  //const userId: number = yield call(appSagas.getUserId);
+  const userId: number = yield select(appSelectors.getUserId);
   let result: WantList.Item[] = yield call(wantListService.get, userId);
 
   if (result.length > 0) {
@@ -57,7 +60,8 @@ function* getWantList() {
 }
 
 function* getCollection() {
-  const userId: number = yield call(appSagas.getUserId);
+  //const userId: number = yield call(appSagas.getUserId);
+  const userId: number = yield select(appSelectors.getUserId);
   let result: Collection.Item[] = yield call(collectionService.get, userId);
   if (result.length > 0) {
     yield put(wantListActions.getCollectionSuccess(result));

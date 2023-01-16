@@ -1,17 +1,17 @@
-import { Folder, InventoryFields } from '../../../domain';
+import { Folder, InventoryFields, SelectedFields } from '../../../domain';
 import { ActionTypes } from '../types';
 
 export interface FoldersState {
   readonly folders: Array<Folder>;
   readonly fields: InventoryFields;
-  readonly selectedFields: Record<string, string>;
+  readonly selectedFields: SelectedFields;
   readonly addingToFolder: boolean;
 }
 
 export interface FoldersActionData {
   folders: Optional<Array<Folder>>;
   fields: Optional<InventoryFields>;
-  selectedFields: Optional<Record<string, string>>;
+  selectedFields: Optional<SelectedFields>;
   addingToFolder: false;
 }
 

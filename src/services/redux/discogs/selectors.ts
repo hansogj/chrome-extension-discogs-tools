@@ -23,9 +23,6 @@ export const getReleasePageMaster = createSelector(
     maybe(releasePageItem).mapTo('master').valueOr(undefined) as Release.MasterReleaseDTO,
 );
 
-export const fromReleasePageMaster = (prop: keyof Release.MasterReleaseDTO) =>
-  createSelector(getReleasePageMaster, (master) => maybe(master).mapTo(prop).valueOr(undefined));
-
 export const getArtistId = createSelector(getDiscogsState, (discogs) =>
   maybe(discogs)
     .mapTo('artist')
