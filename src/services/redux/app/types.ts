@@ -1,9 +1,7 @@
-import { AsyncData } from '@swan-io/boxed';
-import { HighlightedLabels, User } from '../../../domain';
-import { Async } from '../domain';
+import { HighlightedLabels } from '../../../domain';
 import { ActionTypes as AnyActionTypes } from '../store';
 import { ActionTypes } from '../types';
-export const DISCOGS_BASE_URL = 'https://api.discogs.com';
+import { USER_ERROR } from '../user';
 
 export const Views = ['Artist', 'Item', 'Settings', 'Want List'] as const;
 export type View = typeof Views[number];
@@ -11,7 +9,7 @@ export type View = typeof Views[number];
 export type ActionButton = { action: AnyActionTypes; text: string };
 export const MustHaveReleaseItem: View[] = ['Item'];
 export const MustHaveArtistReleases: View[] = ['Artist'];
-export type ErrorType = ERROR | Error | string;
+export type ErrorType = USER_ERROR | ERROR | Error | string;
 
 export type Notification = {
   message: string;
@@ -20,8 +18,15 @@ export type Notification = {
   error?: ErrorType;
 };
 
+export const resourceMatchers = {
+  releases: /\/release\//,
+  masters: /\/master\//,
+  artists: /\/artist\//,
+};
+
+export type ResourceMatcher = Record<keyof typeof resourceMatchers, number>;
+
 export interface AppState {
-  readonly user: Async.User;
   readonly error: Optional<ErrorType>;
   readonly notification: Optional<Notification>;
   readonly isLoading: boolean;
@@ -31,15 +36,11 @@ export interface AppState {
 }
 
 export enum ERROR {
-  NOT_AUTHENTICATED = 'NOT_AUTHENTICATED',
   NO_TAB_TO_CAPTURE = 'NO_TAB_TO_CAPTURE',
 }
 
 export interface AppActionData {
-  identity: Optional<string>;
   error: Optional<ErrorType>;
-  user: Async.User;
-  userToken: Optional<string>;
   notification: Notification;
   view: Optional<View>;
   highlightedLabels: Optional<HighlightedLabels>;
@@ -51,14 +52,7 @@ export enum AppActions {
   notify = 'APP_NOTIFY',
   error = 'APP_ERROR',
   notifyReset = 'APP_NOTIFY_RESET',
-  getIdentity = 'GET_IDENTITY',
-  getIdentitySuccess = 'GET_IDENTITY_SUCCESS',
-  getUserInit = 'GET_USER_INIT',
-  getUser = 'GET_USER',
 
-  setUserToken = 'SET_USER_TOKEN',
-  setUserTokenSuccess = 'SET_USER_TOKEN_SUCCESS',
-  logOut = 'APP_LOG_OUT',
   setView = 'APP_SET_VIEW',
   setViewSuccess = 'APP_SET_VIEW_SUCCESS',
   goToUrl = 'APP_GO_TO_URL',

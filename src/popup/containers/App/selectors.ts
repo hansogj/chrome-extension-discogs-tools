@@ -1,27 +1,25 @@
 import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 
-import { getView, getWindowUrlMatch } from '../../../services/redux/app/selectors';
+import { selectors as appSelectors, ResourceMatcher } from '../../../services/redux/app';
 import { View } from '../../../services/redux/app/types';
 import { empty } from '../../../services/utils/json.utils';
 import { SwitchedView } from './types';
 
 const alwaysAvailable: View[] = ['Settings', 'Want List'];
 
-const getViewFromUrlMatch = (urlMatch: ReturnType<typeof getWindowUrlMatch>) =>
+const getViewFromUrlMatch = (urlMatch: ResourceMatcher) =>
   maybe(urlMatch)
     .nothingIf(() => empty(urlMatch))
     .map(({ artists }) => (Boolean(artists) ? 'Artist' : 'Item'))
     .valueOr(undefined);
 
-const viewIsAlwaysOkOrFallbackToViewFromUrl = (
-  it: View,
-  optionalUrlMatch: Record<string, number>,
-) => (alwaysAvailable.includes(it) ? it : getViewFromUrlMatch(optionalUrlMatch));
+const viewIsAlwaysOkOrFallbackToViewFromUrl = (it: View, optionalUrlMatch: ResourceMatcher) =>
+  alwaysAvailable.includes(it) ? it : getViewFromUrlMatch(optionalUrlMatch);
 
 export const getActiveView = createSelector(
-  getView,
-  getWindowUrlMatch,
+  appSelectors.getView,
+  appSelectors.getWindowUrlMatch,
   (optionalView, optionalUrlMatch): View =>
     maybe(optionalView)
       .map((view) => viewIsAlwaysOkOrFallbackToViewFromUrl(view, optionalUrlMatch))
@@ -29,7 +27,7 @@ export const getActiveView = createSelector(
 );
 
 export const getAvailableViews = createSelector(
-  getWindowUrlMatch,
+  appSelectors.getWindowUrlMatch,
   getActiveView,
   (urlMatch, activeView) =>
     maybe(urlMatch)

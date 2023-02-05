@@ -3,7 +3,6 @@ import { CombinedState } from 'redux';
 import { DEFAULT_HIGHLIGHTED_LABELS } from '../../../constants';
 import { shape } from '../../../_mock_';
 import { AppState } from '../app';
-import { asyncOk } from '../domain';
 import { RootState } from '../root.reducers';
 import {
   getAppState,
@@ -11,8 +10,6 @@ import {
   getHighlightedLabels,
   getNotification,
   getPathToWindowResource,
-  getUser,
-  getUserId,
   getWindowLocation,
   getWindowUrlMatch,
   isLoading,
@@ -29,21 +26,6 @@ describe('App selectors', () => {
       expect(getAppState(rootState as State)).toBe(expected));
   });
 
-  describe.each([
-    [{ App: {} }, undefined as any],
-    [{ App: { user: 'user' } }, 'user'],
-  ] as Array<[Optional<Partial<RootState>>, State]>)('with AppState %j', (appState, expected) => {
-    it(`getUser should be ${expected}`, () => expect(getUser(appState as State)).toBe(expected));
-  });
-
-  describe.each([
-    [{ App: {} }, undefined as any],
-    [{ App: { user: {} } }, undefined],
-    [{ App: { user: asyncOk({ id: 123 }) } }, 123],
-  ] as Array<[Optional<Partial<RootState>>, State]>)('with AppState %j', (appState, expected) => {
-    it(`getUserId should be ${expected}`, () =>
-      expect(getUserId(appState as State)).toBe(expected));
-  });
   describe.each([
     [{ App: {} }, undefined],
     [{ App: { notification: undefined } }, undefined],

@@ -1,6 +1,7 @@
 import maybe from '@hansogj/maybe';
+import { DISCOGS_BASE_URL } from '../constants';
 import { ArtistReleases, Release, ReleasePageItem } from '../domain';
-import { DISCOGS_BASE_URL } from './redux/app';
+
 import * as xhr from './xhr';
 
 export interface PageResourceIds {

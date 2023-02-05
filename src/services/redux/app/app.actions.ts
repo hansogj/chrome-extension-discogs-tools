@@ -1,10 +1,8 @@
 import maybe from '@hansogj/maybe';
-import { AsyncData } from '@swan-io/boxed';
-import { HighlightedLabels, User } from '../../../domain';
-import { Async } from '../domain';
-import { AppActions, AppActionTypes, ERROR, Notification, View } from './types';
+import { HighlightedLabels } from '../../../domain';
+import { AppActions, AppActionTypes, ErrorType, Notification, View } from './types';
 
-export const error = (error: ERROR) => ({
+export const error = (error: ErrorType) => ({
   type: AppActions.error,
   error,
 });
@@ -36,38 +34,6 @@ export const notify = ({
 }: Pick<Notification, 'message' | 'actionBtn'>): AppActionTypes => ({
   type: AppActions.notify,
   notification: { message, actionBtn, isError: false },
-});
-
-export const getUserInit = (): AppActionTypes => ({
-  type: AppActions.getUserInit,
-});
-
-export const getUser = (user: Async.User): AppActionTypes => ({
-  type: AppActions.getUser,
-  user,
-});
-
-export const logOut = (): AppActionTypes => ({
-  type: AppActions.logOut,
-  user: AsyncData.NotAsked(),
-});
-
-export const setUserToken = (userToken: string): AppActionTypes => ({
-  type: AppActions.setUserToken,
-  userToken,
-});
-
-export const setUserTokenSuccess = (): AppActionTypes => ({
-  type: AppActions.setUserTokenSuccess,
-});
-
-export const getIdentity = (): AppActionTypes => ({
-  type: AppActions.getIdentity,
-});
-
-export const getIdentitySuccess = (identity: string): AppActionTypes => ({
-  type: AppActions.getIdentitySuccess,
-  identity,
 });
 
 export const setView = (view: View): AppActionTypes => ({

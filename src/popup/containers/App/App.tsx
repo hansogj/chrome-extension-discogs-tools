@@ -16,7 +16,7 @@ import {
 } from '../../components/App';
 import { getActiveView, getAvailableViews } from './selectors';
 import { AppProps } from './types';
-
+import { actions as userActions, selectors as userSelectors } from '../../../services/redux/user';
 export const App = ({
   notification,
   setUserToken,
@@ -29,6 +29,7 @@ export const App = ({
   return (
     <Container id="container">
       <Content id="content" ref={ref}>
+        {notification && <NotificationComponent {...{ refObject: ref, notification }} />}
         {asyncUser.match({
           NotAsked: () => <TokenInput setUserToken={setUserToken} />,
           Loading: () => <Loader />,
@@ -36,17 +37,11 @@ export const App = ({
             loadedUser.match({
               Ok: (user) => (
                 <div data-test-main-content>
-                  {notification && <NotificationComponent {...{ refObject: ref, notification }} />}
                   <Header {...{ ...headerProps, user }} />
                   <View {...{ activeView }} />
                 </div>
               ),
-              Error: (notification: any) => (
-                <>
-                  <NotificationComponent {...{ refObject: ref, notification }} />
-                  <TokenInput setUserToken={setUserToken} />,
-                </>
-              ),
+              Error: () => <TokenInput setUserToken={setUserToken} />,
             }),
         })}
       </Content>
@@ -55,7 +50,7 @@ export const App = ({
 };
 
 export const mapStateToProps = (state: RootState): StateProps<Partial<AppProps>> => ({
-  user: appSelectors.getUser(state),
+  user: userSelectors.getAsyncUser(state),
   notification: appSelectors.getNotification(state),
   views: getAvailableViews(state),
   activeView: getActiveView(state),
@@ -63,7 +58,7 @@ export const mapStateToProps = (state: RootState): StateProps<Partial<AppProps>>
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<AppProps> =>
   ({
-    setUserToken: bindActionCreators(appActions.setUserToken, dispatch),
+    setUserToken: bindActionCreators(userActions.setUserToken, dispatch),
     setView: bindActionCreators(appActions.setView, dispatch),
   } as AppProps);
 

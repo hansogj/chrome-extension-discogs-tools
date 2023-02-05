@@ -20,7 +20,8 @@ export const getDelay = () => {
 };
 
 export const sleep = (resource: string, delay = getDelay()) =>
-  new Promise<number>((resolve, reject) => setTimeout(() => resolve(delay), delay)).then((delay) =>
+  new Promise<number>((resolve, reject) => setTimeout(() => resolve(delay), delay));
+/* .then((delay) =>
     console.log(`Calling ${resource} after ${delay} millis: ${Date.now()} `, {
       size: stack.length,
       last: maybe(stack)
@@ -29,8 +30,9 @@ export const sleep = (resource: string, delay = getDelay()) =>
         .map((it) => [it.getSeconds(), it.getMilliseconds()].join(':'))
         .valueOr('undef'),
       delay,
-    }),
-  );
+    })
+    );
+    */
 
 export const rejection = (e: any) => {
   console.error(e);

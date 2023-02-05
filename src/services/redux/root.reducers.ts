@@ -4,12 +4,14 @@ import { reducer as Discogs } from './discogs';
 import { reducer as App } from './app';
 import { reducer as WantList } from './wantlist';
 import { reducer as Folders } from './folders';
+import { reducer as User } from './user';
 
 const rootReducer = combineReducers({
   Discogs,
   App,
   WantList,
   Folders,
+  User,
 });
 
 export default rootReducer;

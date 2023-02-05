@@ -13,43 +13,52 @@ import {
 import * as api from '../../api';
 import * as selectedFieldsService from '../../selectedFields.service';
 import { getText, renderText } from '../../texts';
-import {
-  actions as appActions,
-  AppActions,
-  AppActionTypes,
-  sagas as appSagas,
-  selectors as appSelectors,
-} from '../app';
-import { sagas as discogsSaga, selectors as discogsSelectors } from '../discogs';
+import { actions as appActions, AppActions, sagas as appSagas } from '../app';
+import { selectors as discogsSelectors } from '../discogs';
 import * as combinedSelectors from '../selectors/combined.selectors';
+import {
+  sagas as userSagas,
+  selectors as userSelectors,
+  UserActions,
+  UserActionTypes,
+} from '../user';
 import * as actions from './folders.actions';
 import * as folderSelectors from './selectors';
 import { FoldersActions, FoldersActionTypes } from './types';
 
 export function* getFolders() {
-  const result: { folders: Folder[] } = yield discogsSaga.fetchResource(
-    combinedSelectors.getFoldersResource,
+  const result: { folders: Folder[] } = yield userSagas.fetchUserResource('collection_folders_url');
+
+  yield put(
+    maybe(result)
+      .mapTo('folders')
+      .nothingUnless(Boolean)
+      .map(actions.getFoldersSuccess)
+      .valueOr(appActions.warn({ message: getText('folder.fetched.failed') })),
   );
-  if (result && result.folders) yield put(actions.getFoldersSuccess(result.folders));
-  else yield put(appActions.warn({ message: getText('folder.fetched.failed') }));
 }
 
 export function* getFields() {
-  const result: { fields: InventoryFields } = yield discogsSaga.fetchResource(
-    combinedSelectors.getFieldsResource,
+  const result: { fields: InventoryFields } = yield call(
+    userSagas.fetchUserResource,
+    'collection_fields_url',
   );
-  if (result && result.fields) yield put(actions.getInventoryFieldsSuccess(result.fields));
-  else yield put(appActions.warn({ message: getText('fields.fetched.failed') }));
+
+  yield put(
+    result && result.fields
+      ? actions.getInventoryFieldsSuccess(result.fields)
+      : appActions.warn({ message: getText('fields.fetched.failed') }),
+  );
 }
 
 export function* setSelectedFields({ selectedFields }: FoldersActionTypes) {
-  const userId: number = yield select(appSelectors.getUserId);
+  const userId: number = yield select(userSelectors.getUserId);
   const allFields: SelectedFields = yield call(selectedFieldsService.set, userId, selectedFields!);
   yield put(actions.setSelectedFieldsSuccess(allFields));
 }
 
 export function* getSelectedFields() {
-  const userId: number = yield select(appSelectors.getUserId);
+  const userId: number = yield select(userSelectors.getUserId);
   const allFields: SelectedFields = yield call(selectedFieldsService.get, userId);
   yield put(actions.setSelectedFieldsSuccess(allFields));
 }
@@ -130,7 +139,7 @@ export function* raceForResponse(): Generator<any> {
   }
 }
 
-function* onUserSuccess({ user }: AppActionTypes) {
+function* onUserSuccess({ user }: UserActionTypes) {
   try {
     yield put(appActions.notifyReset());
     if (user?.isDone() && user?.get().isOk()) {
@@ -143,7 +152,7 @@ function* onUserSuccess({ user }: AppActionTypes) {
 
 function* DiscogsSaga() {
   yield all([
-    takeLatest(AppActions.getUser, onUserSuccess),
+    takeLatest(UserActions.getUser, onUserSuccess),
     takeLatest(FoldersActions.setSelectedFields, setSelectedFields),
     takeLatest(FoldersActions.addToFolder, addToFolder),
   ]);

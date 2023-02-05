@@ -2,12 +2,13 @@ import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import createSagaMiddleware from 'redux-saga';
 import { MessageActionTypes } from '../message.handlers';
-import { DiscogsActionTypes } from './discogs';
-import { WantListActionTypes } from './wantlist';
 import { AppActionTypes } from './app';
+import { DiscogsActionTypes } from './discogs';
 import { FoldersActionTypes } from './folders';
 import rootReducer from './root.reducers';
 import rootSaga from './root.sagas';
+import { UserActionTypes } from './user';
+import { WantListActionTypes } from './wantlist';
 
 const isProduction = false;
 const sagaMiddleware = createSagaMiddleware();
@@ -25,7 +26,8 @@ export type ActionTypes =
   | AppActionTypes
   | MessageActionTypes
   | WantListActionTypes
-  | FoldersActionTypes;
+  | FoldersActionTypes
+  | UserActionTypes;
 
 export const action = (type: ActionTypes): ActionTypes => store.dispatch(type);
 

@@ -4,14 +4,10 @@ import { Folder, Instance, InventoryFields, Release } from '../../../domain';
 import * as api from '../../api';
 import * as selectedFieldsService from '../../selectedFields.service';
 import { getText, renderText } from '../../texts';
-import {
-  actions as appActions,
-  AppActions,
-  sagas as appSagas,
-  selectors as appSelectors,
-} from '../app';
+import { actions as appActions, AppActions, sagas as appSagas } from '../app';
 import * as discogsSelectors from '../discogs/selectors';
 import * as combinedSelectors from '../selectors/combined.selectors';
+import { selectors as userSelectors } from '../user';
 import * as folderActions from './folders.actions';
 import {
   addToFolder,
@@ -35,19 +31,16 @@ describe('folder saga', () => {
   const FOLDERS: Folder[] = [{ name: 'FOLDER', id: 123 } as Folder];
   const INVENTORY_FIELDS: InventoryFields = [{ name: 'FIELD', id: 456 } as any];
   describe('getFolders', () => {
-    it('should get folders and yield result', () => {
-      testSaga(getFolders)
+    const warn = appActions.warn({ message: getText('folder.fetched.failed') });
+    it.each([
+      [undefined, warn],
+      [{ folders: undefined }, warn],
+      [{ folders: FOLDERS }, folderActions.getFoldersSuccess(FOLDERS)],
+    ])('when fetchResource is %j, should yield %j', (folders: any, expectedAction: any) => {
+      testSaga(getFolders as any)
         .next()
-        .next({ folders: FOLDERS })
-        .put(folderActions.getFoldersSuccess(FOLDERS))
-        .next()
-        .isDone();
-    });
-    it('when failed, should yield warning', () => {
-      testSaga(getFolders)
-        .next()
-        .next()
-        .put(appActions.warn({ message: getText('folder.fetched.failed') }))
+        .next(folders)
+        .put(expectedAction)
         .next()
         .isDone();
     });
@@ -77,7 +70,7 @@ describe('folder saga', () => {
     it('should retrieve userId, call service and yield current stored selection', () => {
       testSaga(setSelectedFields, folderActions.setSelectedFields({}))
         .next()
-        .select(appSelectors.getUserId)
+        .select(userSelectors.getUserId)
         .next(userId)
         .call(selectedFieldsService.set, userId, {})
         .next({ field: 'value' })
@@ -88,7 +81,7 @@ describe('folder saga', () => {
     it('should retrieve userId, call service and yield updated selection', () => {
       testSaga(setSelectedFields, folderActions.setSelectedFields({ new: 'newVal' }))
         .next()
-        .select(appSelectors.getUserId)
+        .select(userSelectors.getUserId)
         .next(userId)
         .call(selectedFieldsService.set, userId, { new: 'newVal' })
         .next({ field: 'value', new: 'newVal' })
@@ -103,7 +96,7 @@ describe('folder saga', () => {
     it('should retrieve userId, call service and yield updated selection', () => {
       testSaga(getSelectedFields)
         .next()
-        .select(appSelectors.getUserId)
+        .select(userSelectors.getUserId)
         .next(userId)
         .call(selectedFieldsService.get, userId)
         .next({ field: 'value' })

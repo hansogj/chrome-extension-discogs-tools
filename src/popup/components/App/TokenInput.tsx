@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
-import { AppActionTypes } from '../../../services/redux/app';
+import { UserActionTypes } from '../../../services/redux/user';
 import { getTexts } from '../../../services/texts';
-import { Submit as StyledSubmit, Card, base, Column, ContentBody, Input, Row } from '../../styled';
+import { base, Card, Column, ContentBody, Input, Row, Submit as StyledSubmit } from '../../styled';
 
 export interface TokenInputProps {
-  setUserToken: Fn<[string], AppActionTypes>;
+  setUserToken: Fn<[string], UserActionTypes>;
 }
 
 const Submit = styled(StyledSubmit)`

@@ -28,7 +28,7 @@ const unRest = (response: Response) =>
   (response.status >= 200 && response.status < 300
     ? Promise.resolve(response.json())
     : Promise.reject(new Error(response.statusText))
-  ).catch(() => Promise.resolve(response.text()));
+  ).catch(() => Promise.reject(response.text()));
 
 const call = async (method: 'DELETE' | 'GET' | 'POST' | 'PUT', uri: string, body = {}) => {
   return sleep(uri)

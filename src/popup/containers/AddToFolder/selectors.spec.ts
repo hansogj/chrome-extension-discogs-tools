@@ -36,7 +36,7 @@ describe('Discogs selectors', () => {
     },
   );
 
-  describe.only.each([
+  describe.each([
     [false, {}, true],
     [false, {}, true],
     [true, {}, true],

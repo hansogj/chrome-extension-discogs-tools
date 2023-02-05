@@ -7,6 +7,7 @@ import { Bin, Collection, Eye, Off } from '../../assets/icons';
 import { HighlightedLabels } from '../../domain';
 import { RootState } from '../../services/redux';
 import { actions as appActions, selectors as appSelectors } from '../../services/redux/app';
+import { actions as userActions } from '../../services/redux/user';
 
 import { DispatchProps, StateProps } from '../../services/redux/selectors/utils';
 import { DispatchAction } from '../../services/redux/store';
@@ -110,7 +111,7 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<Props> =>
     syncCollection: bindActionCreators(wantListActions.syncCollection, dispatch),
     setHighlightedLabels: bindActionCreators(appActions.setHighlightedLabels, dispatch),
     clearStorage: bindActionCreators(appActions.clearStorage, dispatch),
-    logOut: bindActionCreators(appActions.logOut, dispatch),
+    logOut: bindActionCreators(userActions.logOut, dispatch),
   } as Props);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings as FC<Partial<Props>>);

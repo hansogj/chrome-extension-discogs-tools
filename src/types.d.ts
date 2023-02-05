@@ -15,3 +15,4 @@ type TypedRecord<K, T> = {
 
 type SearchParams = Record<string, string | number>;
 type PayLoad = { payLoad?: Record<string, any> };
+type RequireField<T, K extends keyof T> = T & Required<Pick<T, K>>;

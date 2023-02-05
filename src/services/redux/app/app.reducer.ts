@@ -7,7 +7,6 @@ import {
 import { AppActions, AppActionTypes, AppState } from './types';
 
 export const initialState: AppState = {
-  user: AsyncData.NotAsked(),
   notification: undefined,
   error: undefined,
   isLoading: false,
@@ -17,10 +16,6 @@ export const initialState: AppState = {
 };
 
 const discogsReducer = reducerForProducers<AppState, AppActionTypes, AppActions>(initialState, {
-  [AppActions.getUser]: (draft, action) => {
-    draft.user = action.user ? action.user : draft.user;
-    draft.error = undefined;
-  },
   [AppActions.error]: (draft, action) => {
     draft.isLoading = false;
     draft.error = action.error;

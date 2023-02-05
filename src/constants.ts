@@ -6,6 +6,8 @@ export const API_TIMEOUT = 5000;
 
 export const MAX_LOGIN_ATTEMPTS = 5;
 
+export const DISCOGS_BASE_URL = 'https://api.discogs.com';
+
 export const DISCOGS_LOGO =
   'https://st.discogs.com/0cc662c5cb9e836fcd6010bc2a182f5e53a6d1e5/images/discogs-logo.svg';
 
