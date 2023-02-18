@@ -34,6 +34,8 @@ beforeAll(() => {
 afterAll(() => jest.restoreAllMocks());
 
 describe('user saga', () => {
+  const error = 'Failing when reach for api';
+  const warn = appActions.warn({ error });
   describe('getUser', () => {
     it('should retrieve token from storage , call for user and yield updated user', () => {
       testSaga(getUser, undefined)
@@ -58,23 +60,9 @@ describe('user saga', () => {
         .next()
         .call(userTokenService.get)
         .next({})
-        .put(appActions.error(USER_ERROR.NOT_AUTHENTICATED))
-        .next()
-        .next()
-        .isDone();
-    });
-
-    it(`has no stored user token failed ${MAX_LOGIN_ATTEMPTS} times`, () => {
-      testSaga(getUser, undefined, MAX_LOGIN_ATTEMPTS)
-        .next()
-        .put(userActions.getUser(AsyncData.Loading()))
-        .next()
-        .call(userTokenService.get)
-        .next({})
-        .put(appActions.error(USER_ERROR.NOT_AUTHENTICATED))
-        .next(userActions.getUser(unauthorizedUser))
         .put(userActions.getUser(AsyncData.NotAsked()))
-        .next(appSagas.warn('log.inn.error'))
+        .next()
+        .next()
         .isDone();
     });
 
@@ -87,20 +75,9 @@ describe('user saga', () => {
         .next(USER_TOKEN)
         .call(api.fetch, `${DISCOGS_BASE_URL}/oauth/identity`)
         .next(undefined)
+        .put(userActions.getUser(AsyncData.NotAsked()))
         .next()
-        .isDone();
-    });
-    it(`when failed ${MAX_LOGIN_ATTEMPTS} times, should yield user to be ${USER_ERROR.NOT_AUTHENTICATED}`, () => {
-      testSaga(getUser, undefined, MAX_LOGIN_ATTEMPTS)
-        .next()
-        .put(userActions.getUser(AsyncData.Loading()))
-        .next()
-        .call(userTokenService.get)
-        .next(USER_TOKEN)
-        .call(api.fetch, `${DISCOGS_BASE_URL}/oauth/identity`)
-        .next(userActions.getUser(unauthorizedUser))
-        .next()
-        .next()
+        .next(appSagas.warn, warn)
         .isDone();
     });
   });
@@ -127,9 +104,6 @@ describe('user saga', () => {
   });
 
   describe('fetchUserResource', () => {
-    const error = 'Failing when reach for api';
-    const warn = appActions.warn({ error });
-
     const inspect = (e: any, field: string) => {
       expect(e.type).toEqual('SELECT');
       expect(userSelectors.fromUser).toHaveBeenCalledWith(field);

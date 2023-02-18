@@ -2,7 +2,7 @@ import { MockUtil } from '../../../gist/jest-utils/jest.utils';
 import * as appSelectors from '../../../services/redux/app/selectors';
 import { View } from '../../../services/redux/app/types';
 import { shape } from '../../../_mock_';
-import { getActiveView, getAvailableViews } from './selectors';
+import { defaultViewsSettingsActive, getActiveView, getAvailableViews } from './selectors';
 import { SwitchedView } from './types';
 import * as folderSelectors from '../../../services/redux/folders/selectors';
 import { Optional } from '@hansogj/maybe';
@@ -18,31 +18,17 @@ const mocks = MockUtil<typeof appSelectors & typeof folderSelectors>(jest).requi
 );
 
 beforeEach(() => {
-  mocks.fromUser?.mockReturnValue({});
   mocks.getWindowUrlMatch?.mockImplementation(
     jest.requireActual('../../../services/redux/app/selectors').getWindowUrlMatch,
   );
 });
 
-const defaultViews: SwitchedView[] = [
-  { isActive: false, view: 'Want List' },
-  { isActive: false, view: 'Settings' },
-];
-
-const defaultViewsSettingsActive: SwitchedView[] = [
-  { isActive: false, view: 'Want List' },
-  { isActive: true, view: 'Settings' },
-];
-
-const sort = (sw: SwitchedView[] = []) => sw;
-//    sw.sort((a: SwitchedView, b: SwitchedView) => (a.view[0] > b.view[0] ? -1 : 1));
-
 describe('App selectors', () => {
   beforeEach(() => mocks.getIsAddingToFolder?.mockReturnValue(false));
   describe('when state view is empty', () => {
     describe.each([
-      [undefined, []],
-      [{}, []],
+      [undefined, defaultViewsSettingsActive],
+      [{}, defaultViewsSettingsActive],
       [{ master: 3 }, [{ view: 'Item', isActive: false }, ...defaultViewsSettingsActive]],
       [{ artists: 3 }, [{ view: 'Artist', isActive: false }, ...defaultViewsSettingsActive]],
       [{ releases: 3 }, [{ view: 'Item', isActive: false }, ...defaultViewsSettingsActive]],
@@ -79,8 +65,8 @@ describe('App selectors', () => {
     ],
   ])('when state view is "%s"', (view, activeViews) => {
     describe.each([
-      [undefined, []],
-      [{}, []],
+      [undefined, defaultViewsSettingsActive],
+      [{}, defaultViewsSettingsActive],
       [{ master: 3 }, [{ view: 'Item', isActive: false }, ...activeViews]],
       [{ artists: 3 }, [{ view: 'Artist', isActive: false }, ...activeViews]],
       [{ release: 3 }, [{ view: 'Item', isActive: false }, ...activeViews]],

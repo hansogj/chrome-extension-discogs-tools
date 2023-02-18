@@ -21,7 +21,7 @@ export const unauthorizedUser = asyncError({
   isError: true,
 });
 
-export function* getUser(_: any, count = 0): any {
+export function* __getUser(_: any, count = 0): any {
   try {
     yield put(actions.getUser(AsyncData.Loading()));
     const storedToken: string = yield call(userTokenService.get);
@@ -38,8 +38,12 @@ export function* getUser(_: any, count = 0): any {
     }
   } catch (error) {
     console.warn('caught authentication error', error);
+    debugger;
     yield put(appActions.error(USER_ERROR.NOT_AUTHENTICATED));
-    if (count < MAX_LOGIN_ATTEMPTS) {
+    if (
+      !(error as Error).toString().match(new RegExp(USER_ERROR.MISSING_TOKEN)) ||
+      count < MAX_LOGIN_ATTEMPTS
+    ) {
       yield getUser(_, count + 1);
     } else {
       yield put(actions.getUser(AsyncData.NotAsked()));
@@ -47,6 +51,31 @@ export function* getUser(_: any, count = 0): any {
         yield appSaga.warn(getText('log.inn.error'));
       }
     }
+  }
+}
+
+export function* getUser(_: any, count = 0): any {
+  try {
+    yield put(actions.getUser(AsyncData.Loading()));
+    const storedToken: string = yield call(userTokenService.get);
+
+    if (!Boolean(storedToken) || empty(storedToken)) {
+      yield put(actions.getUser(AsyncData.NotAsked()));
+      return false;
+    } else {
+      const identity: OauthIdentity = yield call(api.fetch, `${DISCOGS_BASE_URL}/oauth/identity`);
+
+      if (identity) {
+        const user: User = yield call(api.fetch, identity.resource_url);
+        yield put(actions.getUser(asyncOk(user)));
+        return true;
+      } else {
+        throw new Error(USER_ERROR.NOT_AUTHENTICATED);
+      }
+    }
+  } catch (error) {
+    yield put(actions.getUser(AsyncData.NotAsked()));
+    yield appSaga.warn(getText('log.inn.error'));
   }
 }
 

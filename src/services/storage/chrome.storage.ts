@@ -3,10 +3,12 @@
 import { Storage, StorageKeys } from './types';
 import { prefixed, valueOr } from './utils';
 
-const storage = (key: StorageKeys) =>
-  key.includes('want-list') || key.includes('user-collection')
+const storage = (key: StorageKeys) => {
+  console.log(key);
+  return key.includes('want-list') || key.includes('user-collection') || key.includes('token')
     ? chrome.storage.local
     : chrome.storage.sync;
+};
 
 export const set: Storage.Set = async <T>(key: StorageKeys, val: T) => {
   return new Promise((resolve, reject) => {

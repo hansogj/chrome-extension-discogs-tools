@@ -20,7 +20,7 @@ export const discogsColors = {
     },
 
     green: {
-      soft: '#6bd7a1',
+      soft: '#5ea301',
       strong: '#0b2a06',
     },
 

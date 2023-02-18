@@ -26,6 +26,11 @@ export const getActiveView = createSelector(
       .valueOr('Settings') as View,
 );
 
+export const defaultViewsSettingsActive: SwitchedView[] = [
+  { isActive: false, view: 'Want List' },
+  { isActive: true, view: 'Settings' },
+];
+
 export const getAvailableViews = createSelector(
   appSelectors.getWindowUrlMatch,
   getActiveView,
@@ -37,5 +42,6 @@ export const getAvailableViews = createSelector(
           .filter(Boolean)
           .map((view: View) => ({ view, isActive: view === activeView } as SwitchedView)),
       )
-      .valueOr([]),
+
+      .valueOr(defaultViewsSettingsActive),
 );
