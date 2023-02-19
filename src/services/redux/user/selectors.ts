@@ -27,7 +27,6 @@ export const fromUser = <Key extends keyof User>(prop: Key) =>
   );
 
 export const getUserId = fromUser('id');
-
 export const getFoldersResource = fromUser('collection_folders_url');
 export const getFieldsResource = fromUser('collection_fields_url');
 export const getInventoryResource = fromUser('inventory_url');

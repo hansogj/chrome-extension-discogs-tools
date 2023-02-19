@@ -4,19 +4,24 @@ import { WantList } from '../../../domain';
 import { getArtistId, getReleasePageId } from '../discogs/selectors';
 import { getSelectedFields } from '../folders/selectors';
 import { getFoldersResource } from '../user/selectors';
-import { getCollection, getWantList } from '../wantlist/selectors';
+import { getCollection, getWantList } from '../inventory/selectors';
+import { removeRedundantSlashes } from '../../utils/strings';
 
 export const combinedGetAddReleaseToFolderResource = createSelector(
   getReleasePageId,
   getFoldersResource,
   getSelectedFields,
   (release_id, folderResource, { folders }) =>
-    [folderResource, folders, 'releases', release_id].join('/'),
+    removeRedundantSlashes(
+      [folderResource, folders, 'releases', release_id].filter(Boolean).join('/'),
+    ),
 );
 
 export const getAllFoldersReleasesResource = createSelector(getFoldersResource, (folderResource) =>
-  [folderResource, 0, 'releases'].join('/'),
+  removeRedundantSlashes([folderResource, 0, 'releases'].join('/')),
 );
+
+const sortByYear = (it: any) => it.sort((a: any, b: any) => (a.year < b.year ? -1 : 1));
 
 export const getWantedArtistReleases = createSelector(
   getArtistId,
@@ -24,7 +29,6 @@ export const getWantedArtistReleases = createSelector(
   (artistId, wantList) =>
     maybe(wantList)
       .map((it: WantList.Item[]) => it.map(({ mainRelease }) => mainRelease!).filter(Boolean))
-
       .map((release) =>
         release
           .map((it) => ({
@@ -33,7 +37,7 @@ export const getWantedArtistReleases = createSelector(
           }))
           .filter(({ artists }) => artists.map(({ id }) => id).includes(artistId!)),
       )
-      .map((it) => it.sort((a, b) => (a.year < b.year ? -1 : 1)))
+      .map(sortByYear)
       .valueOr(undefined),
 );
 
@@ -43,6 +47,6 @@ export const getCollectedArtistReleases = createSelector(
   (artistId, collection) =>
     maybe(collection)
       .map((it) => it?.filter(({ artists }) => artists.map(({ id }) => id).includes(artistId!)))
-      .map((it) => it.sort((a, b) => (a.year < b.year ? -1 : 1)))
+      .map(sortByYear)
       .valueOr(undefined),
 );

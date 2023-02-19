@@ -1,7 +1,7 @@
 import { all, fork } from 'redux-saga/effects';
 import DiscogsSaga from './discogs/discogs.saga';
 import AppSaga from './app/app.saga';
-import WantListSaga from './wantlist/wantlist.saga';
+import InventorySaga from './inventory/inventory.saga';
 import FoldersSaga from './folders/folders.saga';
 import UserSaga from './user/user.saga';
 
@@ -10,7 +10,7 @@ export default function* rootSaga() {
     yield all([
       fork(DiscogsSaga),
       fork(AppSaga),
-      fork(WantListSaga),
+      fork(InventorySaga),
       fork(FoldersSaga),
       fork(UserSaga),
     ]);

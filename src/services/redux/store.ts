@@ -8,7 +8,7 @@ import { FoldersActionTypes } from './folders';
 import rootReducer from './root.reducers';
 import rootSaga from './root.sagas';
 import { UserActionTypes } from './user';
-import { WantListActionTypes } from './wantlist';
+import { InventoryActionTypes } from './inventory';
 
 const isProduction = false;
 const sagaMiddleware = createSagaMiddleware();
@@ -25,7 +25,7 @@ export type ActionTypes =
   | DiscogsActionTypes
   | AppActionTypes
   | MessageActionTypes
-  | WantListActionTypes
+  | InventoryActionTypes
   | FoldersActionTypes
   | UserActionTypes;
 

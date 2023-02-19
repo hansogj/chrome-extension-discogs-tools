@@ -12,7 +12,7 @@ import { filteredAndSorted, SortMethod, SortMethods } from './utils';
 
 import maybe from '@hansogj/maybe';
 import { actions as appActions } from '../../../services/redux/app';
-import { getWantList } from '../../../services/redux/wantlist';
+import { getWantList } from '../../../services/redux/inventory';
 import Loader from '../../components/App/Loader';
 
 export interface Props extends ListProps {

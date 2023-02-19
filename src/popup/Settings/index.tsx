@@ -10,7 +10,11 @@ import { actions as userActions } from '../../services/redux/user';
 
 import { DispatchProps, StateProps } from '../../services/redux/selectors/utils';
 import { DispatchAction } from '../../services/redux/store';
-import { actions as wantListActions, getInventory, isSyncing } from '../../services/redux/wantlist';
+import {
+  actions as wantListActions,
+  getInventory,
+  isSyncing,
+} from '../../services/redux/inventory';
 import { getTexts, renderText } from '../../services/texts';
 import { discogsColors, Submit } from '../styled';
 import LabelsControlPanel, { Props as LabelsProps } from './highlighted.labels.control.panel';
