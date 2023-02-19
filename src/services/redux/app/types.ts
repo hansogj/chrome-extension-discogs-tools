@@ -1,6 +1,6 @@
 import { HighlightedLabels } from '../../../domain';
 import { ActionTypes as AnyActionTypes } from '../store';
-import { ActionTypes } from '../types';
+import { ActionDataTypes } from '../types';
 import { USER_ERROR } from '../user';
 
 export const Views = ['Artist', 'Item', 'Settings', 'Want List'] as const;
@@ -39,28 +39,22 @@ export enum ERROR {
   NO_TAB_TO_CAPTURE = 'NO_TAB_TO_CAPTURE',
 }
 
-export interface AppActionData {
-  error: Optional<ErrorType>;
-  notification: Notification;
-  view: Optional<View>;
-  highlightedLabels: Optional<HighlightedLabels>;
-  windowUrl: Optional<URL>;
+export type AppActionData = Mutable<AppState> & {
   url: Optional<string>;
-}
+};
 
 export enum AppActions {
-  notify = 'APP_NOTIFY',
-  error = 'APP_ERROR',
-  notifyReset = 'APP_NOTIFY_RESET',
-
-  setView = 'APP_SET_VIEW',
-  setViewSuccess = 'APP_SET_VIEW_SUCCESS',
-  goToUrl = 'APP_GO_TO_URL',
-  windowUrlRetrieved = 'WINDOW_URL_RETRIEVED',
-  setHighlightedLabels = 'APP_SET_HIGHLIGHTED_LABELS',
-  setHighlightedLabelsSuccess = 'APP_SET_HIGHLIGHTED_LABELS_SUCCESS',
-  getHighlightedLabelsSuccess = 'APP_GET_HIGHLIGHTED_LABELS_SUCCESS',
-  clearStorage = 'APP_CLEAR_STORAGE',
+  APP_NOTIFY = 'APP_NOTIFY',
+  APP_ERROR = 'APP_ERROR',
+  APP_NOTIFY_RESET = 'APP_NOTIFY_RESET',
+  APP_SET_VIEW = 'APP_SET_VIEW',
+  APP_SET_VIEW_SUCCESS = 'APP_SET_VIEW_SUCCESS',
+  APP_GO_TO_URL = 'APP_GO_TO_URL',
+  APP_WINDOW_URL_RETRIEVED = 'WINDOW_URL_RETRIEVED',
+  APP_SET_HIGHLIGHTED_LABELS = 'APP_SET_HIGHLIGHTED_LABELS',
+  APP_SET_HIGHLIGHTED_LABELS_SUCCESS = 'APP_SET_HIGHLIGHTED_LABELS_SUCCESS',
+  APP_GET_HIGHLIGHTED_LABELS_SUCCESS = 'APP_GET_HIGHLIGHTED_LABELS_SUCCESS',
+  APP_CLEAR_STORAGE = 'APP_CLEAR_STORAGE',
 }
 
-export type AppActionTypes = ActionTypes<AppActions, AppActionData>;
+export type AppActionTypes = ActionDataTypes<AppActions, AppActionData>;

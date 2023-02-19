@@ -38,9 +38,9 @@ describe('user saga', () => {
   const warn = appActions.warn({ error });
   describe('getUser', () => {
     it('should retrieve token from storage , call for user and yield updated user', () => {
-      testSaga(getUser, undefined)
+      testSaga(getUser)
         .next()
-        .put(userActions.getUser(AsyncData.Loading()))
+        .put(userActions.getUser({ user: AsyncData.Loading() }))
         .next()
         .call(userTokenService.get)
         .next(USER_TOKEN)
@@ -48,34 +48,34 @@ describe('user saga', () => {
         .next(IDENTITY)
         .call(api.fetch, 'resource_url')
         .next(USER)
-        .put(userActions.getUser(asyncOk(USER)))
+        .put(userActions.getUser({ user: asyncOk(USER) }))
         .next()
         .isDone();
     });
 
     it(`has no stored user token and count is less than ${MAX_LOGIN_ATTEMPTS}`, () => {
-      testSaga(getUser, undefined, MAX_LOGIN_ATTEMPTS - 1)
+      testSaga(getUser)
         .next()
-        .put(userActions.getUser(AsyncData.Loading()))
+        .put(userActions.getUser({ user: AsyncData.Loading() }))
         .next()
         .call(userTokenService.get)
         .next({})
-        .put(userActions.getUser(AsyncData.NotAsked()))
+        .put(userActions.getUser({ user: AsyncData.NotAsked() }))
         .next()
         .next()
         .isDone();
     });
 
     it('when fail, should retry', () => {
-      testSaga(getUser, undefined)
+      testSaga(getUser)
         .next()
-        .put(userActions.getUser(AsyncData.Loading()))
+        .put(userActions.getUser({ user: AsyncData.Loading() }))
         .next()
         .call(userTokenService.get)
         .next(USER_TOKEN)
         .call(api.fetch, `${DISCOGS_BASE_URL}/oauth/identity`)
         .next(undefined)
-        .put(userActions.getUser(AsyncData.NotAsked()))
+        .put(userActions.getUser({ user: AsyncData.NotAsked() }))
         .next()
         .next(appSagas.warn, warn)
         .isDone();
@@ -84,11 +84,11 @@ describe('user saga', () => {
 
   describe('setUserToken', () => {
     it('should get user token from service and call getUser generator', () => {
-      testSaga(setUserToken, userActions.setUserToken(USER_TOKEN))
+      testSaga(setUserToken, userActions.setUserToken({ userToken: USER_TOKEN }))
         .next()
         .call(userTokenService.set, USER_TOKEN)
         .next()
-        .call(getUser, 0)
+        .call(getUser)
         .next()
         .isDone();
     });
@@ -97,7 +97,7 @@ describe('user saga', () => {
         .next()
         .call(userTokenService.remove)
         .next()
-        .put(userActions.getUser(AsyncData.NotAsked()))
+        .put(userActions.getUser({ user: AsyncData.NotAsked() }))
         .next()
         .isDone();
     });
@@ -140,7 +140,7 @@ describe('user saga', () => {
           .next()
           .inspect((e: any) => undefined)
           .next(undefined)
-          .call(getUser, undefined, 0)
+          .call(getUser)
           .next()
           .isDone();
       },

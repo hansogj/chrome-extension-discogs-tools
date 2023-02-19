@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Collection, Head, List, Settings } from '../../../assets/icons';
-import { View } from '../../../services/redux/app';
+import { AppActionData, View } from '../../../services/redux/app';
 import { DispatchAction } from '../../../services/redux/store';
 import {
   base,
@@ -26,7 +26,7 @@ const IconMap: Record<View, (fill: string) => JSX.Element> = {
 };
 
 export interface Props {
-  setView: DispatchAction<View>;
+  setView: DispatchAction<Pick<AppActionData, 'view'>>;
   user?: User;
   views: SwitchedView[];
 }
@@ -58,7 +58,7 @@ const Header: FC<Props> = ({ setView, views, user }: Props) => (
     {views &&
       views.map(({ view, isActive }) => (
         <Column key={view} center>
-          <NavButton onClick={() => setView(view)} className={isActive ? 'activeView' : ''}>
+          <NavButton onClick={() => setView({ view })} className={isActive ? 'activeView' : ''}>
             {IconMap[view](isActive ? discogsColors.bright : discogsColors.white)}
             {view}
           </NavButton>

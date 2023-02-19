@@ -2,11 +2,15 @@ import maybe from '@hansogj/maybe';
 import React from 'react';
 
 import { DispatchAction } from '../../../services/redux/store';
+import { AppActionData } from '../../../services/redux/app';
 import { Column, Row, Thumb } from '../../styled';
 import { ReleaseCol, Offset } from './style';
 import { ListItem } from './types';
 
-export type Props = { entries: ListItem[]; goToUrl: DispatchAction<string> } & Offset;
+export type Props = {
+  entries: ListItem[];
+  goToUrl: DispatchAction<Pick<AppActionData, 'url'>>;
+} & Offset;
 
 const pickUrl = (item: any) => item.resource_url || item.master_url;
 
@@ -29,7 +33,7 @@ const List = ({ entries, goToUrl, offset }: Props) =>
               {...{ href: pickUrl(props) }}
               onClick={(e) => {
                 e.preventDefault();
-                return goToUrl(pickUrl(props));
+                return goToUrl({ url: pickUrl(props) });
               }}
             >
               <Row>

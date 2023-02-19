@@ -1,35 +1,24 @@
 import { AsyncData } from '@swan-io/boxed';
-import { Async } from '../domain';
-import { UserActions, UserActionTypes } from './types';
+import { toAction } from '../utils';
+import { UserActionData, UserActions, UserActionTypes } from './types';
 
-export const getUserInit = (): UserActionTypes => ({
-  type: UserActions.getUserInit,
-});
+// prettier-ignore
+const { GET_USER, GET_IDENTITY, GET_IDENTITY_SUCCESS, GET_USER_INIT, SET_USER_TOKEN, SET_USER_TOKEN_SUCCESS, USER_LOG_OUT, } = UserActions;
 
-export const getUser = (user: Async.User): UserActionTypes => ({
-  type: UserActions.getUser,
-  user,
-});
+const toUserAction =
+  (type: UserActions) =>
+  (data: Partial<UserActionData> = {}) =>
+    toAction<UserActions, Partial<UserActionData>>(type, data);
 
+export const getUser = toUserAction(GET_USER);
+export const setUserToken = toUserAction(SET_USER_TOKEN);
 export const logOut = (): UserActionTypes => ({
-  type: UserActions.logOut,
+  type: USER_LOG_OUT,
   user: AsyncData.NotAsked(),
 });
 
-export const setUserToken = (userToken: string): UserActionTypes => ({
-  type: UserActions.setUserToken,
-  userToken,
-});
-
-export const setUserTokenSuccess = (): UserActionTypes => ({
-  type: UserActions.setUserTokenSuccess,
-});
-
-export const getIdentity = (): UserActionTypes => ({
-  type: UserActions.getIdentity,
-});
-
-export const getIdentitySuccess = (identity: string): UserActionTypes => ({
-  type: UserActions.getIdentitySuccess,
-  identity,
-});
+// TODO REMOVE
+export const getUserInit = toUserAction(GET_USER_INIT);
+export const setUserTokenSuccess = toUserAction(SET_USER_TOKEN_SUCCESS);
+export const getIdentity = toUserAction(GET_IDENTITY);
+export const getIdentitySuccess = toUserAction(GET_IDENTITY_SUCCESS);

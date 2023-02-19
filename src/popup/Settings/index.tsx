@@ -4,7 +4,6 @@ import { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Bin, Collection, Eye, Off } from '../../assets/icons';
-import { HighlightedLabels } from '../../domain';
 import { RootState } from '../../services/redux';
 import { actions as appActions, selectors as appSelectors } from '../../services/redux/app';
 import { actions as userActions } from '../../services/redux/user';
@@ -14,17 +13,15 @@ import { DispatchAction } from '../../services/redux/store';
 import { actions as wantListActions, getInventory, isSyncing } from '../../services/redux/wantlist';
 import { getTexts, renderText } from '../../services/texts';
 import { discogsColors, Submit } from '../styled';
-import LabelsControlPanel from './highlighted.labels.control.panel';
+import LabelsControlPanel, { Props as LabelsProps } from './highlighted.labels.control.panel';
 import { Column } from './styled';
 
-export interface Props {
+export interface Props extends LabelsProps {
   clearStorage: DispatchAction<void>;
   syncWantList: DispatchAction<void>;
   syncCollection: DispatchAction<void>;
   logOut: DispatchAction<void>;
   isSyncing: boolean;
-  setHighlightedLabels: DispatchAction<HighlightedLabels>;
-  highlightedLabels: HighlightedLabels;
   inventory: Record<string, number>;
 }
 
@@ -89,12 +86,7 @@ const Settings = ({
           </DreadButton>
         </Column>
       </Row>
-      <LabelsControlPanel
-        {...{
-          highlightedLabels: highlightedLabels,
-          setHighlightedLabels: setHighlightedLabels,
-        }}
-      />
+      <LabelsControlPanel {...{ highlightedLabels, setHighlightedLabels }} />
     </ContentBody>
   );
 };

@@ -52,11 +52,11 @@ describe('app saga', () => {
 
   describe('setView', () => {
     it('should store item and yield success', () => {
-      testSaga(setView, appActions.setView('Artist'))
+      testSaga(setView, appActions.setView({ view: 'Artist' }))
         .next()
         .call(storage.set, 'view', 'Artist')
         .next()
-        .put(appActions.setViewSuccess('Artist'))
+        .put(appActions.setViewSuccess({ view: 'Artist' }))
         .next()
         .isDone();
     });
@@ -68,7 +68,7 @@ describe('app saga', () => {
         .next()
         .call(storage.get, 'view', '')
         .next('Artist')
-        .put(appActions.setViewSuccess('Artist'))
+        .put(appActions.setViewSuccess({ view: 'Artist' }))
         .next()
         .isDone();
     });
@@ -77,20 +77,20 @@ describe('app saga', () => {
         .next()
         .call(storage.get, 'view', '')
         .next({})
-        .put(appActions.setViewSuccess(undefined))
+        .put(appActions.setViewSuccess())
         .next()
         .isDone();
     });
   });
 
   describe('setHighlightedLabels', () => {
-    const labels = { fair: [] } as any;
+    const highlightedLabels = { fair: [] } as any;
     it('should store item and yield success', () => {
-      testSaga(setHighlightedLabels, appActions.setHighlightedLabels(labels))
+      testSaga(setHighlightedLabels, appActions.setHighlightedLabels({ highlightedLabels }))
         .next()
-        .call(labelService.set, labels)
+        .call(labelService.set, highlightedLabels)
         .next()
-        .put(appActions.setHighlightedLabelsSuccess(labels))
+        .put(appActions.setHighlightedLabelsSuccess({ highlightedLabels }))
         .next()
         .call(api.applyHighlightedLabels)
         .next()
@@ -99,13 +99,13 @@ describe('app saga', () => {
   });
 
   describe('getHighlightedLabels', () => {
-    const labels = { fair: [] } as any;
+    const highlightedLabels = { fair: [] } as any;
     it('should retrieve item and yield success', () => {
       testSaga(getHighlightedLabels)
         .next()
         .call(labelService.get)
-        .next(labels)
-        .put(appActions.getHighlightedLabelsSuccess(labels))
+        .next(highlightedLabels)
+        .put(appActions.getHighlightedLabelsSuccess({ highlightedLabels }))
         .next()
         .call(api.applyHighlightedLabels)
         .next()

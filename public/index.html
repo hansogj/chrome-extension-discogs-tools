@@ -8,6 +8,18 @@
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/discogs.png" />
     <style>
+      body {
+        background: 
+  /* On "top" */ repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            #333 10px,
+            #333 20px
+          ),
+          /* on "bottom" */ linear-gradient(to bottom, #777, #333);
+      }
+
       @font-face {
         font-family: 'IcoMoon-Free';
         src: local('IcoMoon-Free'), url('%PUBLIC_URL%/fonts/IcoMoon-Free.ttf') format('truetype');

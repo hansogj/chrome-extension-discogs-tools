@@ -1,5 +1,5 @@
 import { Versions, WantList, Collection } from '../../../domain';
-import { ActionTypes } from '../types';
+import { ActionDataTypes } from '../types';
 
 export interface WantListState {
   readonly wantList: WantList.Item[];
@@ -27,4 +27,4 @@ export enum WantListActions {
   getCollectionSuccess = 'GET_COLLECTION_SUCCESSs',
 }
 
-export type WantListActionTypes = ActionTypes<WantListActions, WantListActionData>;
+export type WantListActionTypes = ActionDataTypes<WantListActions, WantListActionData>;

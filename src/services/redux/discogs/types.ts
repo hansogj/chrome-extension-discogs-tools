@@ -1,5 +1,5 @@
 import { Artist, ArtistRelease, Instance, ReleasePageItem } from '../../../domain';
-import { ActionTypes } from '../types';
+import { ActionDataTypes } from '../types';
 
 export interface DiscogsState {
   readonly releasePageItem: Optional<ReleasePageItem>;
@@ -24,4 +24,4 @@ export enum DiscogsActions {
   domFilterReleases = 'DOM_FILTER_RELEASES',
 }
 
-export type DiscogsActionTypes = ActionTypes<DiscogsActions, DiscogsActionData>;
+export type DiscogsActionTypes = ActionDataTypes<DiscogsActions, DiscogsActionData>;

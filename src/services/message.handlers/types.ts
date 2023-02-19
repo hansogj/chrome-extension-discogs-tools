@@ -1,6 +1,6 @@
 import { ResourceUrl } from '../../domain';
 import { ActionTypes } from '../redux';
-import { ActionTypes as ReduxActinTypes } from './../redux/types';
+import { ActionDataTypes } from './../redux/types';
 
 export type MessageResolver = (action: ActionTypes) => Promise<unknown>;
 
@@ -27,4 +27,4 @@ export enum MessageActions {
   SYNC_COLLECTION = 'SYNC_COLLECTION',
 }
 
-export type MessageActionTypes = ReduxActinTypes<MessageActions, MessageActionData>;
+export type MessageActionTypes = ActionDataTypes<MessageActions, MessageActionData>;

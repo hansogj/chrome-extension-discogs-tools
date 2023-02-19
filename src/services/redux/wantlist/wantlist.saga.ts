@@ -66,7 +66,7 @@ function* getCollection() {
 
 function* WantListSaga() {
   yield all([
-    takeLatest(UserActions.getUser, onUserSuccess),
+    takeLatest(UserActions.GET_USER, onUserSuccess),
 
     takeLatest(WantListActions.syncWantList, syncWantList),
     takeLatest(WantListActions.syncCollection, syncCollection),

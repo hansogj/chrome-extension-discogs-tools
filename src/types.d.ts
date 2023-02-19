@@ -9,10 +9,13 @@ interface Hash<T> {
   [key: string]: T;
 }
 
-type TypedRecord<K, T> = {
+declare type TypedRecord<K, T> = {
   [P in keyof K]: T;
 };
 
-type SearchParams = Record<string, string | number>;
-type PayLoad = { payLoad?: Record<string, any> };
-type RequireField<T, K extends keyof T> = T & Required<Pick<T, K>>;
+declare type SearchParams = Record<string, string | number>;
+declare type PayLoad = { payLoad?: Record<string, any> };
+declare type RequireField<T, K extends keyof T> = T & Required<Pick<T, K>>;
+declare type Mutable<Type> = {
+  -readonly [Key in keyof Type]: Type[Key];
+};

@@ -120,7 +120,7 @@ export function* notifyNewInstance() {
       title,
     }),
     {
-      action: appActions.goToUrl(uri),
+      action: appActions.goToUrl({ url: uri }),
       text: 'Yes please',
     },
   );
@@ -128,8 +128,8 @@ export function* notifyNewInstance() {
 
 export function* raceForResponse(): Generator<any> {
   const result = yield race({
-    notify: take(AppActions.notifyReset),
-    remove: take(AppActions.goToUrl),
+    notify: take(AppActions.APP_NOTIFY_RESET),
+    remove: take(AppActions.APP_GO_TO_URL),
   });
 
   if ((result as any).notify) {
@@ -152,7 +152,7 @@ function* onUserSuccess({ user }: UserActionTypes) {
 
 function* DiscogsSaga() {
   yield all([
-    takeLatest(UserActions.getUser, onUserSuccess),
+    takeLatest(UserActions.GET_USER, onUserSuccess),
     takeLatest(FoldersActions.setSelectedFields, setSelectedFields),
     takeLatest(FoldersActions.addToFolder, addToFolder),
   ]);

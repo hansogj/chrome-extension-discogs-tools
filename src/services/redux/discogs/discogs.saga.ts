@@ -36,7 +36,7 @@ export function* getResourceIdFromWindowUrl() {
 }
 
 function* DiscogsSaga() {
-  yield all([takeLatest(AppActions.windowUrlRetrieved, getResourceIdFromWindowUrl)]);
+  yield all([takeLatest(AppActions.APP_WINDOW_URL_RETRIEVED, getResourceIdFromWindowUrl)]);
 }
 
 export default DiscogsSaga;

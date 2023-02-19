@@ -1,5 +1,5 @@
 import { Folder, InventoryFields, SelectedFields } from '../../../domain';
-import { ActionTypes } from '../types';
+import { ActionDataTypes } from '../types';
 
 export interface FoldersState {
   readonly folders: Array<Folder>;
@@ -28,4 +28,4 @@ export enum FoldersActions {
   setSelectedFieldsSuccess = 'SET_SELECTED_FIELDS_SUCCESS',
 }
 
-export type FoldersActionTypes = ActionTypes<FoldersActions, FoldersActionData>;
+export type FoldersActionTypes = ActionDataTypes<FoldersActions, FoldersActionData>;

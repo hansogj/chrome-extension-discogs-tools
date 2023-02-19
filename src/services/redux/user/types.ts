@@ -1,5 +1,5 @@
 import { Async } from '../domain';
-import { ActionTypes } from '../types';
+import { ActionDataTypes } from '../types';
 
 export interface UserState {
   readonly user: Async.User;
@@ -10,23 +10,22 @@ export enum USER_ERROR {
   MISSING_TOKEN = 'MISSING_TOKEN',
 }
 
-export interface UserActionData {
+export type UserActionData = Mutable<UserState> & {
   identity: Optional<string>;
-  user: Async.User;
   userToken: Optional<string>;
-}
+};
 
 export enum UserActions {
-  getIdentity = 'GET_IDENTITY',
-  getIdentitySuccess = 'GET_IDENTITY_SUCCESS',
-  getUserInit = 'GET_USER_INIT',
-  getUser = 'GET_USER',
-  setUserToken = 'SET_USER_TOKEN',
-  setUserTokenSuccess = 'SET_USER_TOKEN_SUCCESS',
-  logOut = 'APP_LOG_OUT',
+  GET_IDENTITY = 'GET_IDENTITY',
+  GET_IDENTITY_SUCCESS = 'GET_IDENTITY_SUCCESS',
+  GET_USER_INIT = 'GET_USER_INIT',
+  GET_USER = 'GET_USER',
+  SET_USER_TOKEN = 'SET_USER_TOKEN',
+  SET_USER_TOKEN_SUCCESS = 'SET_USER_TOKEN_SUCCESS',
+  USER_LOG_OUT = 'USER_LOG_OUT',
 }
 
-export type UserActionTypes = ActionTypes<UserActions, UserActionData>;
+export type UserActionTypes = ActionDataTypes<UserActions, UserActionData>;
 
 export type UserResourceField =
   | 'collection_folders_url'

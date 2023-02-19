@@ -7,13 +7,14 @@ import { discogsColors, Column } from '../styled';
 
 import { useEffect, useState } from 'react';
 import { Column as ActionColumn, H3, Preview } from './styled';
+import { AppActionData } from '../../services/redux/app';
 
 const { red, green } = discogsColors.highlightedLabels;
 const splitted = (val: string = '') => val.split(/\n/).filter(Boolean);
 const joined = (val: string[] = []) => val.filter(Boolean).join('\n');
 
 export interface Props {
-  setHighlightedLabels: DispatchAction<HighlightedLabels>;
+  setHighlightedLabels: DispatchAction<Pick<AppActionData, 'highlightedLabels'>>;
   highlightedLabels: HighlightedLabels;
 }
 const HighlightedLabelsControlPanel = ({ setHighlightedLabels, highlightedLabels }: Props) => {
@@ -31,10 +32,12 @@ const HighlightedLabelsControlPanel = ({ setHighlightedLabels, highlightedLabels
 
   const onBlur = () => {
     setHighlightedLabels({
-      poor: splitted(poor),
-      fair: splitted(fair),
-      good: splitted(good),
-      veryGood: splitted(veryGood),
+      highlightedLabels: {
+        poor: splitted(poor),
+        fair: splitted(fair),
+        good: splitted(good),
+        veryGood: splitted(veryGood),
+      },
     });
   };
 

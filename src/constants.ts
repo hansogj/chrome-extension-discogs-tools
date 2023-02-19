@@ -3,6 +3,7 @@ import { HighlightedLabels } from './domain';
 export const isProduction = process.env.NODE_ENV === 'production';
 
 export const API_TIMEOUT = 5000;
+export const NOTIFICATION_TIMEOUT = 5000;
 
 export const MAX_LOGIN_ATTEMPTS = 2;
 

@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
+import { DispatchAction } from '../../../services/redux/store';
 import { UserActionTypes } from '../../../services/redux/user';
 import { getTexts } from '../../../services/texts';
 import { base, Card, Column, ContentBody, Input, Row, Submit as StyledSubmit } from '../../styled';
 
 export interface TokenInputProps {
-  setUserToken: Fn<[string], UserActionTypes>;
+  setUserToken: DispatchAction<Pick<UserActionTypes, 'userToken'>>;
 }
 
 const Submit = styled(StyledSubmit)`
@@ -25,7 +26,7 @@ const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      setUserToken(token);
+      setUserToken({ userToken: token });
     }
   };
   return (
@@ -53,7 +54,7 @@ const TokenInput: FC<TokenInputProps> = ({ setUserToken }: TokenInputProps) => {
               onKeyPress={handleKeyPress}
               onChange={(e) => setToken(e.target.value)}
             ></Input>
-            <Submit onClick={() => setUserToken(token)}>{submit}</Submit>
+            <Submit onClick={() => setUserToken({ userToken: token })}>{submit}</Submit>
           </Card>
         </Column>
       </Row>

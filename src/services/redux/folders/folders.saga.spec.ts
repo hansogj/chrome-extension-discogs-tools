@@ -184,7 +184,7 @@ describe('folder saga', () => {
             title: 'TITLE',
           }),
           {
-            action: appActions.goToUrl('MASTER_URI'),
+            action: appActions.goToUrl({ url: 'MASTER_URI' }),
             text: 'Yes please',
           },
         )
@@ -198,8 +198,8 @@ describe('folder saga', () => {
       testSaga(raceForResponse)
         .next()
         .race({
-          notify: take(AppActions.notifyReset),
-          remove: take(AppActions.goToUrl),
+          notify: take(AppActions.APP_NOTIFY_RESET),
+          remove: take(AppActions.APP_GO_TO_URL),
         })
         .next({ notify: 'notification wins' })
         .next(api.reload())
@@ -211,8 +211,8 @@ describe('folder saga', () => {
       testSaga(raceForResponse)
         .next()
         .race({
-          notify: take(AppActions.notifyReset),
-          remove: take(AppActions.goToUrl),
+          notify: take(AppActions.APP_NOTIFY_RESET),
+          remove: take(AppActions.APP_GO_TO_URL),
         })
         .next({ remove: 'go to url' })
         .put(folderActions.addToFolderSuccess())
