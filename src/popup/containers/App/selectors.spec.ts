@@ -1,6 +1,6 @@
 import { MockUtil } from '../../../gist/jest-utils/jest.utils';
 import * as appSelectors from '../../../services/redux/app/selectors';
-import { View } from '../../../services/redux/app/types';
+import { AppState, View } from '../../../services/redux/app/types';
 import { shape } from '../../../_mock_';
 import { getActiveView, getAvailableViews } from './selectors';
 import { SwitchedView } from './types';
@@ -34,12 +34,12 @@ const sort = (sw: SwitchedView[] = []) => sw;
 describe('App selectors', () => {
   describe('when state view is empty', () => {
     describe.each([
-      [undefined, undefined],
-      [{}, undefined],
+      [undefined, []],
+      [{}, []],
       [{ master: 3 }, [{ view: 'Item', isActive: false }, ...defaultViewsSettingsActive]],
       [{ artists: 3 }, [{ view: 'Artist', isActive: false }, ...defaultViewsSettingsActive]],
       [{ releases: 3 }, [{ view: 'Item', isActive: false }, ...defaultViewsSettingsActive]],
-    ] as Array<[string, Optional<SwitchedView[]>]>)(
+    ] as Array<[Partial<AppState>, SwitchedView[]]>)(
       'and  window url match is %j',
       (match, expected) => {
         beforeEach(() => {
@@ -71,12 +71,12 @@ describe('App selectors', () => {
     ],
   ])('when state view is "%s"', (view, activeViews) => {
     describe.each([
-      [undefined, undefined],
-      [{}, undefined],
+      [undefined, []],
+      [{}, []],
       [{ master: 3 }, [{ view: 'Item', isActive: false }, ...activeViews]],
       [{ artists: 3 }, [{ view: 'Artist', isActive: false }, ...activeViews]],
       [{ release: 3 }, [{ view: 'Item', isActive: false }, ...activeViews]],
-    ] as Array<[string, Optional<SwitchedView[]>]>)(
+    ] as Array<[Partial<AppState>, Optional<SwitchedView[]>]>)(
       'and  window url match is %j',
       (match, expected) => {
         beforeEach(() => {
