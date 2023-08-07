@@ -1,6 +1,6 @@
 import { MockUtil } from '../../../gist/jest-utils/jest.utils';
 import * as appSelectors from '../../../services/redux/app/selectors';
-import { View } from '../../../services/redux/app/types';
+import { AppState, View } from '../../../services/redux/app/types';
 import { shape } from '../../../_mock_';
 import { defaultViewsSettingsActive, getActiveView, getAvailableViews } from './selectors';
 import { SwitchedView } from './types';
