@@ -36,7 +36,11 @@ export function* getResourceIdFromWindowUrl() {
 }
 
 function* DiscogsSaga() {
-  yield all([takeLatest(AppActions.APP_WINDOW_URL_RETRIEVED, getResourceIdFromWindowUrl)]);
+  try {
+    yield all([takeLatest(AppActions.APP_WINDOW_URL_RETRIEVED, getResourceIdFromWindowUrl)]);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export default DiscogsSaga;

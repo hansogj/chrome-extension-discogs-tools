@@ -1,5 +1,5 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import { DISCOGS_BASE_URL, MAX_LOGIN_ATTEMPTS } from '../../../constants';
+import { DISCOGS_BASE_URL } from '../../../constants';
 import { OauthIdentity, User } from '../../../domain';
 import * as api from '../../api';
 
@@ -10,7 +10,7 @@ import { empty } from '../../utils/json.utils';
 import { actions as appActions } from '../app';
 import * as appSaga from '../app/app.saga';
 import { asyncError, asyncOk } from '../domain';
-import { UserActions, UserActionTypes, UserResourceField } from './';
+import { UserActionTypes, UserActions, UserResourceField } from './';
 import { fromUser } from './selectors';
 import { USER_ERROR } from './types';
 import * as actions from './user.actions';
@@ -22,8 +22,8 @@ export const unauthorizedUser = asyncError({
 });
 
 export function* getUser(): any {
+  yield put(actions.getUser({ user: AsyncData.Loading() }));
   try {
-    yield put(actions.getUser({ user: AsyncData.Loading() }));
     const storedToken: string = yield call(userTokenService.get);
 
     if (!Boolean(storedToken) || empty(storedToken)) {

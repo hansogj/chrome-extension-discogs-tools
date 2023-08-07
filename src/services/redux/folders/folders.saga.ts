@@ -15,6 +15,7 @@ import * as selectedFieldsService from '../../selectedFields.service';
 import { getText, renderText } from '../../texts';
 import { actions as appActions, AppActions, sagas as appSagas } from '../app';
 import { selectors as discogsSelectors } from '../discogs';
+import { asyncMaybeOk } from '../domain';
 import * as combinedSelectors from '../selectors/combined.selectors';
 import {
   sagas as userSagas,
@@ -140,14 +141,18 @@ export function* raceForResponse(): Generator<any> {
 }
 
 function* onUserSuccess({ user }: UserActionTypes) {
-  try {
-    yield put(appActions.notifyReset());
+  /* try {
+    
     if (user?.isDone() && user?.get().isOk()) {
       yield all([getFolders(), getFields(), getSelectedFields()]);
     }
   } catch (e) {
     console.log(e);
-  }
+  } */
+
+  yield asyncMaybeOk(user!)
+    .map(() => all([getFolders(), getFields(), getSelectedFields()]))
+    .valueOr(undefined);
 }
 
 function* DiscogsSaga() {

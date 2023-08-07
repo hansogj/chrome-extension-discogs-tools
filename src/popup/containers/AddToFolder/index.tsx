@@ -61,7 +61,7 @@ const AddToFolderComponent: FC<Props> = ({
                         : 'discogs.add.to.folder.submit.message',
                     ),
 
-                    disabled: disableSubmitBtn,
+                    disabled: disableSubmitBtn, // TODO ASYNC
                     onClick: () => addToFolder(),
                   }}
                 >

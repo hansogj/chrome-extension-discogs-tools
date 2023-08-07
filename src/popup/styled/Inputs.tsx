@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import React, { FC, PropsWithChildren, ButtonHTMLAttributes, ReactNode } from 'react';
+import { Spinner } from '../../assets/icons';
 import { colored, padded, shade, size } from './styled';
 import {
   borderRadius,
@@ -62,19 +64,25 @@ const cursor = css`
 export const Button = styled.button<
   Colors & {
     active?: boolean;
+    loading?: boolean;
   }
 >`
   ${cursor}
   ${colored}
   ${inputStyle};
   ${(props) => props.active && activeButton}
+
   text-shadow: 0 1px 1px ${discogsColors.darkShade};
-  &:disabled,
-  &:active {
-    background-color: ${discogsColors.dark};
-    color: ${discogsColors.bright};
-    text-shadow: 0 1px 1px ${discogsColors.darkShade};
-  }
+
+  ${(props) =>
+    !props.loading &&
+    css`
+      &:disabled,
+      &:active {
+        color: ${discogsColors.bright};
+        text-shadow: 0 1px 1px ${discogsColors.darkShade};
+      }
+    `}
 `;
 
 export const NavButton = styled.nav<Colors & { active?: boolean; disabled?: boolean }>`
@@ -104,16 +112,25 @@ export const NavButton = styled.nav<Colors & { active?: boolean; disabled?: bool
 export const Submit = styled(Button)`
   background-color: ${discogsColors.green};
   color: ${discogsColors.white};
+  &:disabled {
+    background-color: ${discogsColors.disabled.green};
+  }
 `;
 
 export const DreadButton = styled(Button)`
   background-color: ${discogsColors.dread};
   color: ${discogsColors.white};
+  &:disabled {
+    background-color: ${discogsColors.disabled.dread};
+  }
 `;
 
 export const UglyButton = styled(Button)`
   background-color: ${discogsColors.uglyYellow};
   color: ${discogsColors.dark};
+  &:disabled {
+    background-color: ${discogsColors.disabled.uglyYellow};
+  }
   text-shadow: none;
 `;
 
@@ -138,3 +155,28 @@ export const TextArea = styled.textarea<Size>`
   ${size}
   text-align: left;
 `;
+
+type LoadButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  icon: ReactNode;
+  loading?: boolean;
+};
+export const LoadButton = ({
+  icon,
+  loading,
+  children,
+  ...props
+}: PropsWithChildren<LoadButtonProps>) => {
+  return (
+    <Submit
+      {...{
+        ...props,
+        disabled: props.disabled || loading,
+      }}
+    >
+      <>
+        {loading ? <Spinner {...{ fill: discogsColors.white }} /> : icon}
+        {children}
+      </>
+    </Submit>
+  );
+};

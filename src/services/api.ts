@@ -3,7 +3,9 @@ import { HighlightedLabels, Release, Paginated, ResourceUrl, Versions } from '..
 import { MessageActions } from './message.handlers';
 import messageHandler from './message.handlers/popup.message.handler';
 import { DiscogsActions } from './redux/discogs';
+import { SyncStatus } from './redux/inventory';
 import { Cache } from './wantlist.service';
+import { AsyncData } from '@swan-io/boxed';
 
 const sleep = <T>(timeout: number, v: () => Promise<T>) =>
   new Promise<T>((r) => setTimeout(() => r(v()), timeout));
@@ -39,10 +41,15 @@ export const syncCollection = async (userId: number, url: string) =>
     userId,
   }).then((cache) => maybe(cache).valueOr({}) as Cache);
 
-export const hasOngoingSync = async () =>
-  messageHandler<boolean>({
-    type: MessageActions.HAS_ONGOING_SYNC,
-  });
+export const getSyncStatus = async () =>
+  messageHandler<SyncStatus>({
+    type: MessageActions.GET_SYNC_STATUS,
+  }).then(
+    ({ wantList, collection }): SyncStatus => ({
+      wantList: wantList ? AsyncData.Loading() : AsyncData.NotAsked(),
+      collection: collection ? AsyncData.Loading() : AsyncData.NotAsked(),
+    }),
+  );
 
 export const getWindowLocation = async () =>
   messageHandler<URL>({

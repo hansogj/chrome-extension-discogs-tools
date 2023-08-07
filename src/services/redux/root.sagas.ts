@@ -15,6 +15,7 @@ export default function* rootSaga() {
       fork(UserSaga),
     ]);
   } catch (error) {
+    console.error('all sagas failed', error);
     debugger;
   }
 }

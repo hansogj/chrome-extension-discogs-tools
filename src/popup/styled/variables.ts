@@ -12,7 +12,15 @@ export const discogsColors = {
   darkShade: '#030405',
   uglyYellow: '#F5DF2D',
   green: '#00800B',
+
   dread: '#BF3A38',
+
+  disabled: {
+    uglyYellow: '#fac936b5',
+    green: '#505b51',
+    dread: '#7f5251de',
+  },
+
   highlightedLabels: {
     red: {
       soft: '#e28080',

@@ -2,7 +2,7 @@ import maybe from '@hansogj/maybe';
 import { createSelector } from 'reselect';
 import { User } from '../../../domain';
 import { selectFromRoot } from '../../../gist/immer-utils/immer.utils';
-import { getLoadedResult } from '../domain';
+import { asyncMaybeOk } from '../domain';
 import { RootState } from '../root.reducers';
 import { UserState } from '../user';
 
@@ -16,7 +16,7 @@ export const getAsyncUser = createSelector(getUserState, (userState) =>
   maybe(userState).mapTo('user').valueOr(undefined),
 );
 export const getUserLoaded = createSelector(getAsyncUser, (user) =>
-  maybe(user).map(getLoadedResult).valueOr(undefined),
+  asyncMaybeOk(user!).valueOr(undefined),
 );
 
 export const fromUser = <Key extends keyof User>(prop: Key) =>

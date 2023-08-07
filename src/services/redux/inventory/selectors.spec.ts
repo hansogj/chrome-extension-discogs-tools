@@ -1,10 +1,11 @@
 import { Optional } from '@hansogj/maybe';
 import { CombinedState } from 'redux';
 import { RootState } from '../root.reducers';
-import { getCollection, getInventory, getWantList, isSyncing } from './selectors';
-import { InventoryState } from './types';
+import { getCollection, getInventory, getWantList, getSyncStatus } from './selectors';
+import { InventoryState, SyncStatus } from './types';
 import { shape } from '../../../_mock_/';
-
+import { asyncOk } from '../domain';
+import { initialSyncStatus } from './inventory.reducer';
 describe('Inventory selectors', () => {
   type State = Partial<CombinedState<InventoryState>>;
 
@@ -29,15 +30,31 @@ describe('Inventory selectors', () => {
   });
 
   describe.each([
-    [undefined, false],
-    [{}, false],
-    [{ Inventory: {} }, false],
-    [{ Inventory: { isSyncing: false } }, false],
-    [{ Inventory: { isSyncing: true } }, true],
-  ] as Array<[Optional<Partial<RootState>>, State]>)('with RootState %j', (rootState, expected) => {
-    it(`isSyncing should be ${expected}`, () =>
-      expect(isSyncing(rootState as State)).toEqual(expected));
-  });
+    [undefined, initialSyncStatus()],
+    [{}, initialSyncStatus()],
+    [{ Inventory: {} }, initialSyncStatus()],
+    [{ Inventory: { syncStatus: initialSyncStatus() } }, initialSyncStatus()],
+    [
+      {
+        Inventory: {
+          syncStatus: {
+            wantList: asyncOk('wantlist'),
+            collection: asyncOk('wantlist'),
+          },
+        },
+      },
+      {
+        wantList: asyncOk('wantlist'),
+        collection: asyncOk('wantlist'),
+      },
+    ],
+  ] as Array<[Optional<Partial<RootState>>, SyncStatus]>)(
+    'with RootState %j',
+    (rootState, expected) => {
+      it(`getSyncStatus should be ${expected}`, () =>
+        expect(getSyncStatus(rootState as State)).toEqual(expected));
+    },
+  );
 
   describe.each([
     [{}, { wantList: 0, collection: 0 }],

@@ -1,12 +1,14 @@
 import maybe from '@hansogj/maybe';
+import { AsyncData } from '@swan-io/boxed';
 import { BasicInformation, Release, WantList } from '../domain';
+import { Async, asyncOk } from './redux/domain';
 import { get as storageGet, set as storageSet, uniqueKey } from './storage';
 import { StorageKeys } from './storage/types';
 import { get as xhrGet } from './xhr';
 
 export type Cache = Record<string, WantList.Item>;
 const storageTarget = 'want-list';
-let isOngoingSyncing = false;
+let asyncStatus: Async.Type<string> = AsyncData.NotAsked();
 
 const fetchMainRelease = async (basics: WantList.Basics): Promise<Release.DTO> => {
   const { master_url, resource_url } = basics;
@@ -27,7 +29,7 @@ const fetchMainRelease = async (basics: WantList.Basics): Promise<Release.DTO> =
 };
 
 const getEntryWithMainRelease = async ({ basics, date_added }: WantList.Item) => {
-  isOngoingSyncing = true;
+  asyncStatus = AsyncData.Loading();
 
   return fetchMainRelease(basics).then(
     ({ master_url, artists, thumb, title, year, master_id }) => ({
@@ -52,10 +54,10 @@ const recoverFromExceededRateLimit = (
   storageKey: StorageKeys,
 ): Promise<Cache> => {
   const awaitWhileRecovering = e.rateLimit ? new Date(e.rateLimit).getMilliseconds() : 60000;
-  isOngoingSyncing = false;
+  asyncStatus = AsyncData.NotAsked();
   return new Promise((resolve) =>
     setTimeout(() => {
-      isOngoingSyncing = true;
+      asyncStatus = AsyncData.Loading();
       resolve(updateWithMainRelease(update, index, storageKey));
     }, awaitWhileRecovering),
   );
@@ -119,7 +121,6 @@ const getPaginatedWantlist = async (url: string, page = 1, prev: Cache): Promise
 };
 
 const start = async (userId: number, url: string, page = 1) => {
-  isOngoingSyncing = true;
   console.clear();
   console.time();
 
@@ -132,15 +133,16 @@ const start = async (userId: number, url: string, page = 1) => {
   await storageSet(uniqueKey(storageTarget, userId), currentCacheStrippedFromRemoved);
   await updateWithMainRelease(newToWantlist, 0, uniqueKey(storageTarget, userId));
   console.timeEnd();
-  isOngoingSyncing = false;
+  asyncStatus = asyncOk('Wantlist: syncing done');
 };
 
 export const sync = async (userId: number, url: string) => {
+  asyncStatus = AsyncData.Loading();
   setTimeout(() => start(userId, url, 1), 100);
   return true;
 };
 
-export const isSyncing = () => Promise.resolve(isOngoingSyncing);
+export const isSyncing = () => Promise.resolve(asyncStatus.isLoading());
 
 const getFromStorage = (key: StorageKeys): Promise<Cache> => storageGet(key, {});
 

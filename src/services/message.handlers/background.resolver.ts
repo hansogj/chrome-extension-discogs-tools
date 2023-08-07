@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime.js';
+import * as collection from '../collection.service';
 import { ActionTypes } from '../redux';
 import * as wanList from '../wantlist.service';
-import * as collection from '../collection.service';
 import { MessageActionMatcher } from './MessageActionMatcher';
 import { MessageActions, MessageActionTypes, MessageResolver } from './types';
 
@@ -15,7 +15,10 @@ export const messageResolverFactory = (): MessageResolver => (action: ActionType
       collection.sync(action.userId as number, action.body as string),
     )
 
-    .matcher(MessageActions.HAS_ONGOING_SYNC, () =>
-      Promise.all([wanList.isSyncing(), collection.isSyncing()]).then((res) => res.some(Boolean)),
+    .matcher(MessageActions.GET_SYNC_STATUS, () =>
+      Promise.all([wanList.isSyncing(), collection.isSyncing()]).then(([wantList, collection]) => ({
+        wantList,
+        collection,
+      })),
     )
     .resolve();

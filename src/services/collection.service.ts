@@ -1,11 +1,13 @@
 import maybe from '@hansogj/maybe';
+import { AsyncData } from '@swan-io/boxed';
 import { Artist, Collection } from '../domain';
+import { Async, asyncOk } from './redux/domain';
 import { get as storageGet, set as storageSet, uniqueKey } from './storage';
 import { StorageKeys } from './storage/types';
 import { get as xhrGet } from './xhr';
 type Cache = Collection.Release[];
 const storageTarget = 'user-collection';
-let isOngoingSyncing = false;
+let asyncStatus: Async.Type<string> = AsyncData.NotAsked();
 
 const extractor = (releases: Collection.DTO[]): Cache =>
   releases.map((release) =>
@@ -20,7 +22,7 @@ const extractor = (releases: Collection.DTO[]): Cache =>
   );
 
 const getPaginatedCollection = async (url: string, page = 1, cache: Cache): Promise<Cache> => {
-  isOngoingSyncing = true;
+  asyncStatus = AsyncData.Loading();
   return xhrGet(url, {
     page,
     per_page: 100,
@@ -37,20 +39,20 @@ const getPaginatedCollection = async (url: string, page = 1, cache: Cache): Prom
 };
 
 const start = async (userId: number, url: string, page = 1) => {
-  isOngoingSyncing = true;
   console.time();
   const userCollection = await getPaginatedCollection(url, page, []);
   console.timeEnd();
   await storageSet(uniqueKey(storageTarget, userId), userCollection);
-  isOngoingSyncing = false;
+  asyncStatus = asyncOk('collection: synced done');
 };
 
 export const sync = async (userId: number, url: string) => {
+  asyncStatus = AsyncData.Loading();
   setTimeout(() => start(userId, url, 1), 100);
   return true;
 };
 
-export const isSyncing = () => Promise.resolve(isOngoingSyncing);
+export const isSyncing = () => Promise.resolve(asyncStatus.isLoading());
 
 const getFromStorage = (key: StorageKeys): Promise<Cache> => storageGet(key, []);
 

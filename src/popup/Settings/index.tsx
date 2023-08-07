@@ -7,17 +7,18 @@ import { Bin, Collection, Eye, Off } from '../../assets/icons';
 import { RootState } from '../../services/redux';
 import { actions as appActions, selectors as appSelectors } from '../../services/redux/app';
 import { actions as userActions } from '../../services/redux/user';
-
+import LabelsControlPanel from './highlighted.labels.control.panel';
+import {
+  actions as inventoryActions,
+  getInventory,
+  getSyncStatus,
+  SyncStatus,
+} from '../../services/redux/inventory';
 import { DispatchProps, StateProps } from '../../services/redux/selectors/utils';
 import { DispatchAction } from '../../services/redux/store';
-import {
-  actions as wantListActions,
-  getInventory,
-  isSyncing,
-} from '../../services/redux/inventory';
 import { getTexts, renderText } from '../../services/texts';
-import { discogsColors, Submit } from '../styled';
-import LabelsControlPanel, { Props as LabelsProps } from './highlighted.labels.control.panel';
+import { LoadButton } from '../styled';
+import { Props as LabelsProps } from './highlighted.labels.control.panel';
 import { Column } from './styled';
 
 export interface Props extends LabelsProps {
@@ -25,7 +26,7 @@ export interface Props extends LabelsProps {
   syncWantList: DispatchAction<void>;
   syncCollection: DispatchAction<void>;
   logOut: DispatchAction<void>;
-  isSyncing: boolean;
+  syncStatus: SyncStatus;
   inventory: Record<string, number>;
 }
 
@@ -33,7 +34,7 @@ const Settings = ({
   clearStorage,
   syncWantList,
   syncCollection,
-  isSyncing,
+  syncStatus: { collection, wantList },
   logOut,
   inventory,
   highlightedLabels,
@@ -54,10 +55,15 @@ const Settings = ({
     <ContentBody filled>
       <Row>
         <Column>
-          <Submit disabled={isSyncing} onClick={() => syncWantList()}>
-            <Eye {...{ fill: discogsColors.white }} />
+          <LoadButton
+            {...{
+              loading: wantList.isLoading(),
+              onClick: () => syncWantList(),
+              icon: <Eye />,
+            }}
+          >
             {resyncBtn}
-          </Submit>
+          </LoadButton>
           <p>{resyncExplained}</p>
           <p>
             {renderText('settings.inventory', { number: inventory.wantList, list: 'want list' })}
@@ -65,10 +71,16 @@ const Settings = ({
         </Column>
 
         <Column>
-          <Submit disabled={isSyncing} onClick={() => syncCollection()}>
-            <Collection {...{ fill: discogsColors.white }} />
+          <LoadButton
+            {...{
+              loading: collection.isLoading(),
+              onClick: () => syncCollection(),
+              icon: <Collection />,
+            }}
+          >
             {collBtn}
-          </Submit>
+          </LoadButton>
+
           <p>{collExplained}</p>
           <p>
             {renderText('settings.inventory', { number: inventory.collection, list: 'collection' })}
@@ -76,7 +88,7 @@ const Settings = ({
         </Column>
 
         <Column>
-          <UglyButton disabled={isSyncing} onClick={() => clearStorage()}>
+          <UglyButton onClick={() => clearStorage()}>
             <Bin />
             {binBtn}
           </UglyButton>
@@ -90,21 +102,21 @@ const Settings = ({
           </DreadButton>
         </Column>
       </Row>
-      <LabelsControlPanel {...{ highlightedLabels, setHighlightedLabels }} />
+      {<LabelsControlPanel {...{ highlightedLabels, setHighlightedLabels }} />}
     </ContentBody>
   );
 };
 
 export const mapStateToProps = (state: RootState): StateProps<Partial<Props>> => ({
-  isSyncing: isSyncing(state),
+  syncStatus: getSyncStatus(state)!,
   highlightedLabels: appSelectors.getHighlightedLabels(state),
   inventory: getInventory(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps<Props> =>
   ({
-    syncWantList: bindActionCreators(wantListActions.syncWantList, dispatch),
-    syncCollection: bindActionCreators(wantListActions.syncCollection, dispatch),
+    syncWantList: bindActionCreators(inventoryActions.syncWantList, dispatch),
+    syncCollection: bindActionCreators(inventoryActions.syncCollection, dispatch),
     setHighlightedLabels: bindActionCreators(appActions.setHighlightedLabels, dispatch),
     clearStorage: bindActionCreators(appActions.clearStorage, dispatch),
     logOut: bindActionCreators(userActions.logOut, dispatch),
